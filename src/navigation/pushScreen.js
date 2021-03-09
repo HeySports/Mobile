@@ -1,7 +1,5 @@
-import { Navigation } from 'react-native-navigation';
-import Home from './src/screens/Auth/Login';
-Navigation.registerComponent('Login', () => Home);
-Navigation.events().registerAppLaunchedListener(() => {
+import Navigation from 'react-native-navigation';
+export const loginScreen = () => {
   Navigation.setRoot({
     root: {
       stack: {
@@ -20,4 +18,4 @@ Navigation.events().registerAppLaunchedListener(() => {
       },
     },
   });
-});
+};
