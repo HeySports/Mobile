@@ -13,7 +13,11 @@ import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-const Login = () => {
+import { pushScreen } from '../../navigation/pushScreen';
+const Login = (props) => {
+  const register = () => {
+    pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -32,7 +36,12 @@ const Login = () => {
         </TouchableOpacity>
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} />
-          <Button titleBtn="Đăng Ký ngay" checkBtn={false} title="Bạn chưa có tài khoản ?" />
+          <Button
+            titleBtn="Đăng nhập ngay"
+            checkBtn={false}
+            title="Bạn chưa có tài khoản ?"
+            function={register}
+          />
         </View>
       </ScrollView>
     </View>

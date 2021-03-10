@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useDispatch } from 'react-redux';
 
+import { makeSkipIntro } from '../../redux/AppRedux/actions';
 import ItemIntro from './Item';
+import Button from '../../components/Button';
 import intro1 from '../../image/player.png';
 import intro2 from '../../image/field.png';
 import intro3 from '../../image/logo.png';
@@ -31,11 +34,16 @@ const data = {
     },
   ],
 };
+
 const Intro = () => {
   const [dataIntro, setDataIntro] = useState(data.dataIntro);
   const [activity, setActivity] = useState(0);
+  const dispatch = useDispatch();
   const _renderItem = ({ item, index }) => {
     return <ItemIntro key={index} inform={item} />;
+  };
+  const StartApp = () => {
+    dispatch(makeSkipIntro());
   };
   return (
     <View style={styles.containerIntro}>
@@ -59,9 +67,7 @@ const Intro = () => {
                 inactiveDotStyle={styles.dot}
                 inactiveDotScale={0.6}
               />
-              <TouchableOpacity style={styles.btnStart}>
-                <Text style={styles.txtStart}>Bắt đầu</Text>
-              </TouchableOpacity>
+              <Button titleBtn="Bắt đầu" checkBtn={true} function={StartApp} />
             </View>
           );
         } else {
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
   },
   paginationBtn: {
     alignItems: 'center',
-    marginBottom: (142.5 / startHeight) * height,
+    marginBottom: (122.5 / startHeight) * height,
   },
   btnStart: {
     width: (150 / startWidth) * width,

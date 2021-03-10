@@ -7,13 +7,13 @@ const Button = (props) => {
   return (
     <View style={styles.container}>
       {props.checkBtn ? (
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={props.function}>
           <Text style={styles.txtBtn}>{props.titleBtn}</Text>
         </TouchableOpacity>
       ) : (
         <View style={styles.containerBtn}>
           <Text style={styles.txtTitle}>{props.title}</Text>
-          <TouchableOpacity style={styles.buttons}>
+          <TouchableOpacity style={styles.buttons} onPress={props.function}>
             <Text style={styles.txtBtns}>{props.titleBtn}</Text>
           </TouchableOpacity>
         </View>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   containerBtn: {
     flexDirection: 'row',
     marginTop: 50,
+    marginBottom: 20,
   },
   buttons: {
     marginLeft: (15 / startWidth) * width,
