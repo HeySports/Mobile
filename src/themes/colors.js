@@ -6,7 +6,7 @@ const Colors = {
   greyishBrown: '#4a4a4a',
   waterBlueTwo: '#1d9dd8',
   txtLevel1: '#262626',
-  txtLevel2: '#ababab',
+  txtLevel2: '#C5C0C0',
   txtLevel3: '#7f7f7f',
   platinum: '#e584fc',
   btnLevel2: '#696969',

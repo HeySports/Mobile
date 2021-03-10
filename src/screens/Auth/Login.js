@@ -18,6 +18,9 @@ const Login = (props) => {
   const register = () => {
     pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
   };
+  const forgot = () => {
+    pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -31,7 +34,7 @@ const Login = (props) => {
           <Input title="Số điện thoại" icon="phone" checkPass={false} />
           <Input title="Mật khẩu" icon="low-vision" checkPass={true} />
         </View>
-        <TouchableOpacity style={styles.forgotPass}>
+        <TouchableOpacity style={styles.forgotPass} onPress={() => forgot()}>
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
         <View style={styles.bottom}>

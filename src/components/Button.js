@@ -7,8 +7,13 @@ const Button = (props) => {
   return (
     <View style={styles.container}>
       {props.checkBtn ? (
-        <TouchableOpacity style={styles.button} onPress={props.function}>
-          <Text style={styles.txtBtn}>{props.titleBtn}</Text>
+        <TouchableOpacity
+          style={props.checkColor ? styles.btnButton : styles.button}
+          onPress={props.function}
+        >
+          <Text style={props.checkColor ? styles.txtBtnButton : styles.txtBtn}>
+            {props.titleBtn}
+          </Text>
         </TouchableOpacity>
       ) : (
         <View style={styles.containerBtn}>
@@ -58,5 +63,19 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     fontSize: Font.font_description,
+  },
+  btnButton: {
+    marginTop: 20,
+    width: (200 / startWidth) * width,
+    height: (38 / startHeight) * height,
+    backgroundColor: Colors.secondary,
+    borderRadius: ((38 / startHeight) * height) / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtBtnButton: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#F9F3F3',
   },
 });
