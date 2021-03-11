@@ -1,5 +1,5 @@
 const Colors = {
-  backgroud:'#F2D2C7',
+  backgroud: '#F2D2C7',
   primary: '#FF7F27',
   secondary: '#00B359',
   btnLevel1: '#5f5f5f',

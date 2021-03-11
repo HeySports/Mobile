@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  txtNotification:{
+  txtNotification: {
     textAlign: 'center',
     lineHeight: 20,
     fontSize: Font.font_description,
