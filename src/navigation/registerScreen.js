@@ -9,6 +9,7 @@ import Register from '../screens/Auth/Register';
 import Phone from '../screens/Auth/password/Phone';
 import Code from '../screens/Auth/password/Code';
 import Password from '../screens/Auth/password/Password';
+import Home from '../screens/Home/Index';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>

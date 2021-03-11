@@ -21,6 +21,9 @@ const Login = (props) => {
   const forgot = () => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
+  const login = () => {
+    pushScreen(props.componentId, 'Home', '', 'Home', false, '', '');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -38,7 +41,7 @@ const Login = (props) => {
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
         <View style={styles.bottom}>
-          <Button titleBtn="Đăng nhập" checkBtn={true} />
+          <Button titleBtn="Đăng nhập" checkBtn={true} function={login}/>
           <Button
             titleBtn="Đăng nhập ngay"
             checkBtn={false}

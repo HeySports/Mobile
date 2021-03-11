@@ -6,16 +6,19 @@ import Font from '../../../themes/font';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Back from '../../../components/Back';
-import { pushScreen } from '../../../navigation/pushScreen';
+import { pushScreen, goBack } from '../../../navigation/pushScreen';
 const Phone = (props) => {
   const pushNextScreen = () => {
     pushScreen(props.componentId, 'Code', '', 'Code', false, '', '');
+  };
+  const goBackScreen = () => {
+    goBack(props.componentId);
   };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.top}>
-          <Back />
+          <Back goBack={goBackScreen} />
         </View>
         <View style={styles.image}>
           <View style={styles.iconImage}>
@@ -28,6 +31,9 @@ const Phone = (props) => {
       </View>
       <View style={styles.bottom}>
         <View style={styles.content}>
+          <Text style={styles.txtNotification}>
+            Vui Lòng Nhập Số Điện Thoại Của Bạn Để Nhận Mã Xác Minh.
+          </Text>
           <Input title="Số Điện Thoại" checkPass={false} />
         </View>
         <View style={styles.buttonBottom}>
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   number: {
-    marginTop: (130 / startHeight) * height,
+    marginTop: (100 / startHeight) * height,
     width: 30,
     height: 30,
     backgroundColor: Color.backgroud,
@@ -111,5 +117,11 @@ const styles = StyleSheet.create({
     fontSize: Font.font_description,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  txtNotification:{
+    textAlign: 'center',
+    lineHeight: 20,
+    fontSize: Font.font_description,
+    fontWeight: '700',
   },
 });

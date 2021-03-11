@@ -227,3 +227,7 @@ export const introScreen = () => {
     },
   });
 };
+
+export const goBack = (idComponent) => {
+  Navigation.pop(idComponent);
+};

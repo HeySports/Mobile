@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-const Back = () => {
+const Back = (props) => {
   return (
-    <TouchableOpacity style={styles.btnBack}>
+    <TouchableOpacity style={styles.btnBack} onPress={() => props.goBack()}>
       <Icon name="chevron-left" style={styles.iconBack} />
     </TouchableOpacity>
   );
