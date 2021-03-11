@@ -10,6 +10,10 @@ import Phone from '../screens/Auth/password/Phone';
 import Code from '../screens/Auth/password/Code';
 import Password from '../screens/Auth/password/Password';
 import Home from '../screens/Home/Index';
+import Field from '../screens/Field/Index';
+import Room from '../screens/Room/Index';
+import Profile from '../screens/Profile/Index';
+import Notification from '../screens/Notification/Index';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -47,5 +51,30 @@ export function registerScreens() {
     'Password',
     () => ReduxProvider(Password),
     () => Password,
+  );
+  Navigation.registerComponent(
+    'Home',
+    () => ReduxProvider(Home),
+    () => Home,
+  );
+  Navigation.registerComponent(
+    'Field',
+    () => ReduxProvider(Field),
+    () => Field,
+  );
+  Navigation.registerComponent(
+    'Room',
+    () => ReduxProvider(Room),
+    () => Room,
+  );
+  Navigation.registerComponent(
+    'Notification',
+    () => ReduxProvider(Notification),
+    () => Notification,
+  );
+  Navigation.registerComponent(
+    'Profile',
+    () => ReduxProvider(Profile),
+    () => Profile,
   );
 }

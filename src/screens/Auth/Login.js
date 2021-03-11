@@ -13,7 +13,7 @@ import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { pushScreen } from '../../navigation/pushScreen';
+import { pushScreen, homeScreen } from '../../navigation/pushScreen';
 const Login = (props) => {
   const register = () => {
     pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
@@ -22,7 +22,7 @@ const Login = (props) => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
   const login = () => {
-    pushScreen(props.componentId, 'Home', '', 'Home', false, '', '');
+    homeScreen();
   };
   return (
     <View style={styles.container}>

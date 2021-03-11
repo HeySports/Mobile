@@ -1,5 +1,6 @@
 import { Navigation } from 'react-native-navigation';
 import Icons from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export const pushScreen = (componentId, screenApp, passProps, title, visible, left, right) => {
   Promise.all([Icons.getImageSource(left, 25), Icons.getImageSource(right, 25)]).then(
     ([leftImage, rightImage]) => {
@@ -62,23 +63,15 @@ export const loginScreen = () => {
 };
 export const homeScreen = () => {
   Promise.all([
-    Icons.getImageSource('ic-home', 30),
-    Icons.getImageSource('ic-order', 30),
-    Icons.getImageSource('ic-notification-1', 30),
-    Icons.getImageSource('ic-user', 30),
-    Icons.getImageSource('ic-library', 30),
-    Icons.getImageSource('ic-menu', 25),
-    Icons.getImageSource('ic-search', 25),
-  ]).then(([listBook, orderHistory, notifications, user, library, menu, search]) => {
+    Icons.getImageSource('home', 30),
+    Icon.getImageSource('soccer-field', 30),
+    Icons.getImageSource('plus-circle', 50),
+    Icons.getImageSource('bell', 30),
+    Icons.getImageSource('user', 30),
+  ]).then(([home, filed, plus, bell, user]) => {
     Navigation.setRoot({
       root: {
         sideMenu: {
-          left: {
-            component: {
-              id: 'sideBar',
-              name: 'SideBar',
-            },
-          },
           center: {
             bottomTabs: {
               children: [
@@ -90,26 +83,15 @@ export const homeScreen = () => {
                           name: 'Home',
                           options: {
                             topBar: {
-                              visible: true,
-                              leftButtons: [
-                                {
-                                  id: 'sideBar',
-                                  icon: menu,
-                                  fontSize: 10,
-                                },
-                              ],
-                              rightButtons: [
-                                {
-                                  id: 'search',
-                                  icon: search,
-                                  fontSize: 10,
-                                },
-                              ],
+                              visible: false,
                             },
                             bottomTab: {
-                              icon: listBook,
-                              fontSize: 30,
+                              icon: home,
                               animate: false,
+                              text: 'Trang chủ',
+                              selectedIconColor: '#FF7F27',
+                              selectedTextColor: '#FF7F27',
+                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -122,16 +104,67 @@ export const homeScreen = () => {
                     children: [
                       {
                         component: {
-                          name: 'Orders',
+                          name: 'Field',
                           options: {
                             topBar: {
                               visible: false,
                             },
                             visible: false,
                             bottomTab: {
-                              icon: orderHistory,
+                              icon: filed,
                               fontSize: 30,
                               animate: false,
+                              text: 'sân bóng',
+                              selectedIconColor: '#FF7F27',
+                              selectedTextColor: '#FF7F27',
+                              iconColor: '#C5C0C0',
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  stack: {
+                    children: [
+                      {
+                        component: {
+                          name: 'Room',
+                          options: {
+                            topBar: {
+                              visible: false,
+                            },
+                            bottomTab: {
+                              icon: plus,
+                              animate: false,
+                              text: 'Tạo trận',
+                              selectedIconColor: '#FF7F27',
+                              selectedTextColor: '#FF7F27',
+                              iconColor: '#00B359',
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  stack: {
+                    children: [
+                      {
+                        component: {
+                          name: 'Notification',
+                          options: {
+                            topBar: {
+                              visible: false,
+                            },
+                            bottomTab: {
+                              icon: bell,
+                              text: 'Thông báo',
+                              selectedIconColor: '#FF7F27',
+                              selectedTextColor: '#FF7F27',
+                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -151,46 +184,10 @@ export const homeScreen = () => {
                             },
                             bottomTab: {
                               icon: user,
-                              fontSize: 30,
-                              animate: false,
-                            },
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  stack: {
-                    children: [
-                      {
-                        component: {
-                          name: 'Notification',
-                          options: {
-                            topBar: {
-                              visible: false,
-                            },
-                            bottomTab: {
-                              icon: notifications,
-                            },
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  stack: {
-                    children: [
-                      {
-                        component: {
-                          name: 'Library',
-                          options: {
-                            topBar: {
-                              visible: false,
-                            },
-                            bottomTab: {
-                              icon: library,
+                              text: 'Tài khoản',
+                              selectedIconColor: '#FF7F27',
+                              selectedTextColor: '#FF7F27',
+                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -206,7 +203,6 @@ export const homeScreen = () => {
     });
   });
 };
-
 export const introScreen = () => {
   Navigation.setRoot({
     root: {
