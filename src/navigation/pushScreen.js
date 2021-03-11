@@ -66,7 +66,7 @@ export const homeScreen = () => {
     Icons.getImageSource('home', 30),
     Icon.getImageSource('soccer-field', 30),
     Icons.getImageSource('plus-circle', 50),
-    Icons.getImageSource('bell', 30),
+    Icon.getImageSource('bell-ring-outline', 30),
     Icons.getImageSource('user', 30),
   ]).then(([home, filed, plus, bell, user]) => {
     Navigation.setRoot({

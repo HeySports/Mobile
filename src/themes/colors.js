@@ -10,5 +10,8 @@ const Colors = {
   txtLevel3: '#7f7f7f',
   platinum: '#e584fc',
   btnLevel2: '#696969',
+  field: '#2DBE75',
+  white: '#F9F3F3',
+  icon: '#daa520',
 };
 export default Colors;
