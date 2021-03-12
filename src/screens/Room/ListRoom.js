@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Back from '../../components/Back';
 import Color from '../../themes/colors';
@@ -6,7 +6,9 @@ import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { goBack } from '../../navigation/pushScreen';
 import ItemRoom from '../../components/ItemRoom';
+import RoomItem from '../../components/Room';
 const ListRoom = (props) => {
+  const [checkView, setCheckView] = useState(true);
   const goBackScreen = () => {
     goBack(props.componentId);
   };
@@ -17,24 +19,41 @@ const ListRoom = (props) => {
         <View style={styles.contentTitle}>
           <Text style={styles.txtTitle}>Đội Bóng Đang Chờ</Text>
         </View>
-        <TouchableOpacity style={styles.btnIcon}>
-          <Icon name="list" style={styles.icon} />
-        </TouchableOpacity>
+        {checkView ? (
+          <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckView(false)}>
+            <Icon name="list" style={styles.icon} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckView(true)}>
+            <Icon name="th-large" style={styles.icon} />
+          </TouchableOpacity>
+        )}
       </View>
-      <ScrollView style={styles.viewRoom}>
-        <View style={styles.listRoom}>
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-          <ItemRoom />
-        </View>
-      </ScrollView>
+      {checkView ? (
+        <ScrollView style={styles.viewRoom}>
+          <View style={styles.listRoom}>
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+            <ItemRoom />
+          </View>
+        </ScrollView>
+      ) : (
+        <ScrollView style={styles.viewRoom}>
+          <View style={styles.roomList} />
+          <RoomItem />
+          <RoomItem />
+          <RoomItem />
+          <RoomItem />
+          <RoomItem />
+        </ScrollView>
+      )}
     </View>
   );
 };
