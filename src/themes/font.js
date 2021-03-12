@@ -5,6 +5,7 @@ const Font = {
   title_main: (30 / startWidth) * width,
   title_child: (25 / startWidth) * width,
   title_child3: (18 / startWidth) * width,
+  title_child4: (16 / startWidth) * width,
   title_child2: (20 / startWidth) * width,
   font_description: (14 / startWidth) * width,
 };
