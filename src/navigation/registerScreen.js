@@ -14,6 +14,7 @@ import Field from '../screens/Field/Index';
 import Room from '../screens/Room/Index';
 import Profile from '../screens/Profile/Index';
 import Notification from '../screens/Notification/Index';
+import ListRoom from '../screens\/Room/ListRoom';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -76,5 +77,10 @@ export function registerScreens() {
     'Profile',
     () => ReduxProvider(Profile),
     () => Profile,
+  );
+  Navigation.registerComponent(
+    'ListRoom',
+    () => ReduxProvider(ListRoom),
+    () => ListRoom,
   );
 }

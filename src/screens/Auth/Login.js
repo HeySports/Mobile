@@ -41,7 +41,7 @@ const Login = (props) => {
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
         <View style={styles.bottom}>
-          <Button titleBtn="Đăng nhập" checkBtn={true} function={login}/>
+          <Button titleBtn="Đăng nhập" checkBtn={true} function={login} />
           <Button
             titleBtn="Đăng nhập ngay"
             checkBtn={false}
