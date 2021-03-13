@@ -51,13 +51,13 @@ const Home = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
+        <Image source={user} style={styles.imgUser} />
         <View style={styles.search}>
           <TextInput style={styles.inputSearch} />
           <TouchableOpacity style={styles.btnIconSearch} onPress={() => search()}>
             <Icon name="search" style={styles.iconSearch} />
           </TouchableOpacity>
         </View>
-        <Image source={user} style={styles.imgUser} />
       </View>
       <ScrollView style={styles.containerHome}>
         <View style={styles.slider}>
@@ -95,7 +95,7 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Danh sách sân bóng" functionViewMore={viewMorePitch } />
+          <Title title="Danh sách sân bóng" functionViewMore={viewMorePitch} />
           <ScrollView style={styles.listScrolls} horizontal={true}>
             <Pitch />
             <Pitch />
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   topBar: {
     width: width,
-    height: 55,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -133,16 +133,16 @@ const styles = StyleSheet.create({
     borderColor: Color.txtLevel2,
   },
   imgUser: {
-    width: 49,
-    height: 49,
-    borderRadius: 49 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: Color.primary,
   },
   search: {
-    marginRight: (15 / startWidth) * width,
+    marginLeft: (5 / startWidth) * width,
     flexDirection: 'row',
-    width: (280 / startWidth) * width,
+    width: (290 / startWidth) * width,
   },
   inputSearch: {
     width: '100%',
