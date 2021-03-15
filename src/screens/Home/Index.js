@@ -19,6 +19,7 @@ import slide1 from '../../image/slide1.png';
 import ItemRoom from '../../components/ItemRoom';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
+import Pitch from '../../components/Pitch';
 const data = {
   dataSlide: [
     {
@@ -44,16 +45,19 @@ const Home = (props) => {
   const viewMoreRoom = () => {
     pushScreen(props.componentId, 'ListRoom', '', 'ListRoom', false, '', '');
   };
+  const viewMorePitch = () => {
+    pushScreen(props.componentId, 'Field', '', 'Field', false, '', '');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
+        <Image source={user} style={styles.imgUser} />
         <View style={styles.search}>
           <TextInput style={styles.inputSearch} />
           <TouchableOpacity style={styles.btnIconSearch} onPress={() => search()}>
             <Icon name="search" style={styles.iconSearch} />
           </TouchableOpacity>
         </View>
-        <Image source={user} style={styles.imgUser} />
       </View>
       <ScrollView style={styles.containerHome}>
         <View style={styles.slider}>
@@ -91,11 +95,12 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Đội bóng đang chờ" />
-          <ScrollView style={styles.listScroll} horizontal={true}>
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
+          <Title title="Danh sách sân bóng" functionViewMore={viewMorePitch} />
+          <ScrollView style={styles.listScrolls} horizontal={true}>
+            <Pitch />
+            <Pitch />
+            <Pitch />
+            <Pitch />
           </ScrollView>
         </View>
         <View style={styles.listRoom}>
@@ -112,32 +117,32 @@ const Home = (props) => {
   );
 };
 export default Home;
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const startWidth = 360;
-const startHeight = 640;
 const styles = StyleSheet.create({
   container: {
     width: width,
   },
   topBar: {
     width: width,
-    height: 55,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: Color.txtLevel2,
   },
   imgUser: {
-    width: 49,
-    height: 49,
-    borderRadius: 49 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: Color.primary,
   },
   search: {
-    marginLeft: (2 / startWidth) * width,
-    marginRight: (15 / startWidth) * width,
+    marginLeft: (5 / startWidth) * width,
     flexDirection: 'row',
-    width: (260 / startWidth) * width,
+    width: (290 / startWidth) * width,
   },
   inputSearch: {
     width: '100%',
@@ -194,5 +199,9 @@ const styles = StyleSheet.create({
   listScroll: {
     marginTop: 10,
     height: (120 / startWidth) * startWidth,
+  },
+  listScrolls: {
+    marginTop: 10,
+    height: 220,
   },
 });
