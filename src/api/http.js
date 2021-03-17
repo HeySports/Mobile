@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_ROOT = 'https://the-books-api-dev.enouvo.com/';
+const API_ROOT = 'http://127.0.0.1:8000/api/';
 
 axios.defaults.baseURL = API_ROOT;
 axios.defaults.timeout = 15000;
@@ -54,22 +54,19 @@ const http = {
   },
   post(url, data = {}, config = {}) {
     console.log(url, data);
-
+    console.log('data');
     return axios.post(url, data, config);
   },
   put(url, data = {}, config = {}) {
     console.log(url, data);
-
     return axios.put(url, data, config);
   },
   patch(url, data = {}, config = {}) {
     console.log(url, data);
-
     return axios.patch(url, data, config);
   },
   delete(url, config = {}) {
     console.log(url);
-
     return axios.delete(url, config);
   },
   postUploadFile(url, data = {}) {
@@ -102,5 +99,4 @@ const http = {
     });
   },
 };
-
 export default http;
