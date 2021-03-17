@@ -10,7 +10,11 @@ const Input = (props) => {
       <Text style={styles.txtInput}>{props.title}</Text>
       {props.checkPass ? (
         <View style={styles.itemInput}>
-          <TextInput style={styles.input} secureTextEntry={checkInput} />
+          <TextInput
+            style={styles.input}
+            secureTextEntry={checkInput}
+            onChangeText={props.txtChange}
+          />
           {checkInput ? (
             <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckInput(false)}>
               <Icon name={props.icon} style={styles.iconInputs} />
@@ -23,7 +27,11 @@ const Input = (props) => {
         </View>
       ) : (
         <View style={styles.itemInput}>
-          <TextInput style={styles.input} secureTextEntry={props.checkPass} />
+          <TextInput
+            style={styles.input}
+            secureTextEntry={props.checkPass}
+            onChangeText={props.txtChange}
+          />
           <Icon name={props.icon} style={styles.iconInput} />
         </View>
       )}

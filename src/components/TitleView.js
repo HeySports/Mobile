@@ -7,10 +7,14 @@ const TitleView = (props) => {
   return (
     <View style={styles.titleListRoom}>
       <Text style={styles.txtTitleListRoom}>{props.title}</Text>
-      <TouchableOpacity style={styles.btnListRoom} onPress={props.functionViewMore}>
-        <Icon name="angle-double-right" style={styles.iconView} />
-        <Text style={styles.txtBtnView}>Xem thêm</Text>
-      </TouchableOpacity>
+      {props.checkTitle ? (
+        <View />
+      ) : (
+        <TouchableOpacity style={styles.btnListRoom} onPress={props.functionViewMore}>
+          <Icon name="angle-double-right" style={styles.iconView} />
+          <Text style={styles.txtBtnView}>Xem thêm</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
