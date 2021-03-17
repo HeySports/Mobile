@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-alert */
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,7 +15,12 @@ import Font from '../../themes/font';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { pushScreen, homeScreen } from '../../navigation/pushScreen';
+import LoginActions from '../../redux/AuthRedux/actions';
+import { useDispatch } from 'react-redux';
 const Login = (props) => {
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
   const register = () => {
     pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
   };
@@ -22,8 +28,18 @@ const Login = (props) => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
   const login = () => {
-    homeScreen();
+    const dataLogin = {
+      phone_numbers: phone,
+      password: password,
+    };
+    if (dataLogin.phone_numbers === '' || dataLogin.password === '') {
+      alert('Bạn cần nhập đầy đủ thông tin !');
+    } else {
+      dispatch(LoginActions.userLogin(dataLogin));
+      homeScreen();
+    }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -34,8 +50,18 @@ const Login = (props) => {
           <Image source={logo} style={styles.logo} />
         </View>
         <View style={styles.center}>
-          <Input title="Số điện thoại" icon="phone" checkPass={false} />
-          <Input title="Mật khẩu" icon="low-vision" checkPass={true} />
+          <Input
+            title="Số điện thoại"
+            icon="phone"
+            checkPass={false}
+            txtChange={(text) => setPhone(text)}
+          />
+          <Input
+            title="Mật khẩu"
+            icon="low-vision"
+            checkPass={true}
+            txtChange={(text) => setPassword(text)}
+          />
         </View>
         <TouchableOpacity style={styles.forgotPass} onPress={() => forgot()}>
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>

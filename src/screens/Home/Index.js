@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   listScroll: {
     marginTop: 10,
-    height: (120 / startWidth) * startWidth,
+    height: (140 / startWidth) * startWidth,
   },
   listScrolls: {
     marginTop: 10,

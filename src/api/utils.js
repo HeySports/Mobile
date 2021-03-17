@@ -91,7 +91,7 @@ function requestWrapper(method) {
     let url = _url;
     let data = _data;
     let params = _params;
-    url = 'https://the-books-api-staging.enouvo.com' + url;
+    url = 'http://127.0.0.1:8000/api/' + url;
     if (method === 'GET') {
       // is it a GET?
       // GET doesn't have data
