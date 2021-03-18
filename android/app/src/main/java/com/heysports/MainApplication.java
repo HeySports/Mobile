@@ -11,7 +11,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
+// import com.reactnativecommunity.geolocation.GeolocationPackage;
 public class MainApplication extends NavigationApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -35,7 +35,21 @@ public class MainApplication extends NavigationApplication {
           return "index";
         }
       };
-
+// @Override
+// protected List<ReactPackage> getPackages() {
+//     return Arrays.asList(
+//             new MainReactPackage(),
+//             new GeolocationPackage()
+//     );
+// }
+// // @Override
+// // protected List<ReactPackage> getPackages() {
+// // return Arrays.<ReactPackage>asList(
+// //     new MainReactPackage(),
+// //            new GeolocationPackage(),
+// //      new MapsPackage()
+// //    );
+// // }
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;

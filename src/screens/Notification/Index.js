@@ -32,7 +32,7 @@ const Notification = () => {
           <Icon name="bell" style={styles.iconTitle} />
         </View>
         <ScrollView style={styles.listNotification}>
-        <ItemNotification />
+          <ItemNotification />
           <ItemNotification />
           <ItemNotification />
           <ItemNotification checkItem={true} />
