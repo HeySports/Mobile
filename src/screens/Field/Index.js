@@ -1,43 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, View, PermissionsAndroid, Platform } from 'react-native';
+import { StyleSheet, Dimensions, View, PermissionsAndroid, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 const Field = () => {
-  const [currentLong, setCurrentLong] = useState(null);
-  const [currentLat, setCurrentLat] = useState(null);
-  const [locationStatus, setLocationStatus] = useState('');
+  const [currentLongitude, setCurrentLongitude] = useState(0);
+  const [currentLatitude, setCurrentLatitude] = useState(0);
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
-            title: 'Truy cập vị tí của bạn',
-            message: 'App này cần bạn cho phép truy cập vị trí của bạn ',
+            title: 'Location Access Required',
+            message: 'This App needs to Access your location',
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          getLocation();
+          Geolocation.getCurrentPosition(
+            (position) => {
+              const currentLong = position.coords.longitude;
+              const currentLat = position.coords.latitude;
+              setCurrentLongitude(currentLong);
+              setCurrentLatitude(currentLat);
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
         } else {
-          setLocationStatus('Permission Denied');
+          console.log('fails');
         }
       } catch (err) {
         console.warn(err);
       }
     };
     requestLocationPermission();
-  });
-  const getLocation = () => {
-    Geolocation.getCurrentPosition((index) => console.log(index));
-  };
+  }, []);
   return (
     <View style={styles.mapContainer}>
+
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: 16.045444,
-          longitude: 108.1827412,
+          latitude: Number(currentLatitude),
+          longitude: Number(currentLongitude),
           latitudeDelta: 0.00932,
           longitudeDelta: 0.2521,
         }}
@@ -45,15 +52,17 @@ const Field = () => {
       >
         <Marker
           coordinate={{
-            latitude: 16.045444,
-            longitude: 108.1827412,
+            latitude: Number(currentLatitude),
+            longitude: Number(currentLongitude),
           }}
         />
       </MapView>
+      <View style={styles.searchView}>
+        <Text>doan tien thanh</Text>
+      </View>
     </View>
   );
 };
-
 export default Field;
 const { height, width } = Dimensions.get('window');
 const startWidth = 360;
@@ -64,8 +73,12 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    position: 'absolute',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  searchView: {
+    marginTop: -200,
   },
 });
