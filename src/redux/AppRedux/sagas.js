@@ -1,7 +1,7 @@
 import { takeLatest, select, put } from 'redux-saga/effects';
 import { AppTypes } from './actions';
 import http from '../../api/http';
-import { introScreen, loginScreen } from '../../navigation/pushScreen';
+import { introScreen, loginScreen, homeScreen } from '../../navigation/pushScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 export function* loadingAppSagas() {
   try {
@@ -15,7 +15,7 @@ export function* loadingAppSagas() {
 
     http.setAuthorizationHeader(token);
     if (token) {
-      console.log('token');
+      homeScreen();
     } else {
       loginScreen();
     }

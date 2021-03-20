@@ -14,7 +14,7 @@ import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { pushScreen, homeScreen } from '../../navigation/pushScreen';
+import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch } from 'react-redux';
 const Login = (props) => {
@@ -36,7 +36,6 @@ const Login = (props) => {
       alert('Bạn cần nhập đầy đủ thông tin !');
     } else {
       dispatch(LoginActions.userLogin(dataLogin));
-      homeScreen();
     }
   };
 

@@ -17,7 +17,7 @@ export const userLoginSuccess = (state, { response }) =>
   state.merge({
     loadingLogin: false,
     errorLogin: null,
-    responseLogin: response,
+    responseLogin: response.user,
     token: response.token,
     type: 'User login success',
   });

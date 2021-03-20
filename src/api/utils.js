@@ -91,7 +91,7 @@ function requestWrapper(method) {
     let url = _url;
     let data = _data;
     let params = _params;
-    url = 'http://127.0.0.1:8000/api/' + url;
+    url = 'https://hey-spoprts.herokuapp.com/api/' + url;
     if (method === 'GET') {
       // is it a GET?
       // GET doesn't have data
@@ -159,7 +159,6 @@ function getQueryString(params) {
     .map((k) => `${esc(k)}=${esc(params[k])}`)
     .join('&');
 }
-
 export const get = requestWrapper('GET');
 export const post = requestWrapper('POST');
 export const put = requestWrapper('PUT');
