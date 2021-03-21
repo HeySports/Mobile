@@ -24,7 +24,6 @@ export function* loadingAppSagas() {
     console.log(error);
   }
 }
-
 export function* goToIntroSagas() {
   introScreen();
 }

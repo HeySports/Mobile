@@ -5,6 +5,8 @@ import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import { goBack, pushScreen } from '../../navigation/pushScreen';
 import ItemSetting from '../../components/ItemSetting';
+import { useDispatch } from 'react-redux';
+import AuthAction from '../../redux/AuthRedux/actions';
 const Setting = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
@@ -21,8 +23,9 @@ const Setting = (props) => {
   const ruleScreen = () => {
     pushScreen(props.componentId, 'Rules', '', 'Rules', false, '', '');
   };
+  const dispatch = useDispatch();
   const logout = () => {
-    alert('logout');
+    dispatch(AuthAction.userLogout());
   };
   return (
     <View style={styles.container}>

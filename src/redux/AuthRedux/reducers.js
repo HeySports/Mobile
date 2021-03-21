@@ -11,7 +11,7 @@ export const INITIAL_STATE = Immutable({
 });
 
 export const userLogin = (state) =>
-  state.merge({ loading: true, errorLogin: null, type: 'User Login' });
+  state.merge({ loadingLogin: true, errorLogin: null, type: 'User Login' });
 
 export const userLoginSuccess = (state, { response }) =>
   state.merge({
@@ -29,11 +29,17 @@ export const userLoginFailure = (state, { error }) =>
     responseLogin: error,
     type: 'User login failure',
   });
+export const userLogout = (state) =>
+  state.merge({
+    token: null,
+    response: null,
+  });
 
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [LoginTypes.USER_LOGIN]: userLogin,
   [LoginTypes.USER_LOGIN_SUCCESS]: userLoginSuccess,
   [LoginTypes.USER_LOGIN_FAILURE]: userLoginFailure,
+  [LoginTypes.USER_LOGOUT]: userLogout,
 });
 
 export default reducer;
