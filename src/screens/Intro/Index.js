@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, PermissionsAndroid } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
-
+import Geolocation from '@react-native-community/geolocation';
 import { makeSkipIntro } from '../../redux/AppRedux/actions';
+import AsyncStorage from '@react-native-community/async-storage';
 import ItemIntro from './Item';
 import Button from '../../components/Button';
 import intro1 from '../../image/player.png';
@@ -34,7 +35,6 @@ const data = {
     },
   ],
 };
-
 const Intro = () => {
   const [dataIntro, setDataIntro] = useState(data.dataIntro);
   const [activity, setActivity] = useState(0);
@@ -42,8 +42,47 @@ const Intro = () => {
   const _renderItem = ({ item, index }) => {
     return <ItemIntro key={index} inform={item} />;
   };
+  const userGetLocation = async () => {
+    const requestLocationPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Access Required',
+            message: 'This App needs to Access your location',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          Geolocation.getCurrentPosition(
+            (position) => {
+              const currentLong = position.coords.longitude;
+              const currentLat = position.coords.latitude;
+              const location = {
+                currentLong: currentLong,
+                currentLat: currentLat,
+              };
+              AsyncStorage.setItem('location', JSON.stringify(location));
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
+        } else {
+          console.log('fails');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    requestLocationPermission();
+  };
   const StartApp = () => {
     dispatch(makeSkipIntro());
+    try {
+      userGetLocation();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <View style={styles.containerIntro}>

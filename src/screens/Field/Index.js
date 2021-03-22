@@ -1,44 +1,27 @@
+/* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, View, PermissionsAndroid, Text } from 'react-native';
+import { StyleSheet, Dimensions, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const Field = () => {
-  const [currentLongitude, setCurrentLongitude] = useState(0);
-  const [currentLatitude, setCurrentLatitude] = useState(0);
+  const [currentLatitude, setCurrentLatitude] = useState('...');
+  const [currentLongitude, setCurrentLongitude] = useState('...');
   useEffect(() => {
-    const requestLocationPermission = async () => {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: 'Location Access Required',
-            message: 'This App needs to Access your location',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          Geolocation.getCurrentPosition(
-            (position) => {
-              const currentLong = position.coords.longitude;
-              const currentLat = position.coords.latitude;
-              setCurrentLongitude(currentLong);
-              setCurrentLatitude(currentLat);
-            },
-            (error) => {
-              console.log(error);
-            },
-          );
-        } else {
-          console.log('fails');
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    };
-    requestLocationPermission();
+    getStore();
   }, []);
+  const getStore = async () => {
+    try {
+      const location = await AsyncStorage.getItem('location');
+      const jsonLocation = JSON.parse(location);
+      setCurrentLatitude(jsonLocation.currentLat);
+      setCurrentLongitude(jsonLocation.currentLong);
+    } catch (e) {
+      alert('Failed to fetch the data from storage');
+    }
+  };
   return (
     <View style={styles.mapContainer}>
-
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -57,9 +40,6 @@ const Field = () => {
           }}
         />
       </MapView>
-      <View style={styles.searchView}>
-        <Text>doan tien thanh</Text>
-      </View>
     </View>
   );
 };

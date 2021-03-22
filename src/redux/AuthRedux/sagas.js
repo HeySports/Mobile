@@ -11,7 +11,6 @@ export function* userLogin({ data }) {
     yield put(AuthAction.userLoginSuccess(response));
     yield put(userStartApp());
   } catch (error) {
-    console.log(error);
     yield put(AuthAction.userLoginFailure(error));
   }
 }

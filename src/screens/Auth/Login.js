@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -23,7 +22,6 @@ const Login = (props) => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const storeLogin = useSelector((state) => state.auth);
-  console.log(storeLogin.auth);
   const register = () => {
     pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
   };
@@ -68,6 +66,11 @@ const Login = (props) => {
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
         {storeLogin.loadingLogin && <ActivityIndicator size="small" color="#0000ff" />}
+        {storeLogin.checkLoginFail && (
+          <View style={styles.error}>
+            <Text style={styles.txtError}>{storeLogin.responseLogin}</Text>
+          </View>
+        )}
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} function={login} />
           <Button
@@ -125,5 +128,15 @@ const styles = StyleSheet.create({
   bottom: {
     width: width,
     alignItems: 'center',
+  },
+  error: {
+    width: width,
+    justifyContent: 'center',
+    height: 40,
+    alignItems: 'center',
+  },
+  txtError: {
+    fontSize: Font.font_description,
+    color: '#ff0000',
   },
 });

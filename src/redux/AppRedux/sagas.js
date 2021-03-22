@@ -21,18 +21,15 @@ export function* loadingAppSagas() {
     }
   } catch (error) {
     loginScreen();
-    console.log(error);
   }
 }
 export function* goToIntroSagas() {
   introScreen();
 }
-
 export function* makeSkipIntroSagas() {
   yield AsyncStorage.setItem('skip', JSON.stringify(true));
   yield loadingAppSagas();
 }
-
 const appSagas = () => [
   takeLatest(AppTypes.START_APP, loadingAppSagas),
   takeLatest(AppTypes.GO_TO_INTRO, goToIntroSagas),

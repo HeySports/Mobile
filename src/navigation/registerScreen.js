@@ -29,6 +29,11 @@ function ReduxProvider(Component) {
 }
 export function registerScreens() {
   Navigation.registerComponent(
+    'Intro',
+    () => ReduxProvider(Intro),
+    () => Intro,
+  );
+  Navigation.registerComponent(
     'Information',
     () => ReduxProvider(Information),
     () => Information,
@@ -52,11 +57,6 @@ export function registerScreens() {
     'Setting',
     () => ReduxProvider(Setting),
     () => Setting,
-  );
-  Navigation.registerComponent(
-    'Intro',
-    () => ReduxProvider(Intro),
-    () => Intro,
   );
   Navigation.registerComponent(
     'Login',

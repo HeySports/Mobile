@@ -5,13 +5,14 @@ import { LoginTypes } from './actions';
 export const INITIAL_STATE = Immutable({
   loadingLogin: false,
   responseLogin: null,
+  checkLoginFail: false,
   errorLogin: null,
   token: null,
   type: '',
 });
 
 export const userLogin = (state) =>
-  state.merge({ loadingLogin: true, errorLogin: null, type: 'User Login' });
+  state.merge({ loadingLogin: true, errorLogin: null, type: 'User Login', checkLoginFail: false });
 
 export const userLoginSuccess = (state, { response }) =>
   state.merge({
@@ -20,14 +21,16 @@ export const userLoginSuccess = (state, { response }) =>
     responseLogin: response.user,
     token: response.token,
     type: 'User login success',
+    checkLoginFail: false,
   });
 
 export const userLoginFailure = (state, { error }) =>
   state.merge({
     loadingLogin: false,
     errorLogin: error,
-    responseLogin: error,
+    responseLogin: error.data.message,
     type: 'User login failure',
+    checkLoginFail: true,
   });
 export const userLogout = (state) =>
   state.merge({
