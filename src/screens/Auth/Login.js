@@ -8,19 +8,22 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import logo from '../../image/logo.png';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { pushScreen, homeScreen } from '../../navigation/pushScreen';
+import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const storeLogin = useSelector((state) => state.auth);
+  console.log(storeLogin.auth);
   const register = () => {
     pushScreen(props.componentId, 'Register', '', 'Register', false, '', '');
   };
@@ -36,10 +39,8 @@ const Login = (props) => {
       alert('Bạn cần nhập đầy đủ thông tin !');
     } else {
       dispatch(LoginActions.userLogin(dataLogin));
-      homeScreen();
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -66,6 +67,7 @@ const Login = (props) => {
         <TouchableOpacity style={styles.forgotPass} onPress={() => forgot()}>
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
+        {storeLogin.loadingLogin && <ActivityIndicator size="small" color="#0000ff" />}
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} function={login} />
           <Button
