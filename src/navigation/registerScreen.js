@@ -20,6 +20,7 @@ import ChangePassword from '../screens/Profile/setting/ChangePassword';
 import Help from '../screens/Profile/setting/Help';
 import Rules from '../screens/Profile/setting/Rules';
 import Information from '../screens/Profile/setting/Information';
+import CodeRegister from '../screens/Auth/Code';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -28,6 +29,11 @@ function ReduxProvider(Component) {
   );
 }
 export function registerScreens() {
+  Navigation.registerComponent(
+    'CodeRegister',
+    () => ReduxProvider(CodeRegister),
+    () => CodeRegister,
+  );
   Navigation.registerComponent(
     'Intro',
     () => ReduxProvider(Intro),

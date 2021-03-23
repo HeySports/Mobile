@@ -14,6 +14,7 @@ const Input = (props) => {
             style={styles.input}
             secureTextEntry={checkInput}
             onChangeText={props.txtChange}
+            keyboardType={props.checkTypeInput}
           />
           {checkInput ? (
             <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckInput(false)}>
@@ -31,6 +32,7 @@ const Input = (props) => {
             style={styles.input}
             secureTextEntry={props.checkPass}
             onChangeText={props.txtChange}
+            keyboardType={props.checkTypeInput}
           />
           <Icon name={props.icon} style={styles.iconInput} />
         </View>

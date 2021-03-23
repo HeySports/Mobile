@@ -54,6 +54,7 @@ const Login = (props) => {
             icon="phone"
             checkPass={false}
             txtChange={(text) => setPhone(text)}
+            checkTypeInput="phone-pad"
           />
           <Input
             title="Mật khẩu"
@@ -74,7 +75,7 @@ const Login = (props) => {
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} function={login} />
           <Button
-            titleBtn="Đăng nhập ngay"
+            titleBtn="Đăng Ký ngay"
             checkBtn={false}
             title="Bạn chưa có tài khoản ?"
             function={register}

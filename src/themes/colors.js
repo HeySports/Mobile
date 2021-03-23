@@ -13,5 +13,6 @@ const Colors = {
   field: '#2DBE75',
   white: '#F9F3F3',
   icon: '#daa520',
+  error: '#ff0000',
 };
 export default Colors;
