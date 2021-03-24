@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Color from '../../themes/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,66 +18,74 @@ import Title from '../../components/TitleView';
 import ItemRoom from '../../components/ItemRoom';
 import Room from '../../components/Room';
 import { pushScreen } from '../../navigation/pushScreen';
+import { useSelector } from 'react-redux';
+import Star from '../../components/Star';
+
 const Profile = (props) => {
+  const storeUser = useSelector((state) => state.profile);
   const settingProfile = () => {
     pushScreen(props.componentId, 'Setting', '', 'Setting', false, '', '');
   };
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image style={styles.avtProfile} source={avatar} />
-        <View style={styles.headerIcon}>
-          <TouchableOpacity style={styles.btnHeader}>
-            <Icons name="camera" style={styles.iconHeader} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnHeader} onPress={settingProfile}>
-            <Icons name="cog" style={styles.iconHeader} />
-          </TouchableOpacity>
+      {storeUser.loadingProfile ? (
+        <View style={styles.containerLoading}>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
-      </View>
-      <View style={styles.information}>
-        <View style={styles.nameProfile}>
-          <Text style={styles.txtNameProfile}>Đoàn Tiến Thành</Text>
-          <View style={styles.backgroundIcon}>
-            <Icon name="star" style={styles.iconStart} />
-            <Icon name="star" style={styles.iconStart} />
-            <Icon name="star" style={styles.iconStart} />
-            <Icon name="star" style={styles.iconStart} />
-            <Icon name="star" style={styles.iconStart} />
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Image style={styles.avtProfile} source={avatar} />
+            <View style={styles.headerIcon}>
+              <TouchableOpacity style={styles.btnHeader}>
+                <Icons name="camera" style={styles.iconHeader} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btnHeader} onPress={settingProfile}>
+                <Icons name="cog" style={styles.iconHeader} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.information}>
+            <View style={styles.nameProfile}>
+              <Text style={styles.txtNameProfile}>{storeUser.responseProfile.full_name}</Text>
+              <View style={styles.backgroundIcon}>
+                <Star star={2.1} />
+              </View>
+            </View>
+            <ScrollView style={styles.content}>
+              <View style={styles.informations}>
+                <TouchableOpacity style={styles.btnContent}>
+                  <Icon name="information-outline" style={styles.iconContent} />
+                  <Text style={styles.txtContent}>Thông tin</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnContent}>
+                  <Icons name="search" style={styles.iconContent} />
+                  <Text style={styles.txtContent}>Tìm đội</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnContent}>
+                  <Icon name="plus-circle-outline" style={styles.iconContent} />
+                  <Text style={styles.txtContent}>Tạo trận</Text>
+                </TouchableOpacity>
+              </View>
+              <Title title="Trận đấu sắp tới" checkTitle={true} />
+              <ScrollView style={styles.listScroll} horizontal={true}>
+                <ItemRoom />
+                <ItemRoom />
+                <ItemRoom />
+              </ScrollView>
+              <Title title="Lịch sử thi đấu" checkTitle={true} />
+              <ScrollView style={styles.viewRoom}>
+                <View style={styles.roomList} />
+                <Room />
+                <Room />
+                <Room />
+                <Room />
+                <Room />
+              </ScrollView>
+            </ScrollView>
           </View>
         </View>
-        <ScrollView style={styles.content}>
-          <View style={styles.informations}>
-            <TouchableOpacity style={styles.btnContent}>
-              <Icon name="information-outline" style={styles.iconContent} />
-              <Text style={styles.txtContent}>Thông tin</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContent}>
-              <Icons name="search" style={styles.iconContent} />
-              <Text style={styles.txtContent}>Tìm đội</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContent}>
-              <Icon name="plus-circle-outline" style={styles.iconContent} />
-              <Text style={styles.txtContent}>Tạo trận</Text>
-            </TouchableOpacity>
-          </View>
-          <Title title="Trận đấu sắp tới" checkTitle={true} />
-          <ScrollView style={styles.listScroll} horizontal={true}>
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-          </ScrollView>
-          <Title title="Lịch sử thi đấu" checkTitle={true} />
-          <ScrollView style={styles.viewRoom}>
-            <View style={styles.roomList} />
-            <Room />
-            <Room />
-            <Room />
-            <Room />
-            <Room />
-          </ScrollView>
-        </ScrollView>
-      </View>
+      )}
     </View>
   );
 };
@@ -85,6 +94,12 @@ const { width, height } = Dimensions.get('window');
 const startWidth = 360;
 const startHeight = 640;
 const styles = StyleSheet.create({
+  containerLoading: {
+    width: width,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     width: width,
     height: height,

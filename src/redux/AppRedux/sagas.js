@@ -3,6 +3,7 @@ import { AppTypes } from './actions';
 import http from '../../api/http';
 import { introScreen, loginScreen, homeScreen } from '../../navigation/pushScreen';
 import AsyncStorage from '@react-native-community/async-storage';
+import ProfileAction from '../ProfileRedux/actions';
 export function* loadingAppSagas() {
   try {
     const storeToken = yield AsyncStorage.getItem('token');
@@ -12,10 +13,10 @@ export function* loadingAppSagas() {
     } else {
       token = yield select((state) => state.auth.token);
     }
-
     http.setAuthorizationHeader(token);
     if (token) {
       homeScreen();
+      yield put(ProfileAction.userGetProfile());
     } else {
       loginScreen();
     }

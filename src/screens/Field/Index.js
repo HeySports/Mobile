@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import AsyncStorage from '@react-native-community/async-storage';
-
 const Field = () => {
   const [currentLatitude, setCurrentLatitude] = useState('...');
   const [currentLongitude, setCurrentLongitude] = useState('...');
