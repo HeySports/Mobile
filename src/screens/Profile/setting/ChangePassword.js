@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
 import Font from '../../../themes/font';
@@ -7,80 +7,91 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Back from '../../../components/Back';
 import { goBack } from '../../../navigation/pushScreen';
+import { useDispatch, useSelector } from 'react-redux';
+import ProfileActions from '../../../redux/ProfileRedux/actions';
+import Error from '../../../components/Error';
 const ChangePassword = (props) => {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(false);
+  const dispatch = useDispatch();
+  const storeChangePass = useSelector((state) => state.profile);
   const savePassword = () => {
-    const dataPassword = {
-      oldPassword: password,
-      newPassword: newPassword,
-      confirmPassword: confirmPassword,
-    };
-    if (
-      dataPassword.oldPassword === '' ||
-      dataPassword.newPassword === '' ||
-      dataPassword.confirmPassword === ''
-    ) {
+    if (password === '' || newPassword === '' || confirmPassword === '') {
       setError('Bạn phải nhập đầy đủ thông tin !');
-    } else if (dataPassword.newPassword < 6) {
+    } else if (newPassword.length < 6) {
       setError('Mật khẩu có ít nhất 6 ký tự !');
-    } else if (dataPassword.newPassword !== dataPassword.confirmPassword) {
+    } else if (newPassword !== confirmPassword) {
       setError('Mật khẩu của bạn không khớp !');
     } else {
-      alert('success');
+      const dataPassword = {
+        password: password,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      };
+      dispatch(ProfileActions.userChangePassword(dataPassword));
     }
   };
   const goBackScreen = () => {
     goBack(props.componentId);
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.top}>
-          <Back goBack={goBackScreen} />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.top}>
+            <Back goBack={goBackScreen} />
+            <View style={styles.title}>
+              <Text style={styles.txtTitle}>Thay Đổi Mật Khẩu</Text>
+            </View>
+          </View>
+          <View style={styles.image}>
+            <View style={styles.iconImage}>
+              <Icon name="check" style={styles.icon} />
+            </View>
+          </View>
         </View>
-        <View style={styles.image}>
-          <View style={styles.iconImage}>
-            <Icon name="check" style={styles.icon} />
+        <View style={styles.center}>
+          <Text style={styles.txtCenter}>Đặt Lại Mật Khẩu Mới</Text>
+        </View>
+        <View style={styles.bottom}>
+          <View style={styles.content}>
+            <Input
+              title="Mật khẩu cũ"
+              checkPass={true}
+              icon="low-vision"
+              txtChange={(text) => setPassword(text)}
+            />
+            <Input
+              title="Mật khẩu mới"
+              checkPass={true}
+              icon="low-vision"
+              txtChange={(text) => setNewPassword(text)}
+            />
+            <Input
+              title="Nhập lại mật khẩu"
+              checkPass={true}
+              icon="low-vision"
+              txtChange={(text) => setConfirmPassword(text)}
+            />
+          </View>
+          {storeChangePass.loadingChangePassword && (
+            <ActivityIndicator size="small" color="#0000ff" />
+          )}
+          {storeChangePass.errorChangePassword && (
+            <Error messageError={storeChangePass.errorChangePassword.message} />
+          )}
+          {storeChangePass.responseChangePassword && (
+            <Error messageError={storeChangePass.responseChangePassword.message} />
+          )}
+          {error && <Error messageError={error} />}
+          <View style={styles.buttonBottom}>
+            <Button titleBtn="Xác Nhận" checkBtn={true} checkColor={true} function={savePassword} />
           </View>
         </View>
       </View>
-      <View style={styles.center}>
-        <Text style={styles.txtCenter}>Đặt Lại Mật Khẩu Mới</Text>
-      </View>
-      <View style={styles.bottom}>
-        <View style={styles.content}>
-          <Input
-            title="Mật khẩu cũ"
-            checkPass={true}
-            icon="low-vision"
-            txtChange={(text) => setPassword(text)}
-          />
-          <Input
-            title="Mật khẩu mới"
-            checkPass={true}
-            icon="low-vision"
-            txtChange={(text) => setNewPassword(text)}
-          />
-          <Input
-            title="Nhập lại mật khẩu"
-            checkPass={true}
-            icon="low-vision"
-            txtChange={(text) => setConfirmPassword(text)}
-          />
-        </View>
-        {error && (
-          <View>
-            <Text>{error}</Text>
-          </View>
-        )}
-        <View style={styles.buttonBottom}>
-          <Button titleBtn="Xác Nhận" checkBtn={true} checkColor={true} function={savePassword} />
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 const { height, width } = Dimensions.get('window');
@@ -90,8 +101,18 @@ export default ChangePassword;
 const styles = StyleSheet.create({
   header: {
     width: width,
-    height: (231 / startHeight) * height,
+    height: (250 / startHeight) * height,
     backgroundColor: Color.secondary,
+  },
+  title: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width - 60,
+  },
+  txtTitle: {
+    fontSize: Font.title_child2,
+    fontWeight: 'bold',
   },
   center: {
     width: width,
@@ -119,10 +140,13 @@ const styles = StyleSheet.create({
   top: {
     width: width,
     height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   image: {
     justifyContent: 'center',
     alignItems: 'center',
+    height: 180,
   },
   iconImage: {
     width: (150 / startWidth) * width,
