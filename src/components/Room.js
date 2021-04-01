@@ -3,24 +3,25 @@ import { StyleSheet, Image, View, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import pitch from '../image/duytan.jpg';
+import { profileTypes } from '../redux/ProfileRedux/actions';
 import Color from '../themes/colors';
 import Font from '../themes/font';
-const RoomItem = () => {
+const RoomItem = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageRoom}>
         <Image source={pitch} style={styles.imgRoom} />
       </View>
       <View style={styles.detailRoom}>
-        <Text style={styles.titleDetail}>Phòng 1</Text>
+        <Text style={styles.titleDetail}>{props.nameRoom}</Text>
         <View style={styles.row}>
           <View style={styles.viewIconDetail}>
             <Icon name="users" style={styles.iconDetail} />
           </View>
           <View style={styles.viewTxtDetail}>
-            <Text style={styles.txtDetail}>Bách Khoa</Text>
+            <Text style={styles.txtDetail}>{props.nameTeam1}</Text>
             <Text style={styles.txtVs}>Vs</Text>
-            <Text style={styles.txtDetail}>Kiến Trúc</Text>
+            <Text style={styles.txtDetail}>{props.nameTeam2}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -28,7 +29,7 @@ const RoomItem = () => {
             <Icon name="people-arrows" style={styles.iconDetail} />
           </View>
           <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>11 người</Text>
+            <Text style={styles.txtDetails}>{props.typeField} người</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -36,7 +37,7 @@ const RoomItem = () => {
             <Icons name="soccer-field" style={styles.iconDetail} />
           </View>
           <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>Sân Duy Tân</Text>
+            <Text style={styles.txtDetails}>{props.nameFiled}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -44,7 +45,7 @@ const RoomItem = () => {
             <Icon name="map-marker-alt" style={styles.iconDetail} />
           </View>
           <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>07 Duy Tân, Hòa Cường Bắc, Hải Châu, Đà Nẵng</Text>
+            <Text style={styles.txtDetails}>{props.address}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -52,7 +53,9 @@ const RoomItem = () => {
             <Icon name="clock" style={styles.iconDetail} />
           </View>
           <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>15:00 - 16:00 | 10/03/2021</Text>
+            <Text style={styles.txtDetailTime}>
+              {props.timeStart} - {props.timeEnd} | {props.datePlay}
+            </Text>
           </View>
         </View>
       </View>
@@ -132,5 +135,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#AC090B',
     fontWeight: '700',
+  },
+  txtDetailTime:{
+    fontSize: 10,
+    color: Color.greyishBrown,
+    fontWeight: 'bold',
   },
 });

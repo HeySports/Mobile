@@ -5,14 +5,15 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../themes/colors';
 import Font from '../themes/font';
-const ItemRoom = () => {
+import Star from '../components/Star';
+const ItemRoom = (props) => {
   return (
     <View style={styles.room}>
-      <Text style={styles.nameRoom}>Phòng 1</Text>
+      <Text style={styles.nameRoom}>{props.nameRoom}</Text>
       <View style={styles.groupRoom}>
         <View style={styles.logoGroup}>
           <View style={styles.txtViewNumber}>
-            <Text style={styles.txtNumberMatches}>5</Text>
+            <Text style={styles.txtNumberMatches}>{props.member1}</Text>
           </View>
           <Image source={imageGroup} style={styles.imageLogoGroup} />
         </View>
@@ -21,36 +22,28 @@ const ItemRoom = () => {
         </View>
         <View style={styles.logoGroup}>
           <View style={styles.txtViewNumber}>
-            <Text style={styles.txtNumberMatches}>5</Text>
+            <Text style={styles.txtNumberMatches}>{props.member2}</Text>
           </View>
           <Image source={imageGroup} style={styles.imageLogoGroup} />
         </View>
       </View>
       <View style={styles.descriptionRoom}>
         <View style={styles.descriptionDetail}>
-          <Text style={styles.txtNameGroup}>Trường Bách Khoa</Text>
+          <Text style={styles.txtNameGroup}>{props.nameTeam1}</Text>
           <View style={styles.listIcon}>
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
+            <Star star={props.starTeam1} />
           </View>
           <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-          <Text style={styles.txtNumberMatch}>1</Text>
+          <Text style={styles.txtNumberMatch}>{props.historyTeam1}</Text>
         </View>
         <View style={styles.space} />
         <View style={styles.descriptionDetail}>
-          <Text style={styles.txtNameGroup}>Trường Bách Khoa</Text>
+          <Text style={styles.txtNameGroup}>{props.nameTeam2}</Text>
           <View style={styles.listIcon}>
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
-            <Icons name="star" style={styles.iconRating} />
+            <Star star={props.starTeam2} />
           </View>
           <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-          <Text style={styles.txtNumberMatch}>1</Text>
+          <Text style={styles.txtNumberMatch}>{props.historyTeam2}</Text>
         </View>
       </View>
     </View>

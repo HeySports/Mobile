@@ -21,6 +21,7 @@ import Help from '../screens/Profile/setting/Help';
 import Rules from '../screens/Profile/setting/Rules';
 import Information from '../screens/Profile/setting/Information';
 import CodeRegister from '../screens/Auth/Code';
+import Detail from '../screens/Field/Detail';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -29,6 +30,11 @@ function ReduxProvider(Component) {
   );
 }
 export function registerScreens() {
+  Navigation.registerComponent(
+    'Detail',
+    () => ReduxProvider(Detail),
+    () => Detail,
+  );
   Navigation.registerComponent(
     'CodeRegister',
     () => ReduxProvider(CodeRegister),

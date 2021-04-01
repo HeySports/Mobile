@@ -2,6 +2,8 @@ import { all } from 'redux-saga/effects';
 import appSaga from './AppRedux/sagas';
 import authSaga from './AuthRedux/sagas';
 import profileSaga from './ProfileRedux/sagas';
+import matchesSagas from './MatchesRedux/sagas';
+import fieldSagas from './FieldRedux/sagas';
 export default function* root() {
-  yield all([...appSaga, ...authSaga, ...profileSaga]);
+  yield all([...appSaga, ...authSaga, ...profileSaga, ...matchesSagas, ...fieldSagas]);
 }

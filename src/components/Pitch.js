@@ -1,38 +1,46 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import pitch from '../image/duytan.jpg';
 import Color from '../themes/colors';
 import Font from '../themes/font';
-const Pitch = () => {
+import { pushScreen } from '../navigation/pushScreen';
+const Pitch = (props) => {
+  const detailPitch = () => {
+    pushScreen(props.idProps, 'Detail', props.id, 'Detail', false, '', '');
+  };
   return (
     <View style={styles.container}>
-      <View style={styles.image}>
-        <Image source={pitch} style={styles.imagePitch} />
-      </View>
-      <View>
-        <View style={styles.detailPitch}>
-          <View style={styles.title}>
-            <Text style={styles.txtTitle}>Sân Bóng Duy Tân</Text>
-          </View>
-          <View style={styles.content}>
-            <View style={styles.iconDetailPitch}>
-              <Icon name="map-marker-alt" style={styles.iconDetail} />
+      <TouchableOpacity onPress={detailPitch}>
+        <View style={styles.image}>
+          <Image source={pitch} style={styles.imagePitch} />
+        </View>
+        <View>
+          <View style={styles.detailPitch}>
+            <View style={styles.title}>
+              <Text style={styles.txtTitle}>{props.nameField}</Text>
             </View>
-            <View style={styles.txtDetailPitch}>
-              <Text style={styles.txtDetail}>Quận Hải Châu</Text>
+            <View style={styles.content}>
+              <View style={styles.iconDetailPitch}>
+                <Icon name="map-marker-alt" style={styles.iconDetail} />
+              </View>
+              <View style={styles.txtDetailPitch}>
+                <Text style={styles.txtDetail}>{props.address}</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.content}>
-            <View style={styles.iconDetailPitch}>
-              <Icon name="clock" style={styles.iconDetail} />
-            </View>
-            <View style={styles.txtDetailPitch}>
-              <Text style={styles.txtDetail}>05:00 - 22:00</Text>
+            <View style={styles.content}>
+              <View style={styles.iconDetailPitch}>
+                <Icon name="clock" style={styles.iconDetail} />
+              </View>
+              <View style={styles.txtDetailPitch}>
+                <Text style={styles.txtDetail}>
+                  {props.timeStart} - {props.timeEnd}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -72,6 +80,7 @@ const styles = StyleSheet.create({
     fontSize: Font.title_child4,
     fontWeight: '700',
     color: Color.primary,
+    textAlign: 'center',
   },
   content: {
     height: '60%',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
@@ -20,6 +21,10 @@ import ItemRoom from '../../components/ItemRoom';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
+import { useSelector, useDispatch } from 'react-redux';
+import MatchesAction from '../../redux/MatchesRedux/actions';
+import FieldAction from '../../redux/FieldRedux/actions';
+
 const data = {
   dataSlide: [
     {
@@ -39,11 +44,28 @@ const Home = (props) => {
   const _renderItem = ({ item, index }) => {
     return <Slide key={index} inform={item} />;
   };
-  const search = (props) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(MatchesAction.getListMatches());
+    dispatch(FieldAction.getListField());
+  }, [dispatch]);
+  // selector
+  var matches = [];
+  var fields = [];
+  const listMatches = useSelector((state) => state.matches);
+  const listField = useSelector((state) => state.fields);
+  // function
+  if (listMatches.responseMatches) {
+    matches = listMatches.responseMatches;
+  }
+  if (listField.responseField) {
+    fields = listField.responseField;
+  }
+  const search = () => {
     alert('Search');
   };
   const viewMoreRoom = () => {
-    pushScreen(props.componentId, 'ListRoom', '', 'ListRoom', false, '', '');
+    pushScreen(props.componentId, 'ListRoom', matches, 'ListRoom', false, '', '');
   };
   const viewMorePitch = () => {
     pushScreen(props.componentId, 'Field', '', 'Field', false, '', '');
@@ -87,21 +109,60 @@ const Home = (props) => {
         <View style={styles.listRoom}>
           <Text style={styles.row} />
           <Title title="Đội bóng đang chờ" functionViewMore={viewMoreRoom} />
-          <ScrollView style={styles.listScroll} horizontal={true}>
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-          </ScrollView>
+          {listMatches.loadingMatches ? (
+            <View style={styles.containerLoading}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <ScrollView
+              style={styles.listScroll}
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              {matches.map((item, index) => {
+                return (
+                  <ItemRoom
+                    key={index}
+                    nameRoom={item.name_room}
+                    member1="4"
+                    member2="5"
+                    nameTeam1="Bách Khoa"
+                    nameTeam2="Sư Phạm"
+                    starTeam1={4.5}
+                    starTeam2={2.5}
+                    historyTeam1={2}
+                    historyTeam2={5}
+                  />
+                );
+              })}
+            </ScrollView>
+          )}
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
           <Title title="Danh sách sân bóng" functionViewMore={viewMorePitch} />
-          <ScrollView style={styles.listScrolls} horizontal={true}>
-            <Pitch />
-            <Pitch />
-            <Pitch />
-            <Pitch />
-          </ScrollView>
+          {listField.loadingField ? (
+            <View style={styles.containerLoading}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <ScrollView style={styles.listScrolls} horizontal={true}>
+              {fields.map((item, index) => {
+                return (
+                  <Pitch
+                    key={index}
+                    id={item.id}
+                    nameField={item.name}
+                    address={item.address}
+                    timeStart="06:00"
+                    timeEnd="22:00"
+                    idProps={props.componentId}
+                  />
+                );
+              })}
+            </ScrollView>
+          )}
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
@@ -203,5 +264,11 @@ const styles = StyleSheet.create({
   listScrolls: {
     marginTop: 10,
     height: 220,
+  },
+  containerLoading: {
+    width: width,
+    height: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

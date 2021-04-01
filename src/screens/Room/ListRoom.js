@@ -12,6 +12,7 @@ const ListRoom = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
+  var matches = props.data;
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -32,26 +33,43 @@ const ListRoom = (props) => {
       {checkView ? (
         <ScrollView style={styles.viewRoom}>
           <View style={styles.listRoom}>
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
+            {matches.map((item, index) => {
+              return (
+                <ItemRoom
+                  key={index}
+                  nameRoom={item.name_room}
+                  member1="4"
+                  member2="5"
+                  nameTeam1="Bách Khoa"
+                  nameTeam2="Sư Phạm"
+                  starTeam1={4.5}
+                  starTeam2={2.5}
+                  historyTeam1={2}
+                  historyTeam2={5}
+                />
+              );
+            })}
           </View>
         </ScrollView>
       ) : (
         <ScrollView style={styles.viewRoom}>
           <View style={styles.roomList} />
-          <RoomItem />
-          <RoomItem />
-          <RoomItem />
-          <RoomItem />
-          <RoomItem />
+          {matches.map((item, index) => {
+            return (
+              <RoomItem
+                key={index}
+                nameRoom={item.name_room}
+                typeField={item.type_field}
+                timeStart={item.time_start_play}
+                timeEnd={item.time_end_play}
+                nameTeam1="Bách Khoa"
+                nameTeam2="Sư Phạm"
+                datePlay="01-04-2021"
+                nameFiled="Sân Duy Tân"
+                address="101B Lê Hữu Trác, Quận Sơn Trà"
+              />
+            );
+          })}
         </ScrollView>
       )}
     </View>
