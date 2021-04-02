@@ -1,47 +1,57 @@
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemNotification from '../../components/Notification';
 const Notification = () => {
+  const [checkNotification, setCheckNotification] = useState(true);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtHeader}>Thông Báo</Text>
       </View>
-      <View style={styles.invited}>
-        <View style={styles.titleInvited}>
-          <Text style={styles.txtTitle}>Quản Lý Lời Mời</Text>
-          <Icon name="users" style={styles.iconTitle} />
-        </View>
-        <ScrollView style={styles.listNotification}>
+      <View style={styles.typeNotification}>
+        <TouchableOpacity
+          style={checkNotification ? styles.itemType : styles.itemTypes}
+          onPress={() => setCheckNotification(true)}
+        >
+          <Icon name="users" style={checkNotification ? styles.icon : styles.icons} />
+          <Text style={checkNotification ? styles.txtNotification : styles.txtNotifications}>
+            Lời Mời
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={checkNotification ? styles.itemTypes : styles.itemType}
+          onPress={() => setCheckNotification(false)}
+        >
+          <Icon name="bell" style={checkNotification ? styles.icons : styles.icon} />
+          <Text style={checkNotification ? styles.txtNotifications : styles.txtNotification}>
+            Thông báo
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {checkNotification ? (
+        <ScrollView style={styles.listView}>
           <ItemNotification />
           <ItemNotification />
+        </ScrollView>
+      ) : (
+        <ScrollView style={styles.listView}>
           <ItemNotification />
           <ItemNotification checkItem={true} />
+          <ItemNotification />
           <ItemNotification checkItem={true} />
           <ItemNotification />
           <ItemNotification checkItem={true} />
+          <ItemNotification />
+          <ItemNotification checkItem={true} />
+          <ItemNotification />
+          <ItemNotification checkItem={true} />
+          <ItemNotification />
           <ItemNotification checkItem={true} />
         </ScrollView>
-      </View>
-      <View style={styles.notification}>
-        <View style={styles.titleInvited}>
-          <Text style={styles.txtTitle}>Quản Lý Thông Báo</Text>
-          <Icon name="bell" style={styles.iconTitle} />
-        </View>
-        <ScrollView style={styles.listNotification}>
-          <ItemNotification />
-          <ItemNotification />
-          <ItemNotification />
-          <ItemNotification checkItem={true} />
-          <ItemNotification />
-          <ItemNotification checkItem={true} />
-          <ItemNotification checkItem={true} />
-          <ItemNotification checkItem={true} />
-        </ScrollView>
-      </View>
+      )}
     </View>
   );
 };
@@ -67,30 +77,48 @@ const styles = StyleSheet.create({
     fontSize: Font.title_child,
     fontWeight: '700',
   },
-  invited: {
-    height: '45%',
-    width: width,
-    borderBottomWidth: 1,
-    borderColor: Color.txtLevel2,
-  },
-  titleInvited: {
+  typeNotification: {
+    width: width - 2,
+    flexDirection: 'row',
     height: 40,
+    marginLeft: 1,
+  },
+  itemType: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Color.primary,
     flexDirection: 'row',
   },
-  txtTitle: {
-    flex: 6,
-    marginLeft: 15,
-    fontSize: Font.title_child4,
-    fontWeight: '700',
-  },
-  iconTitle: {
+  itemTypes: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: Color.txtLevel3,
+    flexDirection: 'row',
+  },
+  icon: {
+    flex: 1,
+    marginLeft: 20,
     fontSize: 20,
     color: Color.primary,
   },
-  notification: {
-    width: width,
-    height: '60%',
+  icons: {
+    flex: 1,
+    marginLeft: 20,
+    fontSize: 20,
+    color: Color.txtLevel3,
+  },
+  txtNotification: {
+    flex: 3,
+    fontSize: Font.font_description,
+    color: Color.primary,
+  },
+  txtNotifications: {
+    flex: 3,
+    fontSize: Font.font_description,
+    color: Color.txtLevel3,
   },
 });

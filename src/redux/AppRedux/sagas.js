@@ -15,7 +15,7 @@ export function* loadingAppSagas() {
     }
     http.setAuthorizationHeader(token);
     if (token) {
-      homeScreen();
+      yield homeScreen();
       yield put(ProfileAction.userGetProfile());
     } else {
       loginScreen();

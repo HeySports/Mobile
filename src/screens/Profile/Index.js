@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,12 +20,13 @@ import Room from '../../components/Room';
 import { pushScreen } from '../../navigation/pushScreen';
 import { useSelector } from 'react-redux';
 import Star from '../../components/Star';
-
+import ProfileAction from '../../redux/ProfileRedux/actions';
 const Profile = (props) => {
   const storeUser = useSelector((state) => state.profile);
   const settingProfile = () => {
     pushScreen(props.componentId, 'Setting', '', 'Setting', false, '', '');
   };
+
   return (
     <View style={styles.container}>
       {storeUser.loadingProfile ? (

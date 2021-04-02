@@ -34,6 +34,9 @@ export const pushScreen = (componentId, screenApp, passProps, title, visible, le
                 },
               ],
             },
+            bottomTabs: {
+              visible: false,
+            },
           },
         },
       });
