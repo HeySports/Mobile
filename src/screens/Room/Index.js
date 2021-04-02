@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemItem: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  itemHave:{
+  itemHave: {
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
