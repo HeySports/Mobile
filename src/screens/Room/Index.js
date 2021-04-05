@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
@@ -22,6 +22,7 @@ const Room = () => {
       content: '5 vs 5',
     },
   ];
+  const [haveField, setHaveField] = useState(false);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -60,7 +61,15 @@ const Room = () => {
             <Text>Đã Có Sân</Text>
           </View>
           <View style={styles.itemHaves}>
-            <Text>1</Text>
+            {haveField ? (
+              <TouchableOpacity style={styles.btnHaveField} onPress={() => setHaveField(false)}>
+                <Icon name="check" style={styles.iconHaveFields} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.btnHaveField} onPress={() => setHaveField(true)}>
+                <Icon name="check" style={styles.iconHaveField} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
@@ -153,7 +162,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemHaves: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
+    marginLeft: 10,
+  },
+  btnHaveField: {
+    height: 25,
+    width: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.txtLevel3,
+    borderRadius: 4,
+  },
+  iconHaveField: {
+    fontSize: 13,
+  },
+  iconHaveFields: {
+    fontSize: 13,
+    color: Color.secondary,
   },
 });
