@@ -23,6 +23,7 @@ import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
 import { useSelector, useDispatch } from 'react-redux';
 import MatchesAction from '../../redux/MatchesRedux/actions';
+import ProfileAction from '../../redux/ProfileRedux/actions';
 import FieldAction from '../../redux/FieldRedux/actions';
 
 const data = {
@@ -48,6 +49,7 @@ const Home = (props) => {
   useEffect(() => {
     dispatch(MatchesAction.getListMatches());
     dispatch(FieldAction.getListField());
+    dispatch(ProfileAction.userGetProfile());
   }, [dispatch]);
   // selector
   var matches = [];
@@ -124,9 +126,11 @@ const Home = (props) => {
                 return (
                   <ItemRoom
                     key={index}
-                    nameRoom={item.name_room}
-                    member1="4"
-                    member2="5"
+                    idComponent={props.componentId}
+                    id={item.match.id}
+                    nameRoom={item.match.name_room}
+                    member1={item.team_a.length}
+                    member2={item.team_b.length}
                     nameTeam1="Bách Khoa"
                     nameTeam2="Sư Phạm"
                     starTeam1={4.5}

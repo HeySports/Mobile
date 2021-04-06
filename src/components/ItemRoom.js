@@ -1,52 +1,57 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import imageGroup from '../image/room.png';
-import Icons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../themes/colors';
 import Font from '../themes/font';
 import Star from '../components/Star';
+import { pushScreen } from '../navigation/pushScreen';
 const ItemRoom = (props) => {
+  const detailRoom = () => {
+    pushScreen(props.idComponent, 'DetailRoom', props.id, 'DetailRoom', false, '', '');
+  };
   return (
-    <View style={styles.room}>
-      <Text style={styles.nameRoom}>{props.nameRoom}</Text>
-      <View style={styles.groupRoom}>
-        <View style={styles.logoGroup}>
-          <View style={styles.txtViewNumber}>
-            <Text style={styles.txtNumberMatches}>{props.member1}</Text>
+    <TouchableOpacity onPress={detailRoom}>
+      <View style={styles.room}>
+        <Text style={styles.nameRoom}>{props.nameRoom}</Text>
+        <View style={styles.groupRoom}>
+          <View style={styles.logoGroup}>
+            <View style={styles.txtViewNumber}>
+              <Text style={styles.txtNumberMatches}>{props.member1}</Text>
+            </View>
+            <Image source={imageGroup} style={styles.imageLogoGroup} />
           </View>
-          <Image source={imageGroup} style={styles.imageLogoGroup} />
-        </View>
-        <View style={styles.iconMatch}>
-          <Icon name="futbol" style={styles.iconFootball} />
-        </View>
-        <View style={styles.logoGroup}>
-          <View style={styles.txtViewNumber}>
-            <Text style={styles.txtNumberMatches}>{props.member2}</Text>
+          <View style={styles.iconMatch}>
+            <Icon name="futbol" style={styles.iconFootball} />
           </View>
-          <Image source={imageGroup} style={styles.imageLogoGroup} />
+          <View style={styles.logoGroup}>
+            <View style={styles.txtViewNumber}>
+              <Text style={styles.txtNumberMatches}>{props.member2}</Text>
+            </View>
+            <Image source={imageGroup} style={styles.imageLogoGroup} />
+          </View>
+        </View>
+        <View style={styles.descriptionRoom}>
+          <View style={styles.descriptionDetail}>
+            <Text style={styles.txtNameGroup}>{props.nameTeam1}</Text>
+            <View style={styles.listIcon}>
+              <Star star={props.starTeam1} />
+            </View>
+            <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
+            <Text style={styles.txtNumberMatch}>{props.historyTeam1}</Text>
+          </View>
+          <View style={styles.space} />
+          <View style={styles.descriptionDetail}>
+            <Text style={styles.txtNameGroup}>{props.nameTeam2}</Text>
+            <View style={styles.listIcon}>
+              <Star star={props.starTeam2} />
+            </View>
+            <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
+            <Text style={styles.txtNumberMatch}>{props.historyTeam2}</Text>
+          </View>
         </View>
       </View>
-      <View style={styles.descriptionRoom}>
-        <View style={styles.descriptionDetail}>
-          <Text style={styles.txtNameGroup}>{props.nameTeam1}</Text>
-          <View style={styles.listIcon}>
-            <Star star={props.starTeam1} />
-          </View>
-          <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-          <Text style={styles.txtNumberMatch}>{props.historyTeam1}</Text>
-        </View>
-        <View style={styles.space} />
-        <View style={styles.descriptionDetail}>
-          <Text style={styles.txtNameGroup}>{props.nameTeam2}</Text>
-          <View style={styles.listIcon}>
-            <Star star={props.starTeam2} />
-          </View>
-          <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-          <Text style={styles.txtNumberMatch}>{props.historyTeam2}</Text>
-        </View>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
