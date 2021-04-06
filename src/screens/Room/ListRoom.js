@@ -37,9 +37,9 @@ const ListRoom = (props) => {
               return (
                 <ItemRoom
                   key={index}
-                  nameRoom={item.name_room}
-                  member1="4"
-                  member2="5"
+                  nameRoom={item.match.name_room}
+                  member1={item.team_a.length}
+                  member2={item.team_b.length}
                   nameTeam1="Bách Khoa"
                   nameTeam2="Sư Phạm"
                   starTeam1={4.5}
@@ -58,14 +58,14 @@ const ListRoom = (props) => {
             return (
               <RoomItem
                 key={index}
-                nameRoom={item.name_room}
-                typeField={item.type_field}
-                timeStart={item.time_start_play}
-                timeEnd={item.time_end_play}
+                nameRoom={item.match.name_room}
+                typeField={item.match.type_field}
+                timeStart={item.match.time_start_play}
+                timeEnd={item.match.time_end_play}
                 nameTeam1="Bách Khoa"
                 nameTeam2="Sư Phạm"
                 datePlay="01-04-2021"
-                nameFiled="Sân Duy Tân"
+                nameFiled={item.match.field}
                 address="101B Lê Hữu Trác, Quận Sơn Trà"
               />
             );

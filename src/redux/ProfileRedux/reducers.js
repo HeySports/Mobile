@@ -12,7 +12,9 @@ const INITIAL_STATE = Immutable({
   errorChangePassword: null,
   responseChangePassword: null,
   typeChangePassword: '',
-  statusChangePassword: false,
+  loadingHistories: false,
+  responseHistories: null,
+  typeHistories: '',
 });
 
 export const userGetProfile = (state) =>
@@ -54,11 +56,25 @@ export const userChangePasswordFailure = (state, { error }) =>
     responseChangePassword: null,
     statusChangePassword: false,
   });
+export const userGetHistories = (state) =>
+  state.merge({
+    loadingHistories: true,
+    responseHistories: null,
+    typeHistories: 'USER GET HISTORIES',
+  });
+export const userGetHistoriesSuccess = (state, { response }) =>
+  state.merge({
+    loadingHistories: false,
+    responseHistories: response,
+    typeHistories: 'USER GET HISTORIES SUCCESS',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [profileTypes.USER_GET_PROFILE]: userGetProfile,
   [profileTypes.USER_GET_PROFILE_SUCCESS]: userGetProfileSuccess,
   [profileTypes.USER_CHANGE_PASSWORD]: userChangePassword,
   [profileTypes.USER_CHANGE_PASSWORD_SUCCESS]: userChangePasswordSuccess,
   [profileTypes.USER_CHANGE_PASSWORD_FAILURE]: userChangePasswordFailure,
+  [profileTypes.USER_GET_HISTORIES]: userGetHistories,
+  [profileTypes.USER_GET_HISTORIES_SUCCESS]: userGetHistoriesSuccess,
 });
 export default reducer;

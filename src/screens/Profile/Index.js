@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,23 +13,35 @@ import Color from '../../themes/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Font from '../../themes/font';
-import avatar from '../../image/avatars.jpg';
+import avatar from '../../image/thanh.jpg';
 import Title from '../../components/TitleView';
 import ItemRoom from '../../components/ItemRoom';
 import Room from '../../components/Room';
 import { pushScreen } from '../../navigation/pushScreen';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Star from '../../components/Star';
 import ProfileAction from '../../redux/ProfileRedux/actions';
+import Loading from '../../components/Loading';
 const Profile = (props) => {
-  const storeUser = useSelector((state) => state.profile);
+  var user = [];
+  var histories = [false];
+  const profileStore = useSelector((state) => state.profile);
+  if (profileStore.responseProfile) {
+    user = profileStore.responseProfile;
+  }
+  if (profileStore.responseHistories !== null) {
+    histories = profileStore.responseHistories;
+  }
   const settingProfile = () => {
     pushScreen(props.componentId, 'Setting', '', 'Setting', false, '', '');
   };
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(ProfileAction.userGetHistories());
+  }, [dispatch]);
   return (
     <View style={styles.container}>
-      {storeUser.loadingProfile ? (
+      {profileStore.loadingProfile ? (
         <View style={styles.containerLoading}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
@@ -48,9 +60,9 @@ const Profile = (props) => {
           </View>
           <View style={styles.information}>
             <View style={styles.nameProfile}>
-              <Text style={styles.txtNameProfile}>{storeUser.responseProfile.full_name}</Text>
+              <Text style={styles.txtNameProfile}>{user.full_name && user.full_name}</Text>
               <View style={styles.backgroundIcon}>
-                <Star star={2.1} />
+                <Star star={user.skill_rating && user.skill_rating} />
               </View>
             </View>
             <ScrollView style={styles.content}>
@@ -76,12 +88,27 @@ const Profile = (props) => {
               </ScrollView>
               <Title title="Lịch sử thi đấu" checkTitle={true} />
               <ScrollView style={styles.viewRoom}>
-                <View style={styles.roomList} />
-                <Room />
-                <Room />
-                <Room />
-                <Room />
-                <Room />
+                {profileStore.loadingHistories ? (
+                  <Loading checkLoading={true} />
+                ) : (
+                  histories &&
+                  histories.map((item, index) => {
+                    return (
+                      <Room
+                        key={index}
+                        nameRoom={item.name_room}
+                        typeField={item.type_field}
+                        timeStart={item.time_start_play}
+                        timeEnd={item.time_end_play}
+                        nameTeam1="Bách Khoa"
+                        nameTeam2="Sư Phạm"
+                        datePlay="01-04-2021"
+                        nameFiled="Sân Duy Tân"
+                        address="101B Lê Hữu Trác, Quận Sơn Trà"
+                      />
+                    );
+                  })
+                )}
               </ScrollView>
             </ScrollView>
           </View>
@@ -107,13 +134,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flex: 1,
+    flex: 0.21,
   },
   iconHeader: {
     fontSize: 20,
   },
   avtProfile: {
-    height: (340 / startHeight) * height,
+    height: (150 / startHeight) * height,
     width: width,
     position: 'absolute',
   },

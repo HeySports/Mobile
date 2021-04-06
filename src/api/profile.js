@@ -5,3 +5,6 @@ export async function userGetProfileApi() {
 export async function userChangePasswordApi(data) {
   return http.post('/user/update/password', data);
 }
+export async function userGetHistoriesApi() {
+  return http.get('/match/getMatchHistory');
+}
