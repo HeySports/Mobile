@@ -7,6 +7,8 @@ export const profileTypes = makeConstantCreator(
   'USER_CHANGE_PASSWORD_FAILURE',
   'USER_GET_HISTORIES',
   'USER_GET_HISTORIES_SUCCESS',
+  'USER_GET_DETAIL',
+  'USER_GET_DETAIL_SUCCESS',
 );
 const userGetProfile = () => makeActionCreator(profileTypes.USER_GET_PROFILE);
 const userGetProfileSuccess = (response) =>
@@ -19,6 +21,9 @@ const userChangePasswordFailure = (error) =>
 const userGetHistories = () => makeActionCreator(profileTypes.USER_GET_HISTORIES);
 const userGetHistoriesSuccess = (response) =>
   makeActionCreator(profileTypes.USER_GET_HISTORIES_SUCCESS, { response });
+const userGetDetail = (id) => makeActionCreator(profileTypes.USER_GET_DETAIL, { id });
+const userGetDetailSuccess = (response) =>
+  makeActionCreator(profileTypes.USER_GET_DETAIL_SUCCESS, { response });
 export default {
   userGetProfile,
   userGetProfileSuccess,
@@ -27,4 +32,6 @@ export default {
   userChangePasswordFailure,
   userGetHistories,
   userGetHistoriesSuccess,
+  userGetDetail,
+  userGetDetailSuccess,
 };

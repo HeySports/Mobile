@@ -9,6 +9,10 @@ const INITIAL_STATE = Immutable({
   loadingDetailMatches: false,
   responseDetailMatches: null,
   typeDetailMatches: '',
+  loadingSearch: false,
+  responseSearch: null,
+  errorSearch: null,
+  typeSearch: '',
 });
 
 export const getListMatches = (state) =>
@@ -38,10 +42,34 @@ export const userGetDetailMatchSuccess = (state, { response }) =>
     responseDetailMatches: response,
     typeDetailMatches: 'USER GET DETAIL MATCH SUCCESS',
   });
+export const userSearchMatches = (state) =>
+  state.merge({
+    loadingSearch: true,
+    responseSearch: null,
+    errorSearch: null,
+    typeSearch: 'USER SEARCH',
+  });
+export const userSearchMatchesSuccess = (state, { response }) =>
+  state.merge({
+    loadingSearch: false,
+    responseSearch: response,
+    errorSearch: null,
+    typeSearch: 'USER SEARCH SUCCESS',
+  });
+export const userSearchMatchesFailure = (state, { error }) =>
+  state.merge({
+    loadingSearch: false,
+    responseSearch: null,
+    errorSearch: error,
+    typeSearch: 'USER SEARCH FAILURE',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.GET_LIST_MATCHES]: getListMatches,
   [matchesTypes.GET_LIST_MATCHES_SUCCESS]: getListMatchesSuccess,
   [matchesTypes.USER_GET_DETAIL_MATCH]: userGetDetailMatch,
   [matchesTypes.USER_GET_DETAIL_MATCH_SUCCESS]: userGetDetailMatchSuccess,
+  [matchesTypes.USER_SEARCH_MATCHES]: userSearchMatches,
+  [matchesTypes.USER_SEARCH_MATCHES_SUCCESS]: userSearchMatchesSuccess,
+  [matchesTypes.USER_SEARCH_MATCHES_FAILURE]: userSearchMatchesFailure,
 });
 export default reducer;
