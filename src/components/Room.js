@@ -1,71 +1,75 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, Image, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import pitch from '../image/duytan.jpg';
-import { profileTypes } from '../redux/ProfileRedux/actions';
 import Color from '../themes/colors';
 import Font from '../themes/font';
+import { pushScreen } from '../navigation/pushScreen';
 const RoomItem = (props) => {
+  const detailRoom = () => {
+    pushScreen(props.idComponent, 'DetailRoom', props.id, 'DetailRoom', false, '', '');
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.imageRoom}>
-        <Image source={pitch} style={styles.imgRoom} />
+    <TouchableOpacity onPress={detailRoom}>
+      <View style={styles.container}>
+        <View style={styles.imageRoom}>
+          <Image source={pitch} style={styles.imgRoom} />
+        </View>
+        <View style={styles.detailRoom}>
+          <Text style={styles.titleDetail}>{props.nameRoom}</Text>
+          <View style={styles.row}>
+            <View style={styles.viewIconDetail}>
+              <Icon name="users" style={styles.iconDetail} />
+            </View>
+            <View style={styles.viewTxtDetail}>
+              <Text style={styles.txtDetail}>{props.nameTeam1}</Text>
+              <Text style={styles.txtVs}>Vs</Text>
+              <Text style={styles.txtDetail}>{props.nameTeam2}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.viewIconDetail}>
+              <Icon name="people-arrows" style={styles.iconDetail} />
+            </View>
+            <View style={styles.viewTxtDetails}>
+              <Text style={styles.txtDetails}>{props.typeField} người</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.viewIconDetail}>
+              <Icons name="soccer-field" style={styles.iconDetail} />
+            </View>
+            <View style={styles.viewTxtDetails}>
+              <Text style={styles.txtDetails}>{props.nameFiled}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.viewIconDetail}>
+              <Icon name="map-marker-alt" style={styles.iconDetail} />
+            </View>
+            <View style={styles.viewTxtDetails}>
+              <Text style={styles.txtDetails}>{props.address}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.viewIconDetail}>
+              <Icon name="clock" style={styles.iconDetail} />
+            </View>
+            <View style={styles.viewTxtDetails}>
+              <Text style={styles.txtDetailTime}>
+                {props.timeStart} - {props.timeEnd} | {props.datePlay}
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
-      <View style={styles.detailRoom}>
-        <Text style={styles.titleDetail}>{props.nameRoom}</Text>
-        <View style={styles.row}>
-          <View style={styles.viewIconDetail}>
-            <Icon name="users" style={styles.iconDetail} />
-          </View>
-          <View style={styles.viewTxtDetail}>
-            <Text style={styles.txtDetail}>{props.nameTeam1}</Text>
-            <Text style={styles.txtVs}>Vs</Text>
-            <Text style={styles.txtDetail}>{props.nameTeam2}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.viewIconDetail}>
-            <Icon name="people-arrows" style={styles.iconDetail} />
-          </View>
-          <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>{props.typeField} người</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.viewIconDetail}>
-            <Icons name="soccer-field" style={styles.iconDetail} />
-          </View>
-          <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>{props.nameFiled}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.viewIconDetail}>
-            <Icon name="map-marker-alt" style={styles.iconDetail} />
-          </View>
-          <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetails}>{props.address}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.viewIconDetail}>
-            <Icon name="clock" style={styles.iconDetail} />
-          </View>
-          <View style={styles.viewTxtDetails}>
-            <Text style={styles.txtDetailTime}>
-              {props.timeStart} - {props.timeEnd} | {props.datePlay}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 export default RoomItem;
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const startWidth = 360;
-const startHeight = 640;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
     color: '#AC090B',
     fontWeight: '700',
   },
-  txtDetailTime:{
+  txtDetailTime: {
     fontSize: 10,
     color: Color.greyishBrown,
     fontWeight: 'bold',

@@ -8,3 +8,6 @@ export async function userChangePasswordApi(data) {
 export async function userGetHistoriesApi() {
   return http.get('/match/getMatchHistory');
 }
+export async function userGetDetailInfoApi(id) {
+  return http.get('/user/getUser/' + id);
+}

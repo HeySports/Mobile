@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View, ImageBackground } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+} from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +19,8 @@ import Field11 from '../../components/Field11';
 import Field5 from '../../components/Field5';
 import Field7 from '../../components/Field7';
 import Loading from '../../components/Loading';
+import profile from '../../image/thanh.jpg';
+import Player from '../../components/Player';
 const DetailRoom = (props) => {
   const idRoom = props.data;
   const dispatch = useDispatch();
@@ -45,7 +55,7 @@ const DetailRoom = (props) => {
               <Text style={styles.txtTitle}>CHI TIẾT TRẬN ĐẤU</Text>
             </View>
           </View>
-          <ScrollView>
+          <ScrollView style={styles.viewScroll}>
             <View style={styles.backgroundDetailMatches}>
               <ImageBackground source={sanbong} style={styles.image}>
                 {typeField && typeField}
@@ -55,28 +65,58 @@ const DetailRoom = (props) => {
               <View style={styles.nameMatches}>
                 <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
               </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
+            </View>
+            <View style={styles.ViewListTeam}>
+              <View style={styles.titleListTeam}>
+                <Text style={styles.txtTitleListTeam}>Danh Sách Đội NameTeamA</Text>
               </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
+              <ScrollView
+                style={styles.listPlayer}
+                horizontal={true}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              >
+                {detail.match &&
+                  detail.team_a.map((item, index) => {
+                    return (
+                      <Player
+                        key={index}
+                        image={profile}
+                        name={item.full_name}
+                        id={item.id}
+                        position={item.team_name}
+                        rating={item.skill_rating}
+                        idComponent={props.componentId}
+                      />
+                    );
+                  })}
+              </ScrollView>
+            </View>
+            <View style={styles.ViewListTeam}>
+              <View style={styles.titleListTeam}>
+                <Text style={styles.txtTitleListTeam}>Danh Sách Đội NameTeamB</Text>
               </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
-              </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
-              </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
-              </View>
-
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
-              </View>
-              <View style={styles.nameMatches}>
-                <Text style={styles.txtNameMatches}>{detail.match && detail.match.name_room}</Text>
-              </View>
+              <ScrollView
+                style={styles.listPlayer}
+                horizontal={true}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              >
+                {detail.match &&
+                  detail.team_b.map((item, index) => {
+                    return (
+                      <Player
+                        key={index}
+                        image={profile}
+                        id={item.id}
+                        name={item.full_name}
+                        position={item.team_name}
+                        rating={item.skill_rating}
+                        idComponent={props.componentId}
+                      />
+                    );
+                  })}
+              </ScrollView>
             </View>
           </ScrollView>
         </View>
@@ -124,5 +164,21 @@ const styles = StyleSheet.create({
   txtNameMatches: {
     fontSize: Font.title_child,
     fontWeight: 'bold',
+  },
+  titleListTeam: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  txtTitleListTeam: {
+    fontSize: Font.title_child3,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
+  listPlayer: {
+    width: width,
+    height: 100,
+  },
+  viewScroll: {
+    marginBottom: 100,
   },
 });

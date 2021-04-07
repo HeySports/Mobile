@@ -46,6 +46,8 @@ const ListRoom = (props) => {
                   starTeam2={2.5}
                   historyTeam1={2}
                   historyTeam2={5}
+                  id={item.match.id}
+                  idComponent={props.componentId}
                 />
               );
             })}
@@ -57,6 +59,8 @@ const ListRoom = (props) => {
           {matches.map((item, index) => {
             return (
               <RoomItem
+                id={item.match.id}
+                idComponent={props.componentId}
                 key={index}
                 nameRoom={item.match.name_room}
                 typeField={item.match.type_field}
