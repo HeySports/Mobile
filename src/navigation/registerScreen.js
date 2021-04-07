@@ -23,6 +23,8 @@ import Information from '../screens/Profile/setting/Information';
 import CodeRegister from '../screens/Auth/Code';
 import Detail from '../screens/Field/Detail';
 import DetailRoom from '../screens/Room/DetailRoom';
+import User from '../screens/Profile/users/Index';
+import ResultSearch from '../screens/Search/Index';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -31,6 +33,16 @@ function ReduxProvider(Component) {
   );
 }
 export function registerScreens() {
+  Navigation.registerComponent(
+    'ResultSearch',
+    () => ReduxProvider(ResultSearch),
+    () => ResultSearch,
+  );
+  Navigation.registerComponent(
+    'User',
+    () => ReduxProvider(User),
+    () => User,
+  );
   Navigation.registerComponent(
     'DetailRoom',
     () => ReduxProvider(DetailRoom),

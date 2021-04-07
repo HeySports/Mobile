@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
@@ -25,7 +26,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ProfileAction from '../../redux/ProfileRedux/actions';
 import FieldAction from '../../redux/FieldRedux/actions';
-
 const data = {
   dataSlide: [
     {
@@ -42,6 +42,7 @@ const data = {
 const Home = (props) => {
   const [dataSlide, setdataSlide] = useState(data.dataSlide);
   const [activity, setActivity] = useState(0);
+  const [txtSearch, setTxtSearch] = useState('');
   const _renderItem = ({ item, index }) => {
     return <Slide key={index} inform={item} />;
   };
@@ -64,7 +65,13 @@ const Home = (props) => {
     fields = listField.responseField;
   }
   const search = () => {
-    alert('Search');
+    if (!txtSearch) {
+      alert('Bạn phải nhập thông tin muốn tìm !');
+    }
+    if (txtSearch) {
+      pushScreen(props.componentId, 'ResultSearch', txtSearch, 'ResultSearch', false, '', '');
+      setTxtSearch('');
+    }
   };
   const viewMoreRoom = () => {
     pushScreen(props.componentId, 'ListRoom', matches, 'ListRoom', false, '', '');
@@ -77,7 +84,12 @@ const Home = (props) => {
       <View style={styles.topBar}>
         <Image source={user} style={styles.imgUser} />
         <View style={styles.search}>
-          <TextInput style={styles.inputSearch} />
+          <TextInput
+            style={styles.inputSearch}
+            placeholder="Tìm Kiếm"
+            onChangeText={(text) => setTxtSearch(text)}
+            value={txtSearch}
+          />
           <TouchableOpacity style={styles.btnIconSearch} onPress={() => search()}>
             <Icon name="search" style={styles.iconSearch} />
           </TouchableOpacity>
