@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
-import user from '../../image/profile.jpg';
+import user from '../../image/thanh.jpg';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
@@ -42,7 +42,6 @@ const data = {
 const Home = (props) => {
   const [dataSlide, setdataSlide] = useState(data.dataSlide);
   const [activity, setActivity] = useState(0);
-  const [txtSearch, setTxtSearch] = useState('');
   const _renderItem = ({ item, index }) => {
     return <Slide key={index} inform={item} />;
   };
@@ -65,13 +64,7 @@ const Home = (props) => {
     fields = listField.responseField;
   }
   const search = () => {
-    if (!txtSearch) {
-      alert('Bạn phải nhập thông tin muốn tìm !');
-    }
-    if (txtSearch) {
-      pushScreen(props.componentId, 'ResultSearch', txtSearch, 'ResultSearch', false, '', '');
-      setTxtSearch('');
-    }
+    pushScreen(props.componentId, 'Search', '', 'Search', false, '', '');
   };
   const viewMoreRoom = () => {
     pushScreen(props.componentId, 'ListRoom', matches, 'ListRoom', false, '', '');
@@ -82,16 +75,19 @@ const Home = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Image source={user} style={styles.imgUser} />
-        <View style={styles.search}>
-          <TextInput
-            style={styles.inputSearch}
-            placeholder="Tìm Kiếm"
-            onChangeText={(text) => setTxtSearch(text)}
-            value={txtSearch}
-          />
-          <TouchableOpacity style={styles.btnIconSearch} onPress={() => search()}>
-            <Icon name="search" style={styles.iconSearch} />
+        <View style={styles.borderProfile}>
+          <View style={styles.imageProfile}>
+            <Image source={user} style={styles.imgUser} />
+          </View>
+        </View>
+        <View style={styles.searchHeader}>
+          <TouchableOpacity style={styles.btnSearch} onPress={() => search()}>
+            <View style={styles.viewTxtSearch}>
+              <Text style={styles.txtSearch}>Tìm kiếm</Text>
+            </View>
+            <View style={styles.viewIconSearch}>
+              <Icon name="search" style={styles.iconSearch} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -209,34 +205,52 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: Color.txtLevel2,
   },
+  borderProfile: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageProfile: {
+    height: 45,
+    width: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: Color.primary,
+    borderWidth: 2,
+    borderRadius: 22.5,
+  },
   imgUser: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    borderWidth: 2,
-    borderColor: Color.primary,
   },
-  search: {
-    marginLeft: (5 / startWidth) * width,
-    flexDirection: 'row',
-    width: (290 / startWidth) * width,
+  searchHeader: {
+    flex: 8,
+    height: '100%',
+    justifyContent: 'center',
   },
-  inputSearch: {
-    width: '100%',
+  btnSearch: {
+    height: 30,
+    borderRadius: 15,
     borderWidth: 0.5,
-    height: 30,
-    borderRadius: 30 / 2,
+    width: '95%',
+    flexDirection: 'row',
+    alignItems: 'center',
     borderColor: Color.txtLevel3,
-    padding: 0,
-    paddingLeft: 10,
-    fontSize: Font.font_description,
   },
-  btnIconSearch: {
-    width: (30 / startWidth) * width,
-    height: 30,
+  viewTxtSearch: {
+    flex: 9,
+    justifyContent: 'center',
+  },
+  txtSearch: {
+    marginLeft: 10,
+    fontSize: Font.font_description,
+    color: Color.txtLevel3,
+  },
+  viewIconSearch: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    right: (30 / startWidth) * width,
   },
   iconSearch: {
     fontSize: Font.font_description,
