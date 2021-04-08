@@ -7,6 +7,7 @@ import Header from '../../components/Header';
 import { goBack } from '../../navigation/pushScreen';
 import RoomItem from '../../components/Room';
 import ItemRoom from '../../components/ItemRoom';
+import SearchActions from '../../redux/SearchRedux/actions';
 const ResultSearch = (props) => {
   const [checkView, setCheckView] = useState(true);
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const ResultSearch = (props) => {
       txtSearch: props.data,
     };
     dispatch(MatchesAction.userSearchMatches(data));
+     dispatch(SearchActions.userPostHistoriesSearch(data));
   }, [dispatch, props.data]);
   var resultSearch = [];
   var listMatch = [];

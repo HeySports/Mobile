@@ -4,6 +4,14 @@ import authSaga from './AuthRedux/sagas';
 import profileSaga from './ProfileRedux/sagas';
 import matchesSagas from './MatchesRedux/sagas';
 import fieldSagas from './FieldRedux/sagas';
+import searchSagas from './SearchRedux/sagas';
 export default function* root() {
-  yield all([...appSaga, ...authSaga, ...profileSaga, ...matchesSagas, ...fieldSagas]);
+  yield all([
+    ...appSaga,
+    ...authSaga,
+    ...profileSaga,
+    ...matchesSagas,
+    ...fieldSagas,
+    ...searchSagas,
+  ]);
 }

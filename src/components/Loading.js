@@ -12,7 +12,7 @@ const Loading = (props) => {
 export default Loading;
 const { height, width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
-  container:{
+  container: {
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
