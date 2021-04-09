@@ -19,6 +19,7 @@ import Loading from '../../components/Loading';
 import Back from '../../components/Back';
 import { goBack } from '../../navigation/pushScreen';
 const Index = (props) => {
+  const { getHistories, loading } = useSelector((state) => state.search);
   const [txtSearch, setTxtSearch] = useState('');
   const dispatch = useDispatch();
   const searchResult = () => {
@@ -26,28 +27,33 @@ const Index = (props) => {
       // eslint-disable-next-line no-alert
       alert('Bạn phải nhập thông tin bạn muốn tìm kiếm !');
     } else {
+      Keyboard.dismiss();
+      dispatch(
+        SearchActions.userPostHistoriesSearch({
+          description: txtSearch,
+        }),
+      );
       pushScreen(props.componentId, 'ResultSearch', txtSearch, 'ResultSearch', false, '', '');
-      Keyboard.dismiss;
       setTxtSearch('');
     }
   };
-  var histories = [];
   useEffect(() => {
     dispatch(SearchActions.userGetHistoriesSearch());
   }, [dispatch]);
-  const history = useSelector((state) => state.search);
-  if (history.getHistories) {
-    histories = history.getHistories;
-  }
+
   const goBackScreen = () => {
     goBack(props.componentId);
   };
   const getTextSearch = (text) => {
     setTxtSearch(text);
+    Keyboard.dismiss();
     pushScreen(props.componentId, 'ResultSearch', text, 'ResultSearch', false, '', '');
-    Keyboard.dismiss;
     setTxtSearch('');
   };
+  const deleteHistories = (id) => {
+    dispatch(SearchActions.userDeleteHistories(id));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -69,11 +75,11 @@ const Index = (props) => {
         </View>
       </View>
       <View style={styles.historiesSearch}>
-        {history.loading ? (
+        {loading ? (
           <Loading />
         ) : (
           <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-            {histories.map((item, index) => {
+            {getHistories?.map((item, index) => {
               return (
                 <View style={styles.itemHistories} key={index}>
                   <View style={styles.historiesItem}>
@@ -90,8 +96,11 @@ const Index = (props) => {
                       </View>
                     </TouchableOpacity>
                     <View style={styles.viewIconDelete}>
-                      <TouchableOpacity style={styles.btnDeleteHistories} activeOpacity={0.6}>
-                        <Icon name="times" style={styles.historiesIcon} />
+                      <TouchableOpacity
+                        style={styles.btnDeleteHistories}
+                        onPress={() => deleteHistories(item.id)}
+                      >
+                        <Icon name="times" style={styles.historiesIcons} />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -197,5 +206,9 @@ const styles = StyleSheet.create({
   historiesIcon: {
     fontSize: 15,
     color: Color.txtLevel3,
+  },
+  historiesIcons: {
+    fontSize: 15,
+    color: Color.error,
   },
 });

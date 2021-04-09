@@ -5,6 +5,4 @@ export async function getListMatchesApi() {
 export async function userGetDetailMatchApi(id) {
   return http.get('/match/getDetailMatch/' + id);
 }
-export async function userSearchMatchesApi(data) {
-  return http.post('/match/postSearchByText', data);
-}
+

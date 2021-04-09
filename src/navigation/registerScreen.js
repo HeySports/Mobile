@@ -26,6 +26,7 @@ import DetailRoom from '../screens/Room/DetailRoom';
 import User from '../screens/Profile/users/Index';
 import ResultSearch from '../screens/Search/ResultSearch';
 import Search from '../screens/Search/Index';
+import CommentField from '../screens/Field/Comment';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -34,6 +35,11 @@ function ReduxProvider(Component) {
   );
 }
 export function registerScreens() {
+  Navigation.registerComponent(
+    'CommentField',
+    () => ReduxProvider(CommentField),
+    () => CommentField,
+  );
   Navigation.registerComponent(
     'Search',
     () => ReduxProvider(Search),

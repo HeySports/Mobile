@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import imageGroup from '../image/room.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -7,17 +7,18 @@ import Font from '../themes/font';
 import Star from '../components/Star';
 import { pushScreen } from '../navigation/pushScreen';
 const ItemRoom = (props) => {
+  const [room] = useState(props.room);
   const detailRoom = () => {
-    pushScreen(props.idComponent, 'DetailRoom', props.id, 'DetailRoom', false, '', '');
+    pushScreen(props.idComponent, 'DetailRoom', room.match.id, 'DetailRoom', false, '', '');
   };
   return (
     <TouchableOpacity onPress={detailRoom}>
       <View style={styles.room}>
-        <Text style={styles.nameRoom}>{props.nameRoom}</Text>
+        <Text style={styles.nameRoom}> {room && room.match.name_room}</Text>
         <View style={styles.groupRoom}>
           <View style={styles.logoGroup}>
             <View style={styles.txtViewNumber}>
-              <Text style={styles.txtNumberMatches}>{props.member1}</Text>
+              <Text style={styles.txtNumberMatches}> {room && room.team_a.length} </Text>
             </View>
             <Image source={imageGroup} style={styles.imageLogoGroup} />
           </View>
@@ -26,28 +27,28 @@ const ItemRoom = (props) => {
           </View>
           <View style={styles.logoGroup}>
             <View style={styles.txtViewNumber}>
-              <Text style={styles.txtNumberMatches}>{props.member2}</Text>
+              <Text style={styles.txtNumberMatches}>{room && room.team_b.length} </Text>
             </View>
             <Image source={imageGroup} style={styles.imageLogoGroup} />
           </View>
         </View>
         <View style={styles.descriptionRoom}>
           <View style={styles.descriptionDetail}>
-            <Text style={styles.txtNameGroup}>{props.nameTeam1}</Text>
+            <Text style={styles.txtNameGroup}> Team A</Text>
             <View style={styles.listIcon}>
-              <Star star={props.starTeam1} />
+              <Star star={1} />
             </View>
             <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-            <Text style={styles.txtNumberMatch}>{props.historyTeam1}</Text>
+            <Text style={styles.txtNumberMatch}>8 </Text>
           </View>
           <View style={styles.space} />
           <View style={styles.descriptionDetail}>
-            <Text style={styles.txtNameGroup}>{props.nameTeam2}</Text>
+            <Text style={styles.txtNameGroup}> Team b</Text>
             <View style={styles.listIcon}>
-              <Star star={props.starTeam2} />
+              <Star star={2} />
             </View>
             <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-            <Text style={styles.txtNumberMatch}>{props.historyTeam2}</Text>
+            <Text style={styles.txtNumberMatch}>2</Text>
           </View>
         </View>
       </View>

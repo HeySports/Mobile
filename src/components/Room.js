@@ -7,8 +7,9 @@ import Color from '../themes/colors';
 import Font from '../themes/font';
 import { pushScreen } from '../navigation/pushScreen';
 const RoomItem = (props) => {
+  const room = props.room;
   const detailRoom = () => {
-    pushScreen(props.idComponent, 'DetailRoom', props.id, 'DetailRoom', false, '', '');
+    pushScreen(props.idComponent, 'DetailRoom', room?.match.id, 'DetailRoom', false, '', '');
   };
   return (
     <TouchableOpacity onPress={detailRoom}>
@@ -17,15 +18,15 @@ const RoomItem = (props) => {
           <Image source={pitch} style={styles.imgRoom} />
         </View>
         <View style={styles.detailRoom}>
-          <Text style={styles.titleDetail}>{props.nameRoom}</Text>
+          <Text style={styles.titleDetail}>{room?.match.name_room}</Text>
           <View style={styles.row}>
             <View style={styles.viewIconDetail}>
               <Icon name="users" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetail}>
-              <Text style={styles.txtDetail}>{props.nameTeam1}</Text>
+              <Text style={styles.txtDetail}>Team A</Text>
               <Text style={styles.txtVs}>Vs</Text>
-              <Text style={styles.txtDetail}>{props.nameTeam2}</Text>
+              <Text style={styles.txtDetail}>Team B</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -33,7 +34,7 @@ const RoomItem = (props) => {
               <Icon name="people-arrows" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetails}>{props.typeField} người</Text>
+              <Text style={styles.txtDetails}>{room?.match.type_field} người</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -41,7 +42,7 @@ const RoomItem = (props) => {
               <Icons name="soccer-field" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetails}>{props.nameFiled}</Text>
+              <Text style={styles.txtDetails}>{room?.match.field}</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -49,7 +50,7 @@ const RoomItem = (props) => {
               <Icon name="map-marker-alt" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetails}>{props.address}</Text>
+              <Text style={styles.txtDetails}>101B Lê Hữu Trác, Quận Sơn Trà</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -58,7 +59,7 @@ const RoomItem = (props) => {
             </View>
             <View style={styles.viewTxtDetails}>
               <Text style={styles.txtDetailTime}>
-                {props.timeStart} - {props.timeEnd} | {props.datePlay}
+                {room?.match.time_start_play} - {room?.time_end_play} | 01-04-2021
               </Text>
             </View>
           </View>

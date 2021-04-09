@@ -7,7 +7,6 @@ import {
   View,
   Dimensions,
   Image,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
@@ -131,22 +130,7 @@ const Home = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               {matches.map((item, index) => {
-                return (
-                  <ItemRoom
-                    key={index}
-                    idComponent={props.componentId}
-                    id={item.match.id}
-                    nameRoom={item.match.name_room}
-                    member1={item.team_a.length}
-                    member2={item.team_b.length}
-                    nameTeam1="Bách Khoa"
-                    nameTeam2="Sư Phạm"
-                    starTeam1={4.5}
-                    starTeam2={2.5}
-                    historyTeam1={2}
-                    historyTeam2={5}
-                  />
-                );
+                return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}

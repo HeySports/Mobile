@@ -1,14 +1,5 @@
-import React, { useEffect } from 'react';
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-} from 'react-native';
-import Color from '../../themes/colors';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, View, ImageBackground } from 'react-native';
 import Font from '../../themes/font';
 import { useDispatch, useSelector } from 'react-redux';
 import Back from '../../components/Back';
@@ -22,11 +13,11 @@ import Loading from '../../components/Loading';
 import profile from '../../image/thanh.jpg';
 import Player from '../../components/Player';
 const DetailRoom = (props) => {
-  const idRoom = props.data;
+  const [id] = useState(props.data);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(MatchesAction.userGetDetailMatch(idRoom));
-  }, [dispatch, idRoom]);
+    dispatch(MatchesAction.userGetDetailMatch(id));
+  }, [dispatch, id]);
   var detail = [];
   const storeDetail = useSelector((state) => state.matches);
   var typeField = false;
