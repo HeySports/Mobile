@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -18,17 +18,15 @@ import Loading from '../../components/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Star from '../../components/Star';
 import Comment from '../../components/Comment';
+import ModelComment from '../../components/ModelComment';
 const Detail = (props) => {
-  const goBackScreen = () => {
-    goBack(props.componentId);
-  };
-
+  const [checkShowModel, setCheckShowModel] = useState(false);
+  const [id] = useState(props.data);
   const dispatch = useDispatch();
   useEffect(() => {
-    const id = props.data;
     dispatch(FieldAction.getDetailField(id));
     dispatch(FieldAction.userGetCommentField(id));
-  }, [dispatch, props.data]);
+  }, [dispatch, id]);
   var field = [];
   var comments = [];
   const detail = useSelector((state) => state.fields);
@@ -60,8 +58,23 @@ const Detail = (props) => {
       content: '310 000 VND/1h',
     },
   ];
+  const goBackScreen = () => {
+    goBack(props.componentId);
+  };
+  const setModel = () => {
+    setCheckShowModel(false);
+  };
   return (
     <>
+      {checkShowModel ? (
+        <ModelComment
+          showModel={setModel}
+          title={field && field.name}
+          description="Nhận xét về sân bóng !"
+        />
+      ) : (
+        <View />
+      )}
       {detail.loadingDetailField ? (
         <Loading />
       ) : (
@@ -81,8 +94,14 @@ const Detail = (props) => {
                 <TouchableOpacity style={styles.itemMenuTab}>
                   <Icon name="paper-plane" style={styles.iconItemMenu} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemMenuTab}>
-                  <Icon name="comment-dots" style={styles.iconItemMenu} />
+                <TouchableOpacity
+                  style={checkShowModel ? styles.choseBtn : styles.itemMenuTab}
+                  onPress={() => setCheckShowModel(true)}
+                >
+                  <Icon
+                    name="comment-dots"
+                    style={checkShowModel ? styles.iconItemMenus : styles.iconItemMenu}
+                  />
                 </TouchableOpacity>
               </View>
               <View style={styles.contentField}>
@@ -136,7 +155,6 @@ const Detail = (props) => {
     </>
   );
 };
-
 export default Detail;
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -176,15 +194,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   itemMenuTab: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: Color.txtLevel2,
   },
+  choseBtn: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Color.primary,
+  },
   iconItemMenu: {
     color: Color.txtLevel3,
     fontSize: Font.title_child4,
+  },
+  iconItemMenus: {
+    color: Color.primary,
+    fontSize: Font.title_child,
   },
   contentField: {
     width: width,

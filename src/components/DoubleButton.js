@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Color from '../themes/colors';
 const DoubleButton = (props) => {
   return (
@@ -19,13 +19,10 @@ const DoubleButton = (props) => {
 };
 
 export default DoubleButton;
-const { width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: width,
     height: 40,
-    marginTop: 20,
   },
   item: {
     flex: 1,
@@ -50,5 +47,5 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     borderRadius: 5,
   },
-  txtBtn: { fontSize: 15, fontWeight: 'bold' },
+  txtBtn: { fontSize: 15, fontWeight: 'bold', color: Color.white, },
 });

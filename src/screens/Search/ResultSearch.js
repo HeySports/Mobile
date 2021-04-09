@@ -1,29 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, Dimensions } from 'react-native';
-import MatchesAction from '../../redux/MatchesRedux/actions';
+import SearchActions from '../../redux/SearchRedux/actions';
 import Loading from '../../components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import { goBack } from '../../navigation/pushScreen';
 import RoomItem from '../../components/Room';
 import ItemRoom from '../../components/ItemRoom';
-import SearchActions from '../../redux/SearchRedux/actions';
 const ResultSearch = (props) => {
+  const { loading, resultSearch } = useSelector((state) => state.search);
+  const { responseMatches } = useSelector((state) => state.matches);
   const [checkView, setCheckView] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
-    const data = {
-      txtSearch: props.data,
-    };
-    dispatch(MatchesAction.userSearchMatches(data));
-     dispatch(SearchActions.userPostHistoriesSearch(data));
+    dispatch(SearchActions.userSearchMatches({ txtSearch: props.data }));
   }, [dispatch, props.data]);
-  var resultSearch = [];
-  var listMatch = [];
-  const search = useSelector((state) => state.matches);
-  if (search.responseSearch) {
-    resultSearch = search.responseSearch;
-  }
+
   const goBackScreen = () => {
     goBack(props.componentId);
   };
@@ -33,12 +25,9 @@ const ResultSearch = (props) => {
   const setViewFail = () => {
     setCheckView(false);
   };
-  if (search.responseMatches) {
-    listMatch = search.responseMatches;
-  }
   return (
     <View style={styles.container}>
-      {search.loadingSearch ? (
+      {loading ? (
         <Loading />
       ) : (
         <View style={styles.container}>
@@ -51,48 +40,18 @@ const ResultSearch = (props) => {
             functionFail={setViewFail}
             functionTrue={setViewTrue}
           />
-          {resultSearch.match ? (
+          {resultSearch ? (
             checkView ? (
               <ScrollView style={styles.viewRoom}>
-                {resultSearch.map((item, index) => {
-                  return (
-                    <RoomItem
-                      id={item.match.id}
-                      idComponent={props.componentId}
-                      key={index}
-                      nameRoom={item.match.name_room}
-                      typeField={item.match.type_field}
-                      timeStart={item.match.time_start_play}
-                      timeEnd={item.match.time_end_play}
-                      nameTeam1="Bách Khoa"
-                      nameTeam2="Sư Phạm"
-                      datePlay="01-04-2021"
-                      nameFiled={item.match.field}
-                      address="101B Lê Hữu Trác, Quận Sơn Trà"
-                    />
-                  );
+                {resultSearch?.map((item, index) => {
+                  return <RoomItem idComponent={props.componentId} key={index} room={item} />;
                 })}
               </ScrollView>
             ) : (
               <ScrollView style={styles.viewRoom}>
                 <View style={styles.listRoom}>
-                  {resultSearch.map((item, index) => {
-                    return (
-                      <ItemRoom
-                        key={index}
-                        nameRoom={item.match.name_room}
-                        member1={item.team_a.length}
-                        member2={item.team_b.length}
-                        nameTeam1="Bách Khoa"
-                        nameTeam2="Sư Phạm"
-                        starTeam1={4.5}
-                        starTeam2={2.5}
-                        historyTeam1={2}
-                        historyTeam2={5}
-                        id={item.match.id}
-                        idComponent={props.componentId}
-                      />
-                    );
+                  {resultSearch?.map((item, index) => {
+                    return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
                   })}
                 </View>
               </ScrollView>
@@ -108,45 +67,15 @@ const ResultSearch = (props) => {
               </View>
               {checkView ? (
                 <ScrollView style={styles.viewRoom}>
-                  {listMatch.map((item, index) => {
-                    return (
-                      <RoomItem
-                        id={item.match.id}
-                        idComponent={props.componentId}
-                        key={index}
-                        nameRoom={item.match.name_room}
-                        typeField={item.match.type_field}
-                        timeStart={item.match.time_start_play}
-                        timeEnd={item.match.time_end_play}
-                        nameTeam1="Bách Khoa"
-                        nameTeam2="Sư Phạm"
-                        datePlay="01-04-2021"
-                        nameFiled={item.match.field}
-                        address="101B Lê Hữu Trác, Quận Sơn Trà"
-                      />
-                    );
+                  {responseMatches?.map((item, index) => {
+                    return <RoomItem room={item} idComponent={props.componentId} key={index} />;
                   })}
                 </ScrollView>
               ) : (
                 <ScrollView style={styles.viewRoom}>
                   <View style={styles.listRoom}>
-                    {listMatch.map((item, index) => {
-                      return (
-                        <ItemRoom
-                          key={index}
-                          nameRoom={item.match.name_room}
-                          member1={item.team_a.length}
-                          member2={item.team_b.length}
-                          nameTeam1="Bách Khoa"
-                          nameTeam2="Sư Phạm"
-                          starTeam1={4.5}
-                          starTeam2={2.5}
-                          historyTeam1={2}
-                          historyTeam2={5}
-                          id={item.match.id}
-                          idComponent={props.componentId}
-                        />
-                      );
+                    {responseMatches?.map((item, index) => {
+                      return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
                     })}
                   </View>
                 </ScrollView>

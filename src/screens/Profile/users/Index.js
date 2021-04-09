@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import Header from '../../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +11,10 @@ import Font from '../../../themes/font';
 import Star from '../../../components/Star';
 const Index = (props) => {
   const dispatch = useDispatch();
+  const [id] = useState(props.data);
   useEffect(() => {
-    const id = props.data;
     dispatch(ProfileAction.userGetDetail(id));
-  }, [dispatch, props.data]);
+  }, [dispatch, id]);
   var users = [];
   const user = useSelector((state) => state.profile);
   if (user.responseDetail) {
