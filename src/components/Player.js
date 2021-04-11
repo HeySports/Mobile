@@ -3,19 +3,21 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Star from '../components/Star';
 import { pushScreen } from '../navigation/pushScreen';
 const Player = (props) => {
+  const users = props.items;
   const user = () => {
-    pushScreen(props.idComponent, 'User', props.id, 'User', false, '', '');
+    pushScreen(props.idComponent, 'User', users?.id, 'User', false, '', '');
   };
+
   return (
     <TouchableOpacity style={styles.player} onPress={user}>
       <View style={styles.header}>
         <Image source={props.image} style={styles.imageProfile} />
       </View>
       <View style={styles.bottom}>
-        <Text style={styles.txtNamePlayer}>{props.name}</Text>
-        <Text style={styles.txtNamePlayer}>{props.position}</Text>
+        <Text style={styles.txtNamePlayer}>{users?.full_name}</Text>
+        <Text style={styles.txtNamePlayer}>{users?.team_name}</Text>
         <View style={styles.rating}>
-          <Star star={props.rating} />
+          <Star star={users?.skill_rating} />
         </View>
       </View>
     </TouchableOpacity>

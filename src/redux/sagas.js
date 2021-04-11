@@ -5,6 +5,7 @@ import profileSaga from './ProfileRedux/sagas';
 import matchesSagas from './MatchesRedux/sagas';
 import fieldSagas from './FieldRedux/sagas';
 import searchSagas from './SearchRedux/sagas';
+import userSagas from './UserRedux/sagas';
 export default function* root() {
   yield all([
     ...appSaga,
@@ -13,5 +14,6 @@ export default function* root() {
     ...matchesSagas,
     ...fieldSagas,
     ...searchSagas,
+    ...userSagas,
   ]);
 }

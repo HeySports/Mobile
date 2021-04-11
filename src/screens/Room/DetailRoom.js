@@ -73,11 +73,8 @@ const DetailRoom = (props) => {
                       <Player
                         key={index}
                         image={profile}
-                        name={item.full_name}
-                        id={item.id}
-                        position={item.team_name}
-                        rating={item.skill_rating}
                         idComponent={props.componentId}
+                        items={item}
                       />
                     );
                   })}
@@ -100,10 +97,8 @@ const DetailRoom = (props) => {
                         key={index}
                         image={profile}
                         id={item.id}
-                        name={item.full_name}
-                        position={item.team_name}
-                        rating={item.skill_rating}
                         idComponent={props.componentId}
+                        items={item}
                       />
                     );
                   })}

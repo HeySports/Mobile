@@ -12,11 +12,18 @@ const Field = () => {
   const getStore = async () => {
     try {
       const location = await AsyncStorage.getItem('location');
-      const jsonLocation = JSON.parse(location);
-      setCurrentLatitude(jsonLocation.currentLat);
-      setCurrentLongitude(jsonLocation.currentLong);
+      if (location) {
+        const jsonLocation = JSON.parse(location);
+        setCurrentLatitude(jsonLocation.currentLat);
+        setCurrentLongitude(jsonLocation.currentLong);
+      } else {
+        setCurrentLatitude(16.0717635);
+        setCurrentLongitude(107.9380399);
+      }
     } catch (e) {
-      alert('Failed to fetch the data from storage');
+      console.log('====================================');
+      console.log(e);
+      console.log('====================================');
     }
   };
   return (

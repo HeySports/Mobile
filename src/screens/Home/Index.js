@@ -25,6 +25,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ProfileAction from '../../redux/ProfileRedux/actions';
 import FieldAction from '../../redux/FieldRedux/actions';
+import Player from '../../components/Player';
+import UserAction from '../../redux/UserRedux/actions';
+import Loading from '../../components/Loading';
 const data = {
   dataSlide: [
     {
@@ -39,8 +42,9 @@ const data = {
   ],
 };
 const Home = (props) => {
-  const [dataSlide, setdataSlide] = useState(data.dataSlide);
+  const [dataSlide] = useState(data.dataSlide);
   const [activity, setActivity] = useState(0);
+  const [listUsers, setListUsers] = useState([]);
   const _renderItem = ({ item, index }) => {
     return <Slide key={index} inform={item} />;
   };
@@ -49,10 +53,12 @@ const Home = (props) => {
     dispatch(MatchesAction.getListMatches());
     dispatch(FieldAction.getListField());
     dispatch(ProfileAction.userGetProfile());
+    dispatch(UserAction.getAllUsers());
   }, [dispatch]);
   // selector
   var matches = [];
   var fields = [];
+  const users = useSelector((state) => state.users);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
   // function
@@ -162,11 +168,9 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Đội bóng đang chờ" />
+          <Title title="Cầu thủ được đánh giá cao" />
           <ScrollView style={styles.listScroll} horizontal={true}>
-            <ItemRoom />
-            <ItemRoom />
-            <ItemRoom />
+            {users?.loading ? <Loading /> : <Player idComponent={props.componentId} image={user} />}
           </ScrollView>
         </View>
       </ScrollView>

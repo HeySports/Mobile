@@ -13,7 +13,7 @@ const ResultSearch = (props) => {
   const [checkView, setCheckView] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(SearchActions.userSearchMatches({ txtSearch: props.data }));
+    dispatch(SearchActions.userSearchMatches({ txtSearch: 'Koepp' }));
   }, [dispatch, props.data]);
 
   const goBackScreen = () => {
