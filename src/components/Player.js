@@ -7,7 +7,6 @@ const Player = (props) => {
   const user = () => {
     pushScreen(props.idComponent, 'User', users?.id, 'User', false, '', '');
   };
-
   return (
     <TouchableOpacity style={styles.player} onPress={user}>
       <View style={styles.header}>
@@ -15,7 +14,7 @@ const Player = (props) => {
       </View>
       <View style={styles.bottom}>
         <Text style={styles.txtNamePlayer}>{users?.full_name}</Text>
-        <Text style={styles.txtNamePlayer}>{users?.team_name}</Text>
+        <Text style={styles.txtNamePlayer}>{users?.position_play}</Text>
         <View style={styles.rating}>
           <Star star={users?.skill_rating} />
         </View>

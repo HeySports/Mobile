@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
-import user from '../../image/thanh.jpg';
+import imageUser from '../../image/thanh.jpg';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
@@ -44,7 +44,6 @@ const data = {
 const Home = (props) => {
   const [dataSlide] = useState(data.dataSlide);
   const [activity, setActivity] = useState(0);
-  const [listUsers, setListUsers] = useState([]);
   const _renderItem = ({ item, index }) => {
     return <Slide key={index} inform={item} />;
   };
@@ -61,6 +60,7 @@ const Home = (props) => {
   const users = useSelector((state) => state.users);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
+  var listUsers = [];
   // function
   if (listMatches.responseMatches) {
     matches = listMatches.responseMatches;
@@ -77,12 +77,30 @@ const Home = (props) => {
   const viewMorePitch = () => {
     pushScreen(props.componentId, 'Field', '', 'Field', false, '', '');
   };
+  if (users.responseUser) {
+    const userRating = users.responseUser;
+    userRating.forEach((element) => {
+      const rating = (Number(element.skill_rating) + Number(element.attitude_rating)) / 2;
+      let user = {
+        id: element.id,
+        full_name: element.full_name,
+        image: element.image,
+        position_play: element.position_play,
+        skill_rating: rating,
+      };
+      listUsers.push(user);
+    });
+  }
+  var usersRating = [];
+  if (listUsers.length > 0) {
+    usersRating = listUsers.sort((a, b) => (a.skill_rating < b.skill_rating ? 1 : -1));
+  }
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <View style={styles.borderProfile}>
           <View style={styles.imageProfile}>
-            <Image source={user} style={styles.imgUser} />
+            <Image source={imageUser} style={styles.imgUser} />
           </View>
         </View>
         <View style={styles.searchHeader}>
@@ -149,7 +167,12 @@ const Home = (props) => {
               <ActivityIndicator size="large" color="#0000ff" />
             </View>
           ) : (
-            <ScrollView style={styles.listScrolls} horizontal={true}>
+            <ScrollView
+              style={styles.listScrolls}
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
               {fields.map((item, index) => {
                 return (
                   <Pitch
@@ -168,10 +191,28 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Cầu thủ được đánh giá cao" />
-          <ScrollView style={styles.listScroll} horizontal={true}>
-            {users?.loading ? <Loading /> : <Player idComponent={props.componentId} image={user} />}
-          </ScrollView>
+          <Title title="Đánh Giá Cao" checkTitle={true} />
+          {users?.loading ? (
+            <Loading />
+          ) : (
+            <ScrollView
+              style={styles.listUserRating}
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              {usersRating?.slice(0, 10).map((item, index) => {
+                return (
+                  <Player
+                    idComponent={props.componentId}
+                    items={item}
+                    key={index}
+                    image={imageUser}
+                  />
+                );
+              })}
+            </ScrollView>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -288,5 +329,10 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  listUserRating: {
+    width: width,
+    marginTop: 10,
+    height: 100,
   },
 });

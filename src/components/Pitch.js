@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
   container: {
     width: (150 / startWidth) * width,
     height: 200,
-    marginLeft: (20 / startWidth) * width,
+    marginLeft: (10 / startWidth) * width,
+    marginRight: (10 / startWidth) * width,
     marginTop: 15,
     borderWidth: 1,
     borderColor: Color.txtLevel2,

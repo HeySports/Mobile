@@ -33,7 +33,7 @@ const ListRoom = (props) => {
       {checkView ? (
         <ScrollView style={styles.viewRoom}>
           <View style={styles.listRoom}>
-            {matches.map((item, index) => {
+            {matches?.map((item, index) => {
               return <ItemRoom key={index} room={item} idComponent={props.componentId} />;
             })}
           </View>
@@ -41,7 +41,7 @@ const ListRoom = (props) => {
       ) : (
         <ScrollView style={styles.viewRoom}>
           <View style={styles.roomList} />
-          {matches.map((item, index) => {
+          {matches?.map((item, index) => {
             return <RoomItem room={item} idComponent={props.componentId} key={index} />;
           })}
         </ScrollView>

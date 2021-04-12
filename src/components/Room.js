@@ -24,9 +24,13 @@ const RoomItem = (props) => {
               <Icon name="users" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetail}>
-              <Text style={styles.txtDetail}>Team A</Text>
+              <Text style={styles.txtDetail}>
+                {room?.team_a.members?.length ? room?.team_a.members[0]?.team_name : 'Team_A'}
+              </Text>
               <Text style={styles.txtVs}>Vs</Text>
-              <Text style={styles.txtDetail}>Team B</Text>
+              <Text style={styles.txtDetail}>
+                {room?.team_b.members?.length ? room?.team_b.members[0]?.team_name : 'Team_B'}
+              </Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -34,7 +38,7 @@ const RoomItem = (props) => {
               <Icon name="people-arrows" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetails}>{room?.match.type_field} người</Text>
+              <Text style={styles.txtDetails}>{room?.match?.type_field} người</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -50,7 +54,7 @@ const RoomItem = (props) => {
               <Icon name="map-marker-alt" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetails}>101B Lê Hữu Trác, Quận Sơn Trà</Text>
+              <Text style={styles.txtDetails}>{room?.match?.address}</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -123,9 +127,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   txtDetail: {
-    fontSize: 12,
+    fontSize: 11,
     color: Color.greyishBrown,
-    width: '45%',
     textAlign: 'center',
     fontWeight: '700',
   },
@@ -135,11 +138,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   txtVs: {
-    fontSize: 12,
-    width: '10%',
+    fontSize: 11,
     textAlign: 'center',
     color: '#AC090B',
     fontWeight: '700',
+    marginLeft: '2%',
+    marginRight: '2%',
   },
   txtDetailTime: {
     fontSize: 10,

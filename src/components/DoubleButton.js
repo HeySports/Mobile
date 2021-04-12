@@ -10,7 +10,7 @@ const DoubleButton = (props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.item}>
-        <TouchableOpacity style={styles.btn2} onPress={props.functionBtn1}>
+        <TouchableOpacity style={styles.btn2} onPress={props.functionBtn2}>
           <Text style={styles.txtBtn}>{props.txtTitleBtn2}</Text>
         </TouchableOpacity>
       </View>

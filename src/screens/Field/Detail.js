@@ -19,17 +19,19 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Star from '../../components/Star';
 import Comment from '../../components/Comment';
 import ModelComment from '../../components/ModelComment';
+import CommentActions from '../../redux/CommentRedux/actions';
 const Detail = (props) => {
   const [checkShowModel, setCheckShowModel] = useState(false);
   const [id] = useState(props.data);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(FieldAction.getDetailField(id));
-    dispatch(FieldAction.userGetCommentField(id));
+    dispatch(CommentActions.userGetCommentField(id));
   }, [dispatch, id]);
   var field = [];
-  var comments = [];
+  var comments = useSelector((state) => state.comment);
   const detail = useSelector((state) => state.fields);
+  var users = useSelector((state) => state.profile.responseProfile.id);
   if (detail.responseDetailField) {
     field = detail.responseDetailField;
   }
@@ -70,6 +72,7 @@ const Detail = (props) => {
         <ModelComment
           showModel={setModel}
           title={field && field.name}
+          id={field && field.id}
           description="Nhận xét về sân bóng !"
         />
       ) : (
@@ -108,7 +111,7 @@ const Detail = (props) => {
                 <View style={styles.nameField}>
                   <Text style={styles.txtNameField}>{field && field.name}</Text>
                 </View>
-                {listItem.map((item, index) => {
+                {listItem?.map((item, index) => {
                   return (
                     <View style={styles.bodyContent} key={index}>
                       <View style={styles.itemContentIcon}>
@@ -135,16 +138,12 @@ const Detail = (props) => {
                   <Star star={field.rating} />
                 </View>
                 <View style={styles.listComment}>
-                  {comments.map((item, index) => {
-                    return (
-                      <Comment
-                        key={index}
-                        user_name={item.user_name}
-                        description={item.description}
-                        time="10:20"
-                        date="01-04-2020"
-                      />
-                    );
+                  {comments?.responseGetComment?.slice(0, 10).map((item, index) => {
+                    if (users === item.id) {
+                      return <Comment key={index} checkUser={true} comment={item} />;
+                    } else {
+                      return <Comment key={index} comment={item} />;
+                    }
                   })}
                 </View>
               </View>
