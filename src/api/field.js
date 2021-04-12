@@ -5,6 +5,3 @@ export async function getListFieldApi() {
 export async function getDetailFieldApi(id) {
   return http.get('/field/getDetailField/' + id);
 }
-export async function userGetCommentFieldApi(id) {
-  return http.get('/commentField/getCommentFieldByIdField/' + id);
-}

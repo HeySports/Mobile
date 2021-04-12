@@ -68,7 +68,7 @@ const DetailRoom = (props) => {
                 showsHorizontalScrollIndicator={false}
               >
                 {detail.match &&
-                  detail.team_a.map((item, index) => {
+                  detail.team_a.members.map((item, index) => {
                     return (
                       <Player
                         key={index}
@@ -91,7 +91,7 @@ const DetailRoom = (props) => {
                 showsHorizontalScrollIndicator={false}
               >
                 {detail.match &&
-                  detail.team_b.map((item, index) => {
+                  detail.team_b.members.map((item, index) => {
                     return (
                       <Player
                         key={index}

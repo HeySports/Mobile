@@ -44,26 +44,10 @@ export const getDetailFieldSuccess = (state, { response }) =>
     errorDetailField: null,
     typeDetailField: 'GET LIST DETAIL SUCCESS',
   });
-export const userGetCommentField = (state) =>
-  state.merge({
-    loadingComment: true,
-    responseComment: null,
-    errorComment: null,
-    typeComment: 'USER GET COMMENT FIELD',
-  });
-export const userGetCommentFieldSuccess = (state, { response }) =>
-  state.merge({
-    loadingComment: false,
-    responseComment: response,
-    errorComment: null,
-    typeComment: 'USER GET COMMENT FIELD SUCCESS',
-  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [fieldTypes.GET_LIST_FIELD]: getListField,
   [fieldTypes.GET_LIST_FIELD_SUCCESS]: getListFieldSuccess,
   [fieldTypes.GET_DETAIL_FIELD]: getDetailField,
   [fieldTypes.GET_DETAIL_FIELD_SUCCESS]: getDetailFieldSuccess,
-  [fieldTypes.USER_GET_COMMENT_FIELD]: userGetCommentField,
-  [fieldTypes.USER_GET_COMMENT_FIELD_SUCCESS]: userGetCommentFieldSuccess,
 });
 export default reducer;

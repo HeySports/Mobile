@@ -4,16 +4,32 @@ import { Rating } from 'react-native-ratings';
 import Color from '../themes/colors';
 import Font from '../themes/font';
 import Button from '../components/DoubleButton';
+import CommentAction from '../redux/CommentRedux/actions'; 
+import { useDispatch } from 'react-redux';
 const ModelComment = (props) => {
   const [modalVisible, setModalVisible] = useState(true);
+  const [txtComment, setTxtComment] = useState('');
   const [star, setStar] = useState(0);
+  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
   const closeModel = () => {
     setModalVisible(false);
     props.showModel();
   };
-  const closeModels = () => {
-    setModalVisible(false);
-    props.showModel();
+  const comment = () => {
+    if (txtComment === '' || star === 0) {
+      setError(true);
+    } else {
+      let data = {
+        id_field: props.id,
+        description: txtComment,
+        rating: star,
+      };
+      dispatch(CommentAction.userCommentField(data));
+      setError(false);
+      setModalVisible(false);
+      props.showModel();
+    }
   };
   return (
     <View style={styles.container}>
@@ -39,14 +55,22 @@ const ModelComment = (props) => {
                 style={styles.txtComment}
                 placeholder={props.description}
                 numberOfLines={10}
+                onChangeText={(txt) => setTxtComment(txt)}
                 multiline={true}
               />
             </View>
           </View>
           <View style={styles.bottomModel}>
+            {error ? (
+              <Text style={styles.txtError}>
+                Bạn chưa đánh giá hoặc để lại cảm nhận của bạn cho sân bóng
+              </Text>
+            ) : (
+              <Text />
+            )}
             <Button
               functionBtn1={closeModel}
-              functionBtn2={closeModels}
+              functionBtn2={comment}
               txtTitleBtn1="Hủy Bỏ"
               txtTitleBtn2="Đánh Giá"
             />
@@ -68,7 +92,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: (20 / startWidth) * width,
-    marginTop: (178 / startHeight) * height,
+    marginTop: (120 / startHeight) * height,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 10,
@@ -127,5 +151,10 @@ const styles = StyleSheet.create({
     flex: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  txtError: {
+    color: Color.error,
+    fontSize: 12,
+    textAlign: 'center',
   },
 });
