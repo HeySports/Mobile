@@ -4,9 +4,18 @@ import Color from '../themes/colors';
 import Font from '../themes/font';
 import profile from '../image/profile.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import CommentActions from '../redux/CommentRedux/actions';
 const Comment = (props) => {
   const comments = props.comment;
+  const dispatch = useDispatch();
+  const deleteComment = () => {
+    let data = {
+      id_comment: comments?.id,
+      id_field: props.id_field,
+    };
+    dispatch(CommentActions.userDeleteComment(data));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.imageUser}>
@@ -32,10 +41,10 @@ const Comment = (props) => {
 
           {props.checkUser ? (
             <View style={styles.iconComment}>
-              <TouchableOpacity style={styles.btnIconComment}>
+              <TouchableOpacity style={styles.btnIconComment} onPress={props.function}>
                 <Icon name="edit" style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btnIconComment}>
+              <TouchableOpacity style={styles.btnIconComment} >
                 <Icon name="trash-alt" style={styles.icon} />
               </TouchableOpacity>
             </View>

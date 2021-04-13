@@ -17,12 +17,14 @@ const DoubleButton = (props) => {
     </View>
   );
 };
-
 export default DoubleButton;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 40,
+    height: 35,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   item: {
     flex: 1,

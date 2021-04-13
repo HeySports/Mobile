@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -6,34 +6,20 @@ import {
   TouchableOpacity,
   View,
   Image,
-  ScrollView,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import Color from '../../themes/colors';
 import thanh from '../../image/thanh.jpg';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useSelector } from 'react-redux';
-import DoubleButton from '../../components/DoubleButton';
-const Room = () => {
-  const dataRoom = [
-    {
-      icon: 'lock',
-      content: '001',
-    },
-    {
-      icon: 'clock',
-      content: '20:00-21:00',
-    },
-    {
-      icon: 'calendar-alt',
-      content: '01-04-2021',
-    },
-    {
-      icon: 'users',
-      content: '5 vs 5',
-    },
-  ];
+import Button from '../../components/DoubleButton';
+import { pushScreen } from '../../navigation/pushScreen';
+import { Picker } from '@react-native-picker/picker';
+import DatePicker from 'react-native-date-picker';
+
+const Room = (props) => {
   var user = [];
   const profileStore = useSelector((state) => state.profile);
   if (profileStore.responseProfile) {
@@ -57,38 +43,63 @@ const Room = () => {
     },
   ];
   const [haveField, setHaveField] = useState(false);
+  const [fieldChoose, setFieldChoose] = useState(false);
+  const [IdField, setIdField] = useState('');
+  const [typeField, setTypeField] = useState('0');
+  const [childField, setChildField] = useState(false);
+  const id_field_choose = props.data;
+  const listField = useSelector((state) => state.fields.responseField);
+  const listChidField = useSelector((state) => state.fields.responseGetChildField);
+  const [date, setDate] = useState(new Date());
+  // Function
+  useEffect(() => {
+    if (id_field_choose) {
+      listField?.forEach((element) => {
+        if (element.id === id_field_choose) {
+          setFieldChoose(element);
+        }
+      });
+      let array = [];
+      listChidField?.forEach((element) => {
+        if (id_field_choose === element.id_field) {
+          array.push(element);
+        }
+      });
+      setChildField(array);
+    }
+  }, [id_field_choose, listChidField, listField]);
+  const listFieldScreen = () => {
+    pushScreen(props.componentId, 'ListField', '', 'ListField', false, '', '');
+  };
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.txtHeader}>Tạo Trận</Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.txtHeader}>Tạo Trận</Text>
+      </View>
+      <ScrollView>
         <View style={styles.elementMatches}>
-          {dataRoom.map((item, index) => {
-            return (
-              <View style={styles.itemElement} key={index}>
-                <View style={styles.viewIcon}>
-                  <Icon name={item.icon} style={styles.icon} />
-                </View>
-                <View style={styles.viewContent}>
-                  <Text style={styles.txtViewContent}>{item.content}</Text>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-        <View style={styles.chooseField}>
-          <View style={styles.itemChooseField}>
-            <TouchableOpacity style={styles.btnChooseField}>
-              <Text style={styles.txtBtnChooseField}>Chọn Sân</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.itemChooseField}>
-            <View style={styles.itemItem}>
-              <Text>N12</Text>
+          <View style={styles.itemElementLock}>
+            <View style={styles.viewIconLock}>
+              <Icon name="lock" style={styles.iconLock} />
             </View>
-            <View style={styles.itemItem}>
-              <Icon name="caret-down" />
+            <View style={styles.viewContentLock}>
+              <Text style={styles.txtViewContent}>1</Text>
+            </View>
+          </View>
+          <View style={styles.itemElementType}>
+            <View style={styles.viewIconType}>
+              <Icon name="users" style={styles.icon} />
+            </View>
+            <View style={styles.viewContentType}>
+              <Picker
+                style={styles.chooseChildField}
+                selectedValue={typeField}
+                onValueChange={(itemValue) => setTypeField(itemValue)}
+              >
+                <Picker.Item label="5 vs 5" value="5" />
+                <Picker.Item label="7 vs 7" value="7" style={styles.itemChooseChildField} />
+                <Picker.Item label="11 vs 11" value="11" style={styles.itemChooseChildField} />
+              </Picker>
             </View>
           </View>
           <View style={styles.itemChooseFields}>
@@ -108,6 +119,54 @@ const Room = () => {
             </View>
           </View>
         </View>
+        <View style={styles.itemElement}>
+          <View style={styles.viewContentDate}>
+            <DatePicker
+              date={date}
+              onDateChange={setDate}
+              style={styles.datePicker}
+              androidVariant="nativeAndroid"
+              locale="vi_VN"
+            />
+          </View>
+        </View>
+        {haveField ? (
+          <View />
+        ) : (
+          <View style={styles.chooseField}>
+            <View style={styles.itemChooseField}>
+              <TouchableOpacity style={styles.btnChooseField} onPress={listFieldScreen}>
+                <Text style={styles.txtBtnChooseField}>
+                  {fieldChoose ? fieldChoose.name : 'Chọn Sân'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.itemChooseField}>
+              <View style={styles.itemItem}>
+                <Picker
+                  style={styles.chooseChildField}
+                  selectedValue={IdField}
+                  onValueChange={(itemValue) => setIdField(itemValue)}
+                >
+                  {childField ? (
+                    childField.map((item, index) => {
+                      return (
+                        <Picker.Item
+                          key={index}
+                          label={item.name_field}
+                          value={item.id}
+                          style={styles.itemChooseChildField}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Picker.Item label="" value="" style={styles.itemChooseChildField} />
+                  )}
+                </Picker>
+              </View>
+            </View>
+          </View>
+        )}
         <View style={styles.informationUser}>
           <View style={styles.imageUser}>
             <View style={styles.borderImage}>
@@ -148,19 +207,17 @@ const Room = () => {
           />
         </View>
         <View style={styles.bottomRoom}>
-          <DoubleButton txtTitleBtn1="Tạo Trận" txtTitleBtn2="Tìm Đối Thủ" />
+          <Button txtTitleBtn1="Tạo Trận" txtTitleBtn2="Tìm Đối Thủ" />
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
-
 export default Room;
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
-    height: height,
     width: width,
   },
   header: {
@@ -179,7 +236,13 @@ const styles = StyleSheet.create({
     height: 40,
   },
   itemElement: {
-    flex: 1,
+    width: width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80,
+  },
+  itemElementLock: {
+    flex: 0.4,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Color.txtLevel3,
@@ -188,14 +251,65 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5,
     flexDirection: 'row',
   },
-  viewIcon: {
+  itemElementType: {
+    flex: 1.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: Color.txtLevel3,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    borderLeftWidth: 0.5,
+    flexDirection: 'row',
+  },
+  iconLock: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: Color.primary,
+  },
+  viewIconLock: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewContentLock: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  viewIconType: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  viewContentType: {
+    flex: 7,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewIcons: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewContentDate: {
+    marginLeft: (20 / startWidth) * width,
+    marginRight: (20 / startWidth) * width,
+    width: width - (40 / startWidth) * width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+  datePicker: {
+    width: width - (40 / startWidth) * width,
+    height: 80,
+    fontSize: 10,
+  },
   icon: {
     fontSize: 12,
     color: Color.primary,
+  },
+  viewContents: {
+    flex: 2,
   },
   viewContent: {
     flex: 8,
@@ -219,7 +333,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   itemChooseFields: {
-    flex: 1.5,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Color.txtLevel3,
@@ -235,6 +349,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemItem: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  chooseChildField: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemChooseChildField: {
+    width: 100,
+    backgroundColor: Color.backgroud,
+  },
   itemHave: {
     flex: 3,
     justifyContent: 'center',
@@ -263,7 +387,7 @@ const styles = StyleSheet.create({
   informationUser: {
     width: width,
     flexDirection: 'row',
-    height: 200,
+    height: 180,
     borderEndColor: Color.txtLevel3,
     borderWidth: 1,
   },
@@ -335,6 +459,10 @@ const styles = StyleSheet.create({
     color: Color.txtLevel1,
   },
   bottomRoom: {
-    flexDirection: 'row',
+    width: width - (50 / startWidth) * width,
+    marginLeft: (25 / startWidth) * width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
   },
 });

@@ -35,9 +35,6 @@ const Detail = (props) => {
   if (detail.responseDetailField) {
     field = detail.responseDetailField;
   }
-  if (detail.responseComment) {
-    comments = detail.responseComment;
-  }
   const listItem = [
     {
       icon: 'map-marker-alt',
@@ -137,15 +134,21 @@ const Detail = (props) => {
                   <Text style={styles.titleDescriptions}>Đánh Giá</Text>
                   <Star star={field.rating} />
                 </View>
-                <View style={styles.listComment}>
-                  {comments?.responseGetComment?.slice(0, 10).map((item, index) => {
-                    if (users === item.id) {
-                      return <Comment key={index} checkUser={true} comment={item} />;
-                    } else {
-                      return <Comment key={index} comment={item} />;
-                    }
-                  })}
-                </View>
+                {comments.loading ? (
+                  <Loading />
+                ) : (
+                  <View style={styles.listComment}>
+                    {comments?.responseGetComment?.slice(0, 10).map((item, index) => {
+                      if (users === item.id_user) {
+                        return (
+                          <Comment key={index} checkUser={true} comment={item} id_field={id} />
+                        );
+                      } else {
+                        return <Comment key={index} comment={item} />;
+                      }
+                    })}
+                  </View>
+                )}
               </View>
             </View>
           </ScrollView>

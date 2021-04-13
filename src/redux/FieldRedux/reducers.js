@@ -15,6 +15,10 @@ const INITIAL_STATE = Immutable({
   responseComment: null,
   errorComment: null,
   typeComment: '',
+  loading: false,
+  responseGetChildField: null,
+  error: null,
+  type: '',
 });
 export const getListField = (state) =>
   state.merge({
@@ -44,10 +48,26 @@ export const getDetailFieldSuccess = (state, { response }) =>
     errorDetailField: null,
     typeDetailField: 'GET LIST DETAIL SUCCESS',
   });
+export const userGetChildField = (state) =>
+  state.merge({
+    loading: true,
+    responseGetChildField: null,
+    error: null,
+    type: 'USER_GET_ALL_CHILD_FIELD',
+  });
+export const userGetChildFieldSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    responseGetChildField: response,
+    error: null,
+    type: 'USER_GET_ALL_CHILD_FIELD_SUCCESS',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [fieldTypes.GET_LIST_FIELD]: getListField,
   [fieldTypes.GET_LIST_FIELD_SUCCESS]: getListFieldSuccess,
   [fieldTypes.GET_DETAIL_FIELD]: getDetailField,
   [fieldTypes.GET_DETAIL_FIELD_SUCCESS]: getDetailFieldSuccess,
+  [fieldTypes.USER_GET_ALL_CHILD_FIELD]: userGetChildField,
+  [fieldTypes.USER_GET_ALL_CHILD_FIELD_SUCCESS]: userGetChildFieldSuccess,
 });
 export default reducer;

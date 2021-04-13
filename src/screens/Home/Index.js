@@ -53,6 +53,7 @@ const Home = (props) => {
     dispatch(FieldAction.getListField());
     dispatch(ProfileAction.userGetProfile());
     dispatch(UserAction.getAllUsers());
+    dispatch(FieldAction.userGetChildField());
   }, [dispatch]);
   // selector
   var matches = [];
