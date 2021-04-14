@@ -16,7 +16,6 @@ import { useSelector } from 'react-redux';
 const ListField = (props) => {
   const fields = useSelector((state) => state.fields.responseField);
   const [listField, setListField] = useState(fields);
-  const [txtSearch, setTxtSearch] = useState('');
   useEffect(() => {
     if (fields) {
       setListField(fields);
@@ -25,8 +24,8 @@ const ListField = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
-  const searchField = () => {
-    const dataSearch = txtSearch;
+  const searchField = (text) => {
+    const dataSearch = text;
     const resultSearch = [];
     fields?.forEach((element) => {
       if (element.name.indexOf(dataSearch) > -1) {
@@ -48,7 +47,8 @@ const ListField = (props) => {
             <TextInput
               style={styles.txtSearch}
               placeholder="Tìm kiếm sân bóng"
-              onChangeText={(text) => setTxtSearch(text)}
+              onChangeText={(text) => searchField(text)}
+              onSubmitEditing={searchField}
             />
           </View>
           <View style={styles.iconSearch}>
