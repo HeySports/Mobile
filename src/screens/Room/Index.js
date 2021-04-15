@@ -13,15 +13,17 @@ import Color from '../../themes/colors';
 import thanh from '../../image/thanh.jpg';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useSelector } from 'react-redux';
-import Button from '../../components/DoubleButton';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '../../components/Button';
 import { pushScreen } from '../../navigation/pushScreen';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
+import MatchesAction from '../../redux/MatchesRedux/actions';
 
 const Room = (props) => {
   var user = [];
   const profileStore = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
   if (profileStore.responseProfile) {
     user = profileStore.responseProfile;
   }
@@ -45,12 +47,15 @@ const Room = (props) => {
   const [haveField, setHaveField] = useState(false);
   const [fieldChoose, setFieldChoose] = useState(false);
   const [IdField, setIdField] = useState('');
-  const [typeField, setTypeField] = useState('0');
+  const [typeField, setTypeField] = useState();
   const [childField, setChildField] = useState(false);
-  const id_field_choose = props.data;
+  var id_field_choose = props.data;
   const listField = useSelector((state) => state.fields.responseField);
   const listChidField = useSelector((state) => state.fields.responseGetChildField);
   const [date, setDate] = useState(new Date());
+  const [nameRoom, setNameRoom] = useState('');
+  const [descriptionRoom, setDescriptionRoom] = useState('');
+  const [error, setError] = useState('');
   // Function
   useEffect(() => {
     if (id_field_choose) {
@@ -70,6 +75,34 @@ const Room = (props) => {
   }, [id_field_choose, listChidField, listField]);
   const listFieldScreen = () => {
     pushScreen(props.componentId, 'ListField', '', 'ListField', false, '', '');
+  };
+  const handleCreateMatch = () => {
+    var id_field = '';
+    if (haveField) {
+      id_field = 7;
+    } else {
+      if (id_field_choose) {
+        id_field = id_field_choose;
+      }
+    }
+    if (descriptionRoom === '') {
+      setDescriptionRoom('description');
+    }
+    if (id_field === '') {
+      setError('Bạn chưa chọn sân, nếu bạn có sân rồi hãy chọn đã có sân');
+    } else if (nameRoom === '') {
+      setError('Bạn phải nhập tên phòng !');
+    } else {
+      const data = {
+        id_field_play: id_field,
+        type_field: typeField,
+        time_start_play: date,
+        time_end_play: date,
+        name_room: nameRoom,
+        description: descriptionRoom,
+      };
+      dispatch(MatchesAction.userPostMatch(data));
+    }
   };
   return (
     <View style={styles.container}>
@@ -96,9 +129,9 @@ const Room = (props) => {
                 selectedValue={typeField}
                 onValueChange={(itemValue) => setTypeField(itemValue)}
               >
-                <Picker.Item label="5 vs 5" value="5" />
-                <Picker.Item label="7 vs 7" value="7" style={styles.itemChooseChildField} />
-                <Picker.Item label="11 vs 11" value="11" style={styles.itemChooseChildField} />
+                <Picker.Item label="5 vs 5" value={5} />
+                <Picker.Item label="7 vs 7" value={7} />
+                <Picker.Item label="11 vs 11" value={11} />
               </Picker>
             </View>
           </View>
@@ -191,11 +224,10 @@ const Room = (props) => {
         </View>
         <View style={styles.descriptionRoom}>
           <TextInput
-            multiline={true}
             style={styles.txtInputNameMatches}
             placeholder="Nhập Tên Trận Bạn muốn tạo"
-            underlineColorAndroid="transparent"
             placeholderTextColor="grey"
+            onChangeText={(text) => setNameRoom(text)}
           />
           <TextInput
             style={styles.textArea}
@@ -204,10 +236,19 @@ const Room = (props) => {
             placeholderTextColor="grey"
             numberOfLines={10}
             multiline={true}
+            onChangeText={(text) => setDescriptionRoom(text)}
           />
         </View>
         <View style={styles.bottomRoom}>
-          <Button txtTitleBtn1="Tạo Trận" txtTitleBtn2="Tìm Đối Thủ" />
+          <View style={styles.viewError}>
+            <Text style={styles.txtError}>{error && error}</Text>
+          </View>
+          <Button
+            titleBtn="Tạo Trận"
+            checkBtn={true}
+            checkColor={false}
+            function={handleCreateMatch}
+          />
         </View>
       </ScrollView>
     </View>
@@ -219,6 +260,18 @@ const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
     width: width,
+  },
+  viewError: {
+    width: width,
+    height: 30,
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtError: {
+    fontSize: 15,
+    color: Color.error,
+    textAlign: 'center',
   },
   header: {
     height: 50,
@@ -439,7 +492,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   descriptionRoom: {
-    height: 150,
+    height: 110,
     margin: (20 / startWidth) * width,
   },
   txtInputNameMatches: {
@@ -451,10 +504,10 @@ const styles = StyleSheet.create({
   },
   textArea: {
     marginTop: 10,
-    height: 100,
+    height: 80,
     borderColor: Color.txtLevel3,
     borderWidth: 0.5,
-    justifyContent: 'flex-end',
+    textAlignVertical: 'top',
     borderRadius: 4,
     color: Color.txtLevel1,
   },
@@ -463,6 +516,6 @@ const styles = StyleSheet.create({
     marginLeft: (25 / startWidth) * width,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 40,
+    marginBottom: 60,
   },
 });

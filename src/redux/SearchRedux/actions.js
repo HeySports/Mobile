@@ -7,9 +7,6 @@ export const searchTypes = makeConstantCreator(
   'USER_POST_HISTORIES_SEARCH_FAILURE',
   'USER_DELETE_HISTORIES_SEARCH',
   'USER_DELETE_HISTORIES_SEARCH_SUCCESS',
-  'USER_SEARCH_MATCHES',
-  'USER_SEARCH_MATCHES_SUCCESS',
-  'USER_SEARCH_MATCHES_FAILURE',
 );
 const userGetHistoriesSearch = () => makeActionCreator(searchTypes.USER_GET_HISTORIES_SEARCH);
 const userGetHistoriesSearchSuccess = (response) =>
@@ -24,11 +21,6 @@ const userDeleteHistories = (id) =>
   makeActionCreator(searchTypes.USER_DELETE_HISTORIES_SEARCH, { id });
 const userDeleteHistoriesSuccess = (response) =>
   makeActionCreator(searchTypes.USER_DELETE_HISTORIES_SEARCH_SUCCESS, { response });
-const userSearchMatches = (data) => makeActionCreator(searchTypes.USER_SEARCH_MATCHES, { data });
-const userSearchMatchesSuccess = (response) =>
-  makeActionCreator(searchTypes.USER_SEARCH_MATCHES_SUCCESS, { response });
-const userSearchMatchesFailure = (error) =>
-  makeActionCreator(searchTypes.USER_GET_DETAIL_MATCH_FAILURE, { error });
 export default {
   userGetHistoriesSearch,
   userGetHistoriesSearchSuccess,
@@ -37,7 +29,4 @@ export default {
   userPostHistoriesSearchFailure,
   userDeleteHistories,
   userDeleteHistoriesSuccess,
-  userSearchMatches,
-  userSearchMatchesSuccess,
-  userSearchMatchesFailure,
 };

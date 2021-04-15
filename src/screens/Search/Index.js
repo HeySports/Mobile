@@ -37,6 +37,10 @@ const Index = (props) => {
     });
     setListMatches(resultSearch);
   };
+  const searchResult = () => {
+    dispatch(SearchActions.userPostHistoriesSearch({ description: txtSearch }));
+    Keyboard.dismiss();
+  };
   useEffect(() => {
     dispatch(SearchActions.userGetHistoriesSearch());
   }, [dispatch]);
@@ -47,12 +51,13 @@ const Index = (props) => {
   const getTextSearch = (text) => {
     setTxtSearch(text);
   };
-  const deleteHistories = (id) => {
-    dispatch(SearchActions.userDeleteHistories(id));
-  };
   const setTypeView = () => {
     setTypeViews(!typeViews);
   };
+  const deleteHistories = (id) => {
+    dispatch(SearchActions.userDeleteHistories(id));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -64,11 +69,11 @@ const Index = (props) => {
               placeholder="Tìm Kiếm"
               onChangeText={(txt) => handleSearch(txt)}
               defaultValue={txtSearch}
-              onSubmitEditing={handleSearch}
+              onSubmitEditing={searchResult}
             />
           </View>
           <View style={styles.viewBtnSearch}>
-            <TouchableOpacity style={styles.btnSearch} onPress={handleSearch}>
+            <TouchableOpacity style={styles.btnSearch} onPress={searchResult}>
               <Icon name="search" style={styles.iconSearch} />
             </TouchableOpacity>
           </View>

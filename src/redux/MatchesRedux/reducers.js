@@ -9,6 +9,10 @@ const INITIAL_STATE = Immutable({
   loadingDetailMatches: false,
   responseDetailMatches: null,
   typeDetailMatches: '',
+  responsePostMatch: null,
+  loading: false,
+  error: null,
+  type: '',
 });
 
 export const getListMatches = (state) =>
@@ -38,10 +42,30 @@ export const userGetDetailMatchSuccess = (state, { response }) =>
     responseDetailMatches: response,
     typeDetailMatches: 'USER GET DETAIL MATCH SUCCESS',
   });
+export const userPostMatch = (state) =>
+  state.merge({
+    loading: true,
+    type: 'POST MATCH',
+  });
+export const userPostMatchSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    responsePostMatch: response,
+    error: null,
+    type: 'POST MATCH SUCCESS',
+  });
+export const userPostMatchFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    type: 'POST MATCH FAILURE',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.GET_LIST_MATCHES]: getListMatches,
   [matchesTypes.GET_LIST_MATCHES_SUCCESS]: getListMatchesSuccess,
   [matchesTypes.USER_GET_DETAIL_MATCH]: userGetDetailMatch,
   [matchesTypes.USER_GET_DETAIL_MATCH_SUCCESS]: userGetDetailMatchSuccess,
+  [matchesTypes.USER_POST_MATCH]: userPostMatch,
+  [matchesTypes.USER_POST_MATCH_SUCCESS]: userPostMatchSuccess,
+  [matchesTypes.USER_POST_MATCH_FAILURE]: userPostMatchFailure,
 });
 export default reducer;

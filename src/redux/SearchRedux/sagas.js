@@ -5,7 +5,6 @@ import {
   userPostHistoriesSearchApi,
   userGetHistoriesSearchApi,
   userDeleteHistoriesSearchApi,
-  userSearchMatchesApi,
 } from '../../api/search';
 export function* userPostHistoriesSearch({ data }) {
   try {
@@ -35,18 +34,9 @@ export function* userDeleteHistoriesSearch({ id }) {
     console.log(error);
   }
 }
-export function* userSearchMatches({ data }) {
-  try {
-    const response = yield call(userSearchMatchesApi, data);
-    yield put(SearchActions.userSearchMatchesSuccess(response.data));
-  } catch (error) {
-    yield put(SearchActions.userSearchMatchesFailure(error));
-  }
-}
 const searchSagas = () => [
   takeLatest(searchTypes.USER_POST_HISTORIES_SEARCH, userPostHistoriesSearch),
   takeLatest(searchTypes.USER_GET_HISTORIES_SEARCH, userGetHistoriesSearch),
   takeLatest(searchTypes.USER_DELETE_HISTORIES_SEARCH, userDeleteHistoriesSearch),
-  takeLatest(searchTypes.USER_SEARCH_MATCHES, userSearchMatches),
 ];
 export default searchSagas();
