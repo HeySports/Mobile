@@ -115,7 +115,11 @@ const Home = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView style={styles.containerHome}>
+      <ScrollView
+        style={styles.containerHome}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={styles.slider}>
           <Carousel
             style={styles.containerSlide}
