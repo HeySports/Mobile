@@ -19,10 +19,12 @@ import { pushScreen } from '../../navigation/pushScreen';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
 import MatchesAction from '../../redux/MatchesRedux/actions';
-
+import ModelNotification from '../../components/modelNotification';
+import AsyncStorage from '@react-native-community/async-storage';
 const Room = (props) => {
   var user = [];
   const profileStore = useSelector((state) => state.profile);
+  const matches = useSelector((state) => state.matches);
   const dispatch = useDispatch();
   if (profileStore.responseProfile) {
     user = profileStore.responseProfile;
@@ -56,6 +58,7 @@ const Room = (props) => {
   const [nameRoom, setNameRoom] = useState('');
   const [descriptionRoom, setDescriptionRoom] = useState('');
   const [error, setError] = useState('');
+  const [checkModel, setCheckModel] = useState(false);
   // Function
   useEffect(() => {
     if (id_field_choose) {
@@ -76,7 +79,8 @@ const Room = (props) => {
   const listFieldScreen = () => {
     pushScreen(props.componentId, 'ListField', '', 'ListField', false, '', '');
   };
-  const handleCreateMatch = () => {
+
+  const handleCreateMatch = async () => {
     var id_field = '';
     if (haveField) {
       id_field = 7;
@@ -102,10 +106,33 @@ const Room = (props) => {
         description: descriptionRoom,
       };
       dispatch(MatchesAction.userPostMatch(data));
+      await setCheckModel(true);
     }
+  };
+  const setModel = () => {
+    setCheckModel(false);
+  };
+  const screenMatchDetail = () => {
+    pushScreen(
+      props.componentId,
+      'DetailRoom',
+      matches?.responsePostMatch?.data.id,
+      'DetailRoom',
+      false,
+      '',
+      '',
+    );
   };
   return (
     <View style={styles.container}>
+      {checkModel && (
+        <ModelNotification
+          showModel={setModel}
+          function={screenMatchDetail}
+          title={matches?.responsePostMatch?.message}
+          description={matches?.responsePostMatch?.error}
+        />
+      )}
       <View style={styles.header}>
         <Text style={styles.txtHeader}>Tạo Trận</Text>
       </View>

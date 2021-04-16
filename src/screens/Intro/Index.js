@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, PermissionsAndroid } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import intro1 from '../../image/player.png';
 import intro2 from '../../image/field.png';
 import intro3 from '../../image/logo.png';
 import Colors from '../../themes/colors';
+import SplashScreen from 'react-native-splash-screen';
 const data = {
   dataIntro: [
     {
@@ -35,6 +36,7 @@ const data = {
     },
   ],
 };
+
 const Intro = () => {
   const [dataIntro, setDataIntro] = useState(data.dataIntro);
   const [activity, setActivity] = useState(0);
@@ -84,6 +86,9 @@ const Intro = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    SplashScreen.hide();
+  });
   return (
     <View style={styles.containerIntro}>
       <Carousel

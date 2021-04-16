@@ -39,6 +39,7 @@ public class MainApplication extends NavigationApplication {
 // protected List<ReactPackage> getPackages() {
 //     return Arrays.asList(
 //             new MainReactPackage(),
+            // new SplashScreenReactPackage();
 //             new GeolocationPackage()
 //     );
 // }
@@ -49,7 +50,7 @@ public class MainApplication extends NavigationApplication {
 // //            new GeolocationPackage(),
 // //      new MapsPackage()
 // //    );
-// // }
+// //}
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;

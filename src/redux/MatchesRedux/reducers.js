@@ -13,6 +13,7 @@ const INITIAL_STATE = Immutable({
   loading: false,
   error: null,
   type: '',
+  checkPostMatch: false,
 });
 
 export const getListMatches = (state) =>
@@ -46,17 +47,21 @@ export const userPostMatch = (state) =>
   state.merge({
     loading: true,
     type: 'POST MATCH',
+    checkPostMatch: false,
   });
 export const userPostMatchSuccess = (state, { response }) =>
   state.merge({
     loading: false,
     responsePostMatch: response,
     error: null,
+    checkPostMatch: true,
     type: 'POST MATCH SUCCESS',
   });
 export const userPostMatchFailure = (state, { error }) =>
   state.merge({
     loading: false,
+    error: error,
+    checkPostMatch: true,
     type: 'POST MATCH FAILURE',
   });
 const reducer = makeReducerCreator(INITIAL_STATE, {

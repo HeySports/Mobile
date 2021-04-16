@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,6 +17,7 @@ import Button from '../../components/Button';
 import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -39,6 +40,9 @@ const Login = (props) => {
       dispatch(LoginActions.userLogin(dataLogin));
     }
   };
+  useEffect(() => {
+    SplashScreen.hide();
+  });
   return (
     <View style={styles.container}>
       <View style={styles.title}>

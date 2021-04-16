@@ -28,6 +28,8 @@ import FieldAction from '../../redux/FieldRedux/actions';
 import Player from '../../components/Player';
 import UserAction from '../../redux/UserRedux/actions';
 import Loading from '../../components/Loading';
+import SplashScreen from 'react-native-splash-screen';
+
 const data = {
   dataSlide: [
     {
@@ -49,6 +51,7 @@ const Home = (props) => {
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    SplashScreen.hide();
     dispatch(MatchesAction.getListMatches());
     dispatch(FieldAction.getListField());
     dispatch(ProfileAction.userGetProfile());

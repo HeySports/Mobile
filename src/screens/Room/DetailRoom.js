@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View, ImageBackground } from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import Font from '../../themes/font';
 import Color from '../../themes/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +24,7 @@ import Player from '../../components/Player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 const DetailRoom = (props) => {
   const [id] = useState(props.data);
+  const [checkUser, setCheckUser] = useState(false);
   const dispatch = useDispatch();
   var detail = [];
   const storeDetail = useSelector((state) => state.matches);
@@ -38,35 +47,49 @@ const DetailRoom = (props) => {
   };
   const team_name_a = detail?.team_a?.members[0]?.team_name;
   const team_name_b = detail?.team_b?.members[0]?.team_name;
+  var name_owner_room = '';
+  if (!name_owner_room) {
+    detail?.team_a?.members?.forEach((element) => {
+      if (detail?.match?.id_user === element.id) {
+        name_owner_room = element.full_name;
+      }
+    });
+  }
+  var users = useSelector((state) => state.profile.responseProfile);
+  if (!checkUser) {
+    if (users?.id === detail?.match?.id_user) {
+      setCheckUser(true);
+    }
+  }
   const dataMatches = [
     {
       icon: 'user',
       title: 'Người Tạo: ',
-      description: 'Thanh Doan',
+      description: name_owner_room ? name_owner_room : 'Người Tạo Phòng',
     },
     {
-      icon: 'user',
+      icon: 'people-arrows',
       title: 'Cáp Kèo',
       description:
         (team_name_a ? team_name_a : 'Team A') + ' Vs ' + (team_name_b ? team_name_b : 'Team B'),
     },
     {
-      icon: 'user',
+      icon: 'volleyball-ball',
       title: 'Sân Bóng',
       description: detail?.match?.field,
     },
     {
-      icon: 'user',
+      icon: 'i-cursor',
       title: 'Loại Sân',
       description: 'Sân ' + detail?.match?.type_field + ' Người',
     },
     {
-      icon: 'user',
+      icon: 'map-marker-alt',
       title: 'Địa Chỉ',
       description: detail?.match?.address,
     },
     {
-      icon: 'user',
+      icon: 'clock',
       title: 'Thời Gian',
       description:
         detail?.match?.time_start_play.slice(10, 16) +
@@ -74,12 +97,11 @@ const DetailRoom = (props) => {
         detail?.match?.time_start_play.slice(0, 10),
     },
     {
-      icon: 'user',
+      icon: 'balance-scale-right',
       title: 'Tỷ Lệ',
-      description: detail?.match?.lose_pay,
+      description: detail?.match?.lose_pay ? detail?.match?.lose_pay : 'Đến sân rồi tính',
     },
   ];
-
   return (
     <View style={styles.container}>
       {storeDetail.loadingDetailMatches ? (
@@ -168,7 +190,20 @@ const DetailRoom = (props) => {
                     </View>
                   );
                 })}
+                <View style={styles.descriptionDetail}>
+                  <Text style={styles.txtTitleDescription}>Mô Tả</Text>
+                  <Text style={styles.txtDescription}>{detail?.match?.description}</Text>
+                </View>
               </View>
+            </View>
+            <View style={styles.order}>
+              {checkUser ? (
+                <TouchableOpacity style={styles.btnOrder}>
+                  <Text style={styles.txtBtnOrder}>ĐẶT SÂN</Text>
+                </TouchableOpacity>
+              ) : (
+                <View />
+              )}
             </View>
           </ScrollView>
         </View>
@@ -264,11 +299,40 @@ const styles = StyleSheet.create({
   txtValueDetail: {
     fontSize: Font.font_description,
     color: Color.txtLevel1,
-    flex: 6.9,
+    flex: 6.8,
   },
   iconDetail: {
-    flex: 0.6,
-    fontSize: Font.font_description,
+    flex: 0.7,
+    fontSize: 18,
     color: Color.primary,
+  },
+  descriptionDetail: {
+    marginLeft: 20,
+    marginTop: 5,
+  },
+  txtTitleDescription: {
+    fontSize: 18,
+  },
+  txtDescription: {
+    fontSize: Font.font_description,
+    marginTop: 5,
+  },
+  order: {
+    width: width,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnOrder: {
+    width: '80%',
+    height: 40,
+    backgroundColor: Color.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  txtBtnOrder: {
+    fontSize: 16,
+    fontWeight: '700',
   },
 });
