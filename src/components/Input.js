@@ -15,6 +15,8 @@ const Input = (props) => {
             secureTextEntry={checkInput}
             onChangeText={props.txtChange}
             keyboardType={props.checkTypeInput}
+            returnKeyType={'next'}
+            autoFocus={true}
           />
           {checkInput ? (
             <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckInput(false)}>
@@ -33,6 +35,8 @@ const Input = (props) => {
             secureTextEntry={props.checkPass}
             onChangeText={props.txtChange}
             keyboardType={props.checkTypeInput}
+            returnKeyType={'next'}
+            autoFocus={true}
           />
           <Icon name={props.icon} style={styles.iconInput} />
         </View>

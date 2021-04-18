@@ -3,7 +3,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Colors from '../../themes/colors';
 import Font from '../../themes/font';
 import Header from '../../components/Header';
-const index = (props) => {
+const Index = (props) => {
   const data = props.data;
   const dataInfoMatch = [
     {
@@ -75,7 +75,7 @@ const index = (props) => {
   );
 };
 
-export default index;
+export default Index;
 const { width, height } = Dimensions.get('screen');
 const startWidth = 360;
 const styles = StyleSheet.create({
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     fontSize: Font.font_description,
     color: Colors.txtLevel3,
   },
-  txtInfoUser:{
+  txtInfoUser: {
     marginTop: 15,
     fontSize: Font.title_child3,
     fontWeight: '700',

@@ -115,10 +115,9 @@ const DetailRoom = (props) => {
       email: users?.email,
       phone: users?.phone_numbers,
       id_match: detail?.match?.id,
-      field: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
+      field: 'Sân ' + detail?.match?.name_field + ' của ' + detail?.match?.field,
       team_name_match:
         (team_name_a ? team_name_a : 'Team A') + ' Vs ' + (team_name_b ? team_name_b : 'Team B'),
-
       time:
         detail?.match?.time_start_play.slice(10, 16) +
         ' Ngày ' +

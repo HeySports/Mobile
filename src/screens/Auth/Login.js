@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import logo from '../../image/logo.png';
 import Color from '../../themes/colors';
@@ -21,6 +22,7 @@ import SplashScreen from 'react-native-splash-screen';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [errorLogin, setErrorLogin] = useState(false);
   const dispatch = useDispatch();
   const storeLogin = useSelector((state) => state.auth);
   const register = () => {
@@ -29,16 +31,22 @@ const Login = (props) => {
   const forgot = () => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
-  const login = () => {
-    const dataLogin = {
-      phone_numbers: phone,
-      password: password,
-    };
-    if (dataLogin.phone_numbers === '' || dataLogin.password === '') {
-      alert('Bạn cần nhập đầy đủ thông tin !');
+  const handleTextInput = () => {
+    let validatePhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    if (!phone || !password) {
+      setErrorLogin('Bạn phải nhập đủ thông tin để tiến hành Login !');
+    } else if (phone.indexOf(' ') >= 0 || password.indexOf(' ') >= 0 || password.length < 6) {
+      setErrorLogin('Số điện thoại hoặc mật khẩu của bạn không hợp lệ !');
+    } else if (!phone.valueOf().match(validatePhone)) {
+      setErrorLogin('Số điện thoại hoặc mật khẩu của bạn không hợp lệ !');
     } else {
-      dispatch(LoginActions.userLogin(dataLogin));
+      handleLogin(phone, password);
+      Keyboard.dismiss();
+      setErrorLogin(false);
     }
+  };
+  const handleLogin = (phone_numbers, password_login) => {
+    dispatch(LoginActions.userLogin({ phone_numbers: phone_numbers, password: password_login }));
   };
   useEffect(() => {
     SplashScreen.hide();
@@ -76,8 +84,13 @@ const Login = (props) => {
             <Text style={styles.txtError}>{storeLogin.responseLogin}</Text>
           </View>
         )}
+        {errorLogin && (
+          <View style={styles.error}>
+            <Text style={styles.txtError}>{errorLogin}</Text>
+          </View>
+        )}
         <View style={styles.bottom}>
-          <Button titleBtn="Đăng nhập" checkBtn={true} function={login} />
+          <Button titleBtn="Đăng nhập" checkBtn={true} function={handleTextInput} />
           <Button
             titleBtn="Đăng Ký ngay"
             checkBtn={false}
