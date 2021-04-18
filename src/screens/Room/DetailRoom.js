@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const DetailRoom = (props) => {
   const [id] = useState(props.data);
   const [checkUser, setCheckUser] = useState(false);
+  const [checkShowModel, setCheckShowModel] = useState(false);
   const dispatch = useDispatch();
   var detail = [];
   const storeDetail = useSelector((state) => state.matches);
@@ -45,22 +46,6 @@ const DetailRoom = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
-  const team_name_a = detail?.team_a?.members[0]?.team_name;
-  const team_name_b = detail?.team_b?.members[0]?.team_name;
-  var name_owner_room = '';
-  if (!name_owner_room) {
-    detail?.team_a?.members?.forEach((element) => {
-      if (detail?.match?.id_user === element.id) {
-        name_owner_room = element.full_name;
-      }
-    });
-  }
-  var users = useSelector((state) => state.profile.responseProfile);
-  if (!checkUser) {
-    if (users?.id === detail?.match?.id_user) {
-      setCheckUser(true);
-    }
-  }
   const dataMatches = [
     {
       icon: 'user',
@@ -102,6 +87,32 @@ const DetailRoom = (props) => {
       description: detail?.match?.lose_pay ? detail?.match?.lose_pay : 'Đến sân rồi tính',
     },
   ];
+
+  const team_name_a = detail?.team_a?.members[0]?.team_name;
+  const team_name_b = detail?.team_b?.members[0]?.team_name;
+  var name_owner_room = '';
+  if (!name_owner_room) {
+    detail?.team_a?.members?.forEach((element) => {
+      if (detail?.match?.id_user === element.id) {
+        name_owner_room = element.full_name;
+      }
+    });
+  }
+  var users = useSelector((state) => state.profile.responseProfile);
+  if (!checkUser) {
+    if (users?.id === detail?.match?.id_user) {
+      setCheckUser(true);
+    }
+  }
+  const handleBooking = () => {
+    let memberInmatch = detail?.team_b?.members?.length + detail?.team_a?.members?.length;
+    let typesField = detail?.match?.type_field * 2;
+    if (memberInmatch < typesField) {
+     setCheckShowModel(true);
+    } else {
+      alert('Bạn Muốn đặt Sân !');
+    }
+  };
   return (
     <View style={styles.container}>
       {storeDetail.loadingDetailMatches ? (
@@ -198,11 +209,13 @@ const DetailRoom = (props) => {
             </View>
             <View style={styles.order}>
               {checkUser ? (
-                <TouchableOpacity style={styles.btnOrder}>
+                <TouchableOpacity style={styles.btnOrder} onPress={handleBooking}>
                   <Text style={styles.txtBtnOrder}>ĐẶT SÂN</Text>
                 </TouchableOpacity>
               ) : (
-                <View />
+                <TouchableOpacity style={styles.btnOrder}>
+                  <Text style={styles.txtBtnOrder}>THAM GIA TRẬN ĐẤU</Text>
+                </TouchableOpacity>
               )}
             </View>
           </ScrollView>
