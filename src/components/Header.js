@@ -4,10 +4,14 @@ import Back from '../components/Back';
 import Font from '../themes/font';
 import Color from '../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { goBack } from '../navigation/pushScreen';
 const Header = (props) => {
+  const handleGoBack = () => {
+    goBack(props.idComponent);
+  };
   return (
     <View style={styles.container}>
-      <Back goBack={props.function_goBack} />
+      <Back goBack={props.idComponent ? handleGoBack : props.function_goBack} />
       <View style={styles.title}>
         <Text style={styles.txtNamePlayer}>{props.title}</Text>
       </View>

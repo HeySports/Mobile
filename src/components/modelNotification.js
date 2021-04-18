@@ -28,14 +28,29 @@ const ModelComment = (props) => {
                 : 'Bạn đã Tạo Trận Thành Công, Hãy Xác nhận để xem chi tiết trận đấu'}
             </Text>
           </View>
-          <View style={styles.bottomModel}>
-            <TouchableOpacity
-              onPress={props.description ? closeModel : handleCloseModel}
-              style={styles.btnModel}
-            >
-              <Text style={styles.txtButton}>Xác Nhận</Text>
-            </TouchableOpacity>
-          </View>
+          {props.checkModel ? (
+            <View style={styles.bottomDoubleButton}>
+              <View style={styles.itemBtn}>
+                <TouchableOpacity onPress={closeModel} style={styles.itemBtnModel}>
+                  <Text style={styles.txtButton}>{props.titleBtnLeft}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.itemBtn}>
+                <TouchableOpacity onPress={handleCloseModel} style={styles.itemBtnModel}>
+                  <Text style={styles.txtButton}>{props.titileBtnRight}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.bottomModel}>
+              <TouchableOpacity
+                onPress={props.description ? closeModel : handleCloseModel}
+                style={styles.btnModel}
+              >
+                <Text style={styles.txtButton}>Xác Nhận</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </Modal>
     </View>
@@ -110,5 +125,24 @@ const styles = StyleSheet.create({
     fontSize: Font.font_description,
     alignContent: 'center',
     textAlign: 'center',
+  },
+  bottomDoubleButton: {
+    width: '100%',
+    flexDirection: 'row',
+    flex: 1.2,
+  },
+  itemBtn: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+  },
+  itemBtnModel: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.primary,
+    height: 35,
+    borderRadius: 4,
   },
 });

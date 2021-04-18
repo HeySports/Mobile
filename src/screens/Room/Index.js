@@ -20,7 +20,6 @@ import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ModelNotification from '../../components/modelNotification';
-import AsyncStorage from '@react-native-community/async-storage';
 const Room = (props) => {
   var user = [];
   const profileStore = useSelector((state) => state.profile);
@@ -103,6 +102,7 @@ const Room = (props) => {
         time_start_play: date,
         time_end_play: date,
         name_room: nameRoom,
+        id_child_field: typeField ? typeField : 1,
         description: descriptionRoom,
       };
       dispatch(MatchesAction.userPostMatch(data));

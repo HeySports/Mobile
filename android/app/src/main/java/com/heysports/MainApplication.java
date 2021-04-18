@@ -39,9 +39,11 @@ public class MainApplication extends NavigationApplication {
 // protected List<ReactPackage> getPackages() {
 //     return Arrays.asList(
 //             new MainReactPackage(),
+            // new SplashScreenReactPackage(),
             // new SplashScreenReactPackage();
 //             new GeolocationPackage()
 //     );
+
 // }
 // // @Override
 // // protected List<ReactPackage> getPackages() {

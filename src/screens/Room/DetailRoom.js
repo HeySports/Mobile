@@ -13,7 +13,7 @@ import Color from '../../themes/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Back from '../../components/Back';
 import MatchesAction from '../../redux/MatchesRedux/actions';
-import { goBack } from '../../navigation/pushScreen';
+import { goBack, pushScreen } from '../../navigation/pushScreen';
 import sanbong from '../../image/sanbong.jpg';
 import Field11 from '../../components/Field11';
 import Field5 from '../../components/Field5';
@@ -22,9 +22,11 @@ import Loading from '../../components/Loading';
 import profile from '../../image/thanh.jpg';
 import Player from '../../components/Player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import ModelNotification from '../../components/modelNotification';
 const DetailRoom = (props) => {
   const [id] = useState(props.data);
   const [checkUser, setCheckUser] = useState(false);
+  const [checkShowModel, setCheckShowModel] = useState(false);
   const dispatch = useDispatch();
   var detail = [];
   const storeDetail = useSelector((state) => state.matches);
@@ -45,22 +47,6 @@ const DetailRoom = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
-  const team_name_a = detail?.team_a?.members[0]?.team_name;
-  const team_name_b = detail?.team_b?.members[0]?.team_name;
-  var name_owner_room = '';
-  if (!name_owner_room) {
-    detail?.team_a?.members?.forEach((element) => {
-      if (detail?.match?.id_user === element.id) {
-        name_owner_room = element.full_name;
-      }
-    });
-  }
-  var users = useSelector((state) => state.profile.responseProfile);
-  if (!checkUser) {
-    if (users?.id === detail?.match?.id_user) {
-      setCheckUser(true);
-    }
-  }
   const dataMatches = [
     {
       icon: 'user',
@@ -76,7 +62,7 @@ const DetailRoom = (props) => {
     {
       icon: 'volleyball-ball',
       title: 'Sân Bóng',
-      description: detail?.match?.field,
+      description: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
     },
     {
       icon: 'i-cursor',
@@ -102,8 +88,72 @@ const DetailRoom = (props) => {
       description: detail?.match?.lose_pay ? detail?.match?.lose_pay : 'Đến sân rồi tính',
     },
   ];
+
+  const team_name_a = detail?.team_a?.members[0]?.team_name;
+  const team_name_b = detail?.team_b?.members[0]?.team_name;
+  var name_owner_room = '';
+  if (!name_owner_room) {
+    detail?.team_a?.members?.forEach((element) => {
+      if (detail?.match?.id_user === element.id) {
+        name_owner_room = element.full_name;
+      }
+    });
+  }
+  var users = useSelector((state) => state.profile.responseProfile);
+  if (!checkUser) {
+    if (users?.id === detail?.match?.id_user) {
+      setCheckUser(true);
+    }
+  }
+
+  const handleModel = () => {
+    setCheckShowModel(false);
+  };
+  const bookingScreen = () => {
+    const dataProps = {
+      name_user: users?.full_name,
+      email: users?.email,
+      phone: users?.phone_numbers,
+      id_match: detail?.match?.id,
+      field: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
+      team_name_match:
+        (team_name_a ? team_name_a : 'Team A') + ' Vs ' + (team_name_b ? team_name_b : 'Team B'),
+
+      time:
+        detail?.match?.time_start_play.slice(10, 16) +
+        ' Ngày ' +
+        detail?.match?.time_start_play.slice(0, 10),
+      address: detail?.match?.address,
+      typeField: 'Sân ' + detail?.match?.type_field + ' Người',
+    };
+    pushScreen(props.componentId, 'Booking', dataProps, ' Booking', false, '', '');
+  };
+  const handleBooking = () => {
+    let memberInmatch = detail?.team_b?.members?.length + detail?.team_a?.members?.length;
+    let typesField = detail?.match?.type_field * 2;
+    if (memberInmatch < typesField) {
+      setCheckShowModel(true);
+    } else {
+      bookingScreen();
+    }
+  };
   return (
     <View style={styles.container}>
+      {checkShowModel && (
+        <ModelNotification
+          titleBtnLeft="Hủy Bỏ"
+          titileBtnRight="Đặt Sân"
+          checkModel={true}
+          description={
+            'Bạn chưa đủ cầu thủ để có thể đá sân ' +
+            detail?.match?.type_field +
+            ' người. Bạn có muốn tiếp tục đặt sân không?'
+          }
+          title="Thông Báo"
+          showModel={handleModel}
+          function={bookingScreen}
+        />
+      )}
       {storeDetail.loadingDetailMatches ? (
         <Loading />
       ) : (
@@ -198,11 +248,13 @@ const DetailRoom = (props) => {
             </View>
             <View style={styles.order}>
               {checkUser ? (
-                <TouchableOpacity style={styles.btnOrder}>
+                <TouchableOpacity style={styles.btnOrder} onPress={handleBooking}>
                   <Text style={styles.txtBtnOrder}>ĐẶT SÂN</Text>
                 </TouchableOpacity>
               ) : (
-                <View />
+                <TouchableOpacity style={styles.btnOrder}>
+                  <Text style={styles.txtBtnOrder}>THAM GIA TRẬN ĐẤU</Text>
+                </TouchableOpacity>
               )}
             </View>
           </ScrollView>
