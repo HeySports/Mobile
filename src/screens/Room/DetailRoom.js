@@ -13,7 +13,7 @@ import Color from '../../themes/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Back from '../../components/Back';
 import MatchesAction from '../../redux/MatchesRedux/actions';
-import { goBack } from '../../navigation/pushScreen';
+import { goBack, pushScreen } from '../../navigation/pushScreen';
 import sanbong from '../../image/sanbong.jpg';
 import Field11 from '../../components/Field11';
 import Field5 from '../../components/Field5';
@@ -22,6 +22,7 @@ import Loading from '../../components/Loading';
 import profile from '../../image/thanh.jpg';
 import Player from '../../components/Player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import ModelNotification from '../../components/modelNotification';
 const DetailRoom = (props) => {
   const [id] = useState(props.data);
   const [checkUser, setCheckUser] = useState(false);
@@ -61,7 +62,7 @@ const DetailRoom = (props) => {
     {
       icon: 'volleyball-ball',
       title: 'Sân Bóng',
-      description: detail?.match?.field,
+      description: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
     },
     {
       icon: 'i-cursor',
@@ -104,17 +105,55 @@ const DetailRoom = (props) => {
       setCheckUser(true);
     }
   }
+
+  const handleModel = () => {
+    setCheckShowModel(false);
+  };
+  const bookingScreen = () => {
+    const dataProps = {
+      name_user: users?.full_name,
+      email: users?.email,
+      phone: users?.phone_numbers,
+      id_match: detail?.match?.id,
+      field: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
+      team_name_match:
+        (team_name_a ? team_name_a : 'Team A') + ' Vs ' + (team_name_b ? team_name_b : 'Team B'),
+
+      time:
+        detail?.match?.time_start_play.slice(10, 16) +
+        ' Ngày ' +
+        detail?.match?.time_start_play.slice(0, 10),
+      address: detail?.match?.address,
+      typeField: 'Sân ' + detail?.match?.type_field + ' Người',
+    };
+    pushScreen(props.componentId, 'Booking', dataProps, ' Booking', false, '', '');
+  };
   const handleBooking = () => {
     let memberInmatch = detail?.team_b?.members?.length + detail?.team_a?.members?.length;
     let typesField = detail?.match?.type_field * 2;
     if (memberInmatch < typesField) {
-     setCheckShowModel(true);
+      setCheckShowModel(true);
     } else {
-      alert('Bạn Muốn đặt Sân !');
+      bookingScreen();
     }
   };
   return (
     <View style={styles.container}>
+      {checkShowModel && (
+        <ModelNotification
+          titleBtnLeft="Hủy Bỏ"
+          titileBtnRight="Đặt Sân"
+          checkModel={true}
+          description={
+            'Bạn chưa đủ cầu thủ để có thể đá sân ' +
+            detail?.match?.type_field +
+            ' người. Bạn có muốn tiếp tục đặt sân không?'
+          }
+          title="Thông Báo"
+          showModel={handleModel}
+          function={bookingScreen}
+        />
+      )}
       {storeDetail.loadingDetailMatches ? (
         <Loading />
       ) : (
