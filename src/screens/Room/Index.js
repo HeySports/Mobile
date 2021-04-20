@@ -48,7 +48,7 @@ const Room = (props) => {
   const [haveField, setHaveField] = useState(false);
   const [fieldChoose, setFieldChoose] = useState(false);
   const [IdField, setIdField] = useState('');
-  const [typeField, setTypeField] = useState();
+  const [typeField, setTypeField] = useState(5);
   const [childField, setChildField] = useState(false);
   var id_field_choose = props.data;
   const listField = useSelector((state) => state.fields.responseField);
@@ -76,7 +76,7 @@ const Room = (props) => {
     }
   }, [id_field_choose, listChidField, listField]);
   const listFieldScreen = () => {
-    pushScreen(props.componentId, 'ListField', '', 'ListField', false, '', '');
+    pushScreen(props.componentId, 'ListField', typeField, 'ListField', false, '', '');
   };
 
   const handleCreateMatch = async () => {
@@ -143,7 +143,7 @@ const Room = (props) => {
               <Icon name="lock" style={styles.iconLock} />
             </View>
             <View style={styles.viewContentLock}>
-              <Text style={styles.txtViewContent}>1</Text>
+              <Text style={styles.txtViewContent}>{Math.floor(Math.random() * 10 + 1)}</Text>
             </View>
           </View>
           <View style={styles.itemElementType}>

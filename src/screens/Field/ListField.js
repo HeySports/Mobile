@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 import Colors from '../../themes/colors';
 import Fonts from '../../themes/font';
@@ -34,6 +35,9 @@ const ListField = (props) => {
     });
     setListField(resultSearch);
   };
+  console.log('====================================');
+  console.log(props.data);
+  console.log('====================================');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
