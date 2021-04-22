@@ -13,10 +13,17 @@ const RoomItem = (props) => {
   };
   return (
     <TouchableOpacity onPress={detailRoom}>
-      <View style={styles.container}>
-        <View style={styles.imageRoom}>
+      <View style={[styles.container, props.styleHomepage && props.styleHomepage]}>
+        {
+           props.styleHomepage ?
+           console.log('no')
+           :
+           <View style={styles.imageRoom}>
           <Image source={pitch} style={styles.imgRoom} />
         </View>
+        
+        }
+        
         <View style={styles.detailRoom}>
           <Text style={styles.titleDetail}>{room?.match.name_room}</Text>
           <View style={styles.row}>
@@ -25,20 +32,22 @@ const RoomItem = (props) => {
             </View>
             <View style={styles.viewTxtDetail}>
               <Text style={styles.txtDetail}>
-                {room?.team_a.members?.length ? room?.team_a.members[0]?.team_name : 'Team_A'}
+                {room?.team_a.members?.length ? room?.team_a.members[0]?.team_name : 'Đang chờ...'}
               </Text>
               <Text style={styles.txtVs}>Vs</Text>
               <Text style={styles.txtDetail}>
-                {room?.team_b.members?.length ? room?.team_b.members[0]?.team_name : 'Team_B'}
+                {room?.team_b.members?.length ? room?.team_b.members[0]?.team_name : 'Đang chờ...'}
               </Text>
             </View>
           </View>
-          <View style={styles.row}>
+          <View style={[styles.row]}>
             <View style={styles.viewIconDetail}>
               <Icon name="people-arrows" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
               <Text style={styles.txtDetails}>{room?.match?.type_field} người</Text>
+              <Icon name="people-arrows" style={[styles.iconDetail, styles.iconLosePay]} />
+              <Text style={[styles.txtDetails,styles.txtLosePay]}>{room?.match?.lose_pay}</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -63,7 +72,7 @@ const RoomItem = (props) => {
             </View>
             <View style={styles.viewTxtDetails}>
               <Text style={styles.txtDetailTime}>
-                {room?.match.time_start_play} - {room?.time_end_play} | 01-04-2021
+                {room?.match.time_start_play}
               </Text>
             </View>
           </View>
@@ -76,6 +85,12 @@ export default RoomItem;
 const { width } = Dimensions.get('window');
 const startWidth = 360;
 const styles = StyleSheet.create({
+  iconLosePay: {
+    marginLeft: 20,
+  },
+  txtLosePay: {
+    marginLeft: 5
+  },  
   container: {
     flexDirection: 'row',
     flex: 1,
@@ -85,6 +100,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 0,
   },
+  
   imageRoom: {
     flex: 2,
     justifyContent: 'center',
@@ -142,8 +158,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#AC090B',
     fontWeight: '700',
-    marginLeft: '2%',
-    marginRight: '2%',
+    marginLeft: '3%',
+    marginRight: '3%',
   },
   txtDetailTime: {
     fontSize: 10,

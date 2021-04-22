@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
 import ItemRoom from '../../components/ItemRoom';
+import RoomItem from '../../components/Room';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
@@ -149,7 +150,7 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Đội bóng đang chờ" functionViewMore={viewMoreRoom} />
+          <Title title="Các đội tìm đấu thủ" functionViewMore={viewMoreRoom} />
           {listMatches.loadingMatches ? (
             <View style={styles.containerLoading}>
               <ActivityIndicator size="large" color="#0000ff" />
@@ -163,6 +164,26 @@ const Home = (props) => {
             >
               {matches.map((item, index) => {
                 return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
+              })}
+            </ScrollView>
+          )}
+        </View>
+        <View style={styles.listRoom}>
+          <Text style={styles.row} />
+          <Title title="Các đội tìm thành viên" functionViewMore={viewMoreRoom} />
+          {listMatches.loadingMatches ? (
+            <View style={styles.containerLoading}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <ScrollView
+              style={styles.listScroll}
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              {matches.map((item, index) => {
+                return <RoomItem styleHomepage={styles.styleHomepage} key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}
@@ -232,6 +253,17 @@ const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
     width: width,
+  },
+  styleHomepage: {
+    flexDirection: 'row',
+    flex: 1,
+    margin: 0,
+    width: 160,
+    backgroundColor: Color.field,
+    height: 130,
+    marginTop: 15,
+    marginBottom: 0,
+    marginHorizontal: 7.5,
   },
   topBar: {
     width: width,
