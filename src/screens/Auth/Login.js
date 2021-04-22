@@ -19,6 +19,7 @@ import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
+import Error from '../../components/Error';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -41,11 +42,12 @@ const Login = (props) => {
       setErrorLogin('Số điện thoại hoặc mật khẩu của bạn không hợp lệ !');
     } else {
       handleLogin(phone, password);
-      Keyboard.dismiss();
       setErrorLogin(false);
     }
   };
   const handleLogin = (phone_numbers, password_login) => {
+    Keyboard.dismiss();
+    setErrorLogin('');
     dispatch(LoginActions.userLogin({ phone_numbers: phone_numbers, password: password_login }));
   };
   useEffect(() => {
@@ -84,11 +86,7 @@ const Login = (props) => {
             <Text style={styles.txtError}>{storeLogin.responseLogin}</Text>
           </View>
         )}
-        {errorLogin && (
-          <View style={styles.error}>
-            <Text style={styles.txtError}>{errorLogin}</Text>
-          </View>
-        )}
+        {errorLogin && <Error messageError={errorLogin} />}
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} function={handleTextInput} />
           <Button

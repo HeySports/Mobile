@@ -19,7 +19,7 @@ const ItemField = (props) => {
       type_field: typeFiled,
     };
     await dispatch(FieldActions.userGetPriceField(data));
-    await pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', '');
+    pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', true, '', '');
   };
   const detailField = () => {
     pushScreen(props.idProps, 'Detail', field.id, 'Detail', false, '', '');

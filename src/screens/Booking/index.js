@@ -74,7 +74,6 @@ const Index = (props) => {
     </View>
   );
 };
-
 export default Index;
 const { width, height } = Dimensions.get('screen');
 const startWidth = 360;

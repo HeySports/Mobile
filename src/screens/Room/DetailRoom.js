@@ -41,6 +41,10 @@ const DetailRoom = (props) => {
       typeField = <Field11 />;
     }
   }
+  const numberFormat = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
   useEffect(() => {
     dispatch(MatchesAction.userGetDetailMatch(id));
   }, [dispatch, id]);
@@ -62,7 +66,7 @@ const DetailRoom = (props) => {
     {
       icon: 'volleyball-ball',
       title: 'Sân Bóng',
-      description: 'Sân '+ detail?.match?.name_field + ' của sân ' + detail?.match?.field,
+      description: 'Sân ' + detail?.match?.name_field + ' của sân ' + detail?.match?.field,
     },
     {
       icon: 'i-cursor',
@@ -81,6 +85,11 @@ const DetailRoom = (props) => {
         detail?.match?.time_start_play.slice(10, 16) +
         ' Ngày ' +
         detail?.match?.time_start_play.slice(0, 10),
+    },
+    {
+      icon: 'map-marker-alt',
+      title: 'Giá sân',
+      description: numberFormat.format(detail?.match?.price),
     },
     {
       icon: 'balance-scale-right',

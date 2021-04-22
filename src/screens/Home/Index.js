@@ -199,7 +199,7 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Đánh Giá Cao" checkTitle={true} />
+          <Title title="Cầu thủ tiềm năng" checkTitle={true} />
           {users?.loading ? (
             <Loading />
           ) : (

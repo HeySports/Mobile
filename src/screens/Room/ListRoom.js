@@ -31,7 +31,11 @@ const ListRoom = (props) => {
         )}
       </View>
       {checkView ? (
-        <ScrollView style={styles.viewRoom}>
+        <ScrollView
+          style={styles.viewRoom}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={styles.listRoom}>
             {matches?.map((item, index) => {
               return <ItemRoom key={index} room={item} idComponent={props.componentId} />;
@@ -39,7 +43,11 @@ const ListRoom = (props) => {
           </View>
         </ScrollView>
       ) : (
-        <ScrollView style={styles.viewRoom}>
+        <ScrollView
+          style={styles.viewRoom}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={styles.roomList} />
           {matches?.map((item, index) => {
             return <RoomItem room={item} idComponent={props.componentId} key={index} />;

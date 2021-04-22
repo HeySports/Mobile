@@ -1,7 +1,17 @@
 import { Navigation } from 'react-native-navigation';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-export const pushScreen = (componentId, screenApp, passProps, title, visible, left, right) => {
+import Colors from '../themes/colors';
+export const pushScreen = (
+  componentId,
+  screenApp,
+  passProps,
+  title,
+  visible,
+  visibleBottom,
+  left,
+  right,
+) => {
   Promise.all([Icons.getImageSource(left, 25), Icons.getImageSource(right, 25)]).then(
     ([leftImage, rightImage]) => {
       Navigation.push(componentId, {
@@ -35,7 +45,7 @@ export const pushScreen = (componentId, screenApp, passProps, title, visible, le
               ],
             },
             bottomTabs: {
-              visible: false,
+              visible: visibleBottom ? visibleBottom : false,
             },
           },
         },
@@ -66,7 +76,7 @@ export const loginScreen = () => {
 };
 export const homeScreen = () => {
   Promise.all([
-    Icons.getImageSource('home', 30),
+    Icon.getImageSource('home-outline', 30),
     Icon.getImageSource('soccer-field', 30),
     Icons.getImageSource('plus-circle', 50),
     Icon.getImageSource('bell-ring-outline', 30),
@@ -77,6 +87,7 @@ export const homeScreen = () => {
         sideMenu: {
           center: {
             bottomTabs: {
+              id: 'BottomTabs',
               children: [
                 {
                   stack: {
@@ -92,9 +103,6 @@ export const homeScreen = () => {
                               icon: home,
                               animate: false,
                               text: 'Trang chủ',
-                              selectedIconColor: '#FF7F27',
-                              selectedTextColor: '#FF7F27',
-                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -115,12 +123,8 @@ export const homeScreen = () => {
                             visible: false,
                             bottomTab: {
                               icon: filed,
-                              fontSize: 30,
                               animate: false,
                               text: 'sân bóng',
-                              selectedIconColor: '#FF7F27',
-                              selectedTextColor: '#FF7F27',
-                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -140,10 +144,7 @@ export const homeScreen = () => {
                             },
                             bottomTab: {
                               icon: plus,
-                              animate: false,
                               text: 'Tạo trận',
-                              selectedIconColor: '#FF7F27',
-                              selectedTextColor: '#FF7F27',
                               iconColor: '#00B359',
                             },
                           },
@@ -165,9 +166,6 @@ export const homeScreen = () => {
                             bottomTab: {
                               icon: bell,
                               text: 'Thông báo',
-                              selectedIconColor: '#FF7F27',
-                              selectedTextColor: '#FF7F27',
-                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -188,9 +186,6 @@ export const homeScreen = () => {
                             bottomTab: {
                               icon: user,
                               text: 'Tài khoản',
-                              selectedIconColor: '#FF7F27',
-                              selectedTextColor: '#FF7F27',
-                              iconColor: '#C5C0C0',
                             },
                           },
                         },
@@ -206,6 +201,23 @@ export const homeScreen = () => {
     });
   });
 };
+Navigation.setDefaultOptions({
+  bottomTab: {
+    textColor: Colors.txtLevel3,
+    iconColor: Colors.txtLevel3,
+    selectedIconColor: Colors.primary,
+    selectedTextColor: Colors.primary,
+    fontSize: 10,
+  },
+  bottomTabs: {
+    visible: true,
+    animate: true,
+    elevation: 10,
+    titleDisplayMode: 'alwaysShow',
+    preferLargeIcons: true,
+    animateTabSelection: false,
+  },
+});
 export const introScreen = () => {
   Navigation.setRoot({
     root: {

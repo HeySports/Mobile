@@ -22,6 +22,8 @@ import MatchesAction from '../../redux/MatchesRedux/actions';
 import ModelNotification from '../../components/modelNotification';
 import Loading from '../../components/Loading';
 import FieldActions from '../../redux/FieldRedux/actions';
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 const Room = (props) => {
   var user = [];
   const fields = useSelector((state) => state.fields);
@@ -32,23 +34,6 @@ const Room = (props) => {
   if (profileStore.responseProfile) {
     user = profileStore.responseProfile;
   }
-  const dataInfoUsers = [
-    {
-      icon: 'users',
-      title: 'Câu Lạc Bộ: ',
-      description: 'PNV',
-    },
-    {
-      icon: 'info-circle',
-      title: '',
-      description: user.full_name,
-    },
-    {
-      icon: 'phone',
-      title: '',
-      description: user.phone_numbers,
-    },
-  ];
   const [haveField, setHaveField] = useState(false);
   const [fieldChoose, setFieldChoose] = useState(false);
   const [IdField, setIdField] = useState('');
@@ -97,8 +82,8 @@ const Room = (props) => {
     );
   };
   const numberFormat = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
     currency: 'VND',
+    style: 'currency',
   });
   const handleCreateMatch = async () => {
     var id_field = '';
@@ -145,7 +130,7 @@ const Room = (props) => {
         <Text style={styles.txtHeader}>Tạo Trận</Text>
       </View>
       {fields?.loading && <Loading />}
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={styles.elementMatches}>
           <View style={styles.itemElementLock}>
             <View style={styles.viewIconLock}>
@@ -234,32 +219,10 @@ const Room = (props) => {
                 </Picker>
               </View>
             </View>
-            <View style={styles.itemChooseField}>
-              <Text>{numberFormat.format(priceField)}</Text>
-            </View>
           </View>
         )}
         <View style={styles.informationUser}>
-          <View style={styles.imageUser}>
-            <View style={styles.borderImage}>
-              <Image source={thanh} style={styles.imageProfile} />
-            </View>
-          </View>
-          <View style={styles.information}>
-            {dataInfoUsers.map((item, index) => {
-              return (
-                <View style={styles.itemInfo} key={index}>
-                  <View style={styles.iconInfo}>
-                    <Icon name={item.icon} style={styles.iconInformation} />
-                  </View>
-                  <View style={styles.contentInfo}>
-                    <Text style={styles.txtTitleInfo}>{item.title}</Text>
-                    <Text style={styles.txtTitleInfo}>{item.description}</Text>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
+        <Text>Thông Tin</Text>
         </View>
         <View style={styles.descriptionRoom}>
           <TextInput
@@ -394,7 +357,6 @@ const styles = StyleSheet.create({
   datePicker: {
     width: width - (40 / startWidth) * width,
     height: 80,
-    fontSize: 10,
   },
   icon: {
     fontSize: 12,
@@ -475,56 +437,6 @@ const styles = StyleSheet.create({
   iconHaveFields: {
     fontSize: 13,
     color: Color.secondary,
-  },
-  informationUser: {
-    width: width,
-    flexDirection: 'row',
-    height: 180,
-    borderEndColor: Color.txtLevel3,
-    borderWidth: 1,
-  },
-  imageUser: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  borderImage: {
-    width: 110,
-    height: 110,
-    borderColor: Color.primary,
-    borderWidth: 4.7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 55,
-  },
-  imageProfile: {
-    height: 100,
-    width: 100,
-    borderRadius: 50,
-  },
-  information: {
-    flex: 1.5,
-    marginTop: 20,
-    height: 160,
-  },
-  itemInfo: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  iconInfo: {
-    flex: 2.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconInformation: {
-    fontSize: 20,
-    color: Color.primary,
-  },
-  contentInfo: {
-    flex: 7.5,
-    alignItems: 'center',
-    flexDirection: 'row',
   },
   txtTitleInfo: {
     fontSize: Font.font_description,
