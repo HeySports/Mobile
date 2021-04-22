@@ -6,11 +6,20 @@ import Colors from '../themes/colors';
 import Button from './DoubleButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { pushScreen } from '../navigation/pushScreen';
+import { useDispatch } from 'react-redux';
+import FieldActions from '../redux/FieldRedux/actions';
 import Star from '../components/Star';
 const ItemField = (props) => {
   const field = props.field;
-  const chooseField = () => {
-    pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', '');
+  const typeFiled = props.typeField;
+  const dispatch = useDispatch();
+  const chooseField = async () => {
+    const data = {
+      id_field: field.id,
+      type_field: typeFiled,
+    };
+    await dispatch(FieldActions.userGetPriceField(data));
+    await pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', '');
   };
   const detailField = () => {
     pushScreen(props.idProps, 'Detail', field.id, 'Detail', false, '', '');

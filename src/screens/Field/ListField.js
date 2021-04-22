@@ -35,9 +35,6 @@ const ListField = (props) => {
     });
     setListField(resultSearch);
   };
-  console.log('====================================');
-  console.log(props.data);
-  console.log('====================================');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -64,7 +61,14 @@ const ListField = (props) => {
       </View>
       <ScrollView style={styles.containerListField}>
         {listField?.map((item, index) => {
-          return <ItemField key={index} field={item} idProps={props.componentId} />;
+          return (
+            <ItemField
+              key={index}
+              field={item}
+              idProps={props.componentId}
+              typeField={props.data}
+            />
+          );
         })}
       </ScrollView>
     </View>

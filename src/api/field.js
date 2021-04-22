@@ -8,3 +8,7 @@ export async function getDetailFieldApi(id) {
 export async function userGetChildFieldApi() {
   return http.get('field/getChildFieldsByField');
 }
+
+export async function userGetPriceFieldApi(data) {
+  return http.get('/match/price/' + data.id_field + '/field/by/' + data.type_field);
+}

@@ -6,6 +6,8 @@ export const fieldTypes = makeConstantCreator(
   'GET_DETAIL_FIELD_SUCCESS',
   'USER_GET_ALL_CHILD_FIELD',
   'USER_GET_ALL_CHILD_FIELD_SUCCESS',
+  'USER_GET_PRICE_FIELD',
+  'USER_GET_PRICE_FIELD_SUCCESS',
 );
 const getListField = () => makeActionCreator(fieldTypes.GET_LIST_FIELD);
 const getListFieldSuccess = (response) =>
@@ -16,7 +18,9 @@ const getDetailFieldSuccess = (response) =>
 const userGetChildField = () => makeActionCreator(fieldTypes.USER_GET_ALL_CHILD_FIELD);
 const userGetChildFieldSuccess = (response) =>
   makeActionCreator(fieldTypes.USER_GET_ALL_CHILD_FIELD_SUCCESS, { response });
-
+const userGetPriceField = (data) => makeActionCreator(fieldTypes.USER_GET_PRICE_FIELD, { data });
+const userGetPriceFieldSuccess = (response) =>
+  makeActionCreator(fieldTypes.USER_GET_PRICE_FIELD_SUCCESS, { response });
 export default {
   getListField,
   getListFieldSuccess,
@@ -24,4 +28,6 @@ export default {
   getDetailFieldSuccess,
   userGetChildField,
   userGetChildFieldSuccess,
+  userGetPriceField,
+  userGetPriceFieldSuccess,
 };

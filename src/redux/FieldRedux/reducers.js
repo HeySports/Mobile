@@ -19,6 +19,7 @@ const INITIAL_STATE = Immutable({
   responseGetChildField: null,
   error: null,
   type: '',
+  responsePriceField: null,
 });
 export const getListField = (state) =>
   state.merge({
@@ -62,6 +63,20 @@ export const userGetChildFieldSuccess = (state, { response }) =>
     error: null,
     type: 'USER_GET_ALL_CHILD_FIELD_SUCCESS',
   });
+export const userGetPriceField = (state) =>
+  state.merge({
+    loading: true,
+    responsePriceField: null,
+    error: null,
+    type: 'USER_GET_PRICE_FIELD',
+  });
+export const userGetPriceFieldSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    responsePriceField: response,
+    error: null,
+    type: 'USER_GET_PRICE_FIELD_SUCCESS',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [fieldTypes.GET_LIST_FIELD]: getListField,
   [fieldTypes.GET_LIST_FIELD_SUCCESS]: getListFieldSuccess,
@@ -69,5 +84,7 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [fieldTypes.GET_DETAIL_FIELD_SUCCESS]: getDetailFieldSuccess,
   [fieldTypes.USER_GET_ALL_CHILD_FIELD]: userGetChildField,
   [fieldTypes.USER_GET_ALL_CHILD_FIELD_SUCCESS]: userGetChildFieldSuccess,
+  [fieldTypes.USER_GET_PRICE_FIELD]: userGetPriceField,
+  [fieldTypes.USER_GET_PRICE_FIELD_SUCCESS]: userGetPriceFieldSuccess,
 });
 export default reducer;

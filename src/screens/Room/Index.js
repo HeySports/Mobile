@@ -20,10 +20,14 @@ import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ModelNotification from '../../components/modelNotification';
+import Loading from '../../components/Loading';
+import FieldActions from '../../redux/FieldRedux/actions';
 const Room = (props) => {
   var user = [];
+  const fields = useSelector((state) => state.fields);
   const profileStore = useSelector((state) => state.profile);
   const matches = useSelector((state) => state.matches);
+  const priceField = fields?.responsePriceField?.length ? fields?.responsePriceField[0]?.price : 0;
   const dispatch = useDispatch();
   if (profileStore.responseProfile) {
     user = profileStore.responseProfile;
@@ -51,8 +55,8 @@ const Room = (props) => {
   const [typeField, setTypeField] = useState(5);
   const [childField, setChildField] = useState(false);
   var id_field_choose = props.data;
-  const listField = useSelector((state) => state.fields.responseField);
-  const listChidField = useSelector((state) => state.fields.responseGetChildField);
+  const listChidField = fields?.responseGetChildField;
+  const listField = fields?.responseField;
   const [date, setDate] = useState(new Date());
   const [nameRoom, setNameRoom] = useState('');
   const [descriptionRoom, setDescriptionRoom] = useState('');
@@ -74,40 +78,9 @@ const Room = (props) => {
       });
       setChildField(array);
     }
-  }, [id_field_choose, listChidField, listField]);
+  }, [dispatch, id_field_choose, listChidField, listField, typeField]);
   const listFieldScreen = () => {
     pushScreen(props.componentId, 'ListField', typeField, 'ListField', false, '', '');
-  };
-
-  const handleCreateMatch = async () => {
-    var id_field = '';
-    if (haveField) {
-      id_field = 7;
-    } else {
-      if (id_field_choose) {
-        id_field = id_field_choose;
-      }
-    }
-    if (descriptionRoom === '') {
-      setDescriptionRoom('description');
-    }
-    if (id_field === '') {
-      setError('Bạn chưa chọn sân, nếu bạn có sân rồi hãy chọn đã có sân');
-    } else if (nameRoom === '') {
-      setError('Bạn phải nhập tên phòng !');
-    } else {
-      const data = {
-        id_field_play: id_field,
-        type_field: typeField,
-        time_start_play: date,
-        time_end_play: date,
-        name_room: nameRoom,
-        id_child_field: typeField ? typeField : 1,
-        description: descriptionRoom,
-      };
-      dispatch(MatchesAction.userPostMatch(data));
-      await setCheckModel(true);
-    }
   };
   const setModel = () => {
     setCheckModel(false);
@@ -123,6 +96,41 @@ const Room = (props) => {
       '',
     );
   };
+  const numberFormat = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+  const handleCreateMatch = async () => {
+    var id_field = '';
+    if (haveField) {
+      id_field = 7;
+    } else {
+      if (id_field_choose) {
+        id_field = id_field_choose;
+      }
+    }
+    if (!descriptionRoom) {
+      setDescriptionRoom('description');
+    }
+    if (!id_field) {
+      setError('Bạn chưa chọn sân, nếu bạn có sân rồi hãy chọn đã có sân');
+    } else if (!nameRoom) {
+      setError('Bạn phải nhập tên phòng !');
+    } else {
+      const data = {
+        id_field_play: id_field,
+        price: priceField ? priceField : 0,
+        type_field: typeField,
+        time_start_play: date,
+        time_end_play: date,
+        name_room: nameRoom,
+        id_child_field: typeField ? typeField : 1,
+        description: descriptionRoom,
+      };
+      dispatch(MatchesAction.userPostMatch(data));
+      await setCheckModel(true);
+    }
+  };
   return (
     <View style={styles.container}>
       {checkModel && (
@@ -136,6 +144,7 @@ const Room = (props) => {
       <View style={styles.header}>
         <Text style={styles.txtHeader}>Tạo Trận</Text>
       </View>
+      {fields?.loading && <Loading />}
       <ScrollView>
         <View style={styles.elementMatches}>
           <View style={styles.itemElementLock}>
@@ -220,10 +229,13 @@ const Room = (props) => {
                       );
                     })
                   ) : (
-                    <Picker.Item label="" value="" style={styles.itemChooseChildField} />
+                    <Picker.Item style={styles.itemChooseChildField} />
                   )}
                 </Picker>
               </View>
+            </View>
+            <View style={styles.itemChooseField}>
+              <Text>{numberFormat.format(priceField)}</Text>
             </View>
           </View>
         )}
