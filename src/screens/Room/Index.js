@@ -5,12 +5,10 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
   TextInput,
   ScrollView,
 } from 'react-native';
 import Color from '../../themes/colors';
-import thanh from '../../image/thanh.jpg';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,19 +19,15 @@ import DatePicker from 'react-native-date-picker';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ModelNotification from '../../components/modelNotification';
 import Loading from '../../components/Loading';
-import FieldActions from '../../redux/FieldRedux/actions';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Room = (props) => {
-  var user = [];
   const fields = useSelector((state) => state.fields);
   const profileStore = useSelector((state) => state.profile);
   const matches = useSelector((state) => state.matches);
   const priceField = fields?.responsePriceField?.length ? fields?.responsePriceField[0]?.price : 0;
   const dispatch = useDispatch();
-  if (profileStore.responseProfile) {
-    user = profileStore.responseProfile;
-  }
   const [haveField, setHaveField] = useState(false);
   const [fieldChoose, setFieldChoose] = useState(false);
   const [IdField, setIdField] = useState('');
@@ -42,11 +36,15 @@ const Room = (props) => {
   var id_field_choose = props.data;
   const listChidField = fields?.responseGetChildField;
   const listField = fields?.responseField;
+
+  const [error, setError] = useState('');
+  const [checkModel, setCheckModel] = useState(false);
+  const [payment, setPayment] = useState('');
   const [date, setDate] = useState(new Date());
   const [nameRoom, setNameRoom] = useState('');
   const [descriptionRoom, setDescriptionRoom] = useState('');
-  const [error, setError] = useState('');
-  const [checkModel, setCheckModel] = useState(false);
+  const [membersHave, setMembersHave] = useState(false);
+  const [opttion, setOpttion] = useState(false);
   // Function
   useEffect(() => {
     if (id_field_choose) {
@@ -94,27 +92,29 @@ const Room = (props) => {
         id_field = id_field_choose;
       }
     }
-    if (!descriptionRoom) {
-      setDescriptionRoom('description');
-    }
     if (!id_field) {
       setError('Bạn chưa chọn sân, nếu bạn có sân rồi hãy chọn đã có sân');
-    } else if (!nameRoom) {
-      setError('Bạn phải nhập tên phòng !');
+    } else if (!nameRoom || !membersHave || !opttion || !descriptionRoom) {
+      setError('Bạn phải cung cấp đầy đủ thông tin được yêu cầu !');
     } else {
       const data = {
         id_field_play: id_field,
-        price: priceField ? priceField : 0,
+        price: priceField,
         type_field: typeField,
         time_start_play: date,
         time_end_play: date,
         name_room: nameRoom,
         id_child_field: typeField ? typeField : 1,
         description: descriptionRoom,
+        lose_pay: payment,
+        numbers_user_added: membersHave,
       };
-      dispatch(MatchesAction.userPostMatch(data));
-      await setCheckModel(true);
+      createNewMatch(data);
     }
+  };
+  const createNewMatch = (data) => {
+    dispatch(MatchesAction.userPostMatch(data));
+    setCheckModel(true);
   };
   return (
     <View style={styles.container}>
@@ -221,20 +221,67 @@ const Room = (props) => {
             </View>
           </View>
         )}
+        <View style={styles.titleInfo}>
+          <Text style={styles.txtInfo}>Thông Tin Trận Đấu</Text>
+        </View>
         <View style={styles.informationUser}>
-        <Text>Thông Tin</Text>
+          <View style={styles.itemInfo}>
+            <View style={styles.infomationMatches}>
+              <TextInput
+                style={styles.txtInputNameMatches}
+                placeholder="Tên Trận Đấu"
+                placeholderTextColor="grey"
+                onChangeText={(text) => setNameRoom(text)}
+              />
+              <Picker
+                style={styles.chosePayment}
+                selectedValue={payment}
+                onValueChange={(itemValue) => setPayment(itemValue)}
+              >
+                <Picker.Item label="Tỷ Lệ" value="0" />
+                <Picker.Item label="7 / 3" value="7 / 3" />
+                <Picker.Item label="6 / 4" value="6 / 4" />
+                <Picker.Item label="5 / 5" value="5 / 5" />
+                <Picker.Item label="100" value="100" />
+              </Picker>
+              <TextInput
+                style={styles.txtInputNameMatcheses}
+                placeholder="Số cầu thủ đã có"
+                placeholderTextColor="grey"
+                onChangeText={(text) => setMembersHave(text)}
+                keyboardType="number-pad"
+              />
+              <TextInput
+                style={styles.txtInputNameMatches}
+                placeholder="Hình thức"
+                placeholderTextColor="grey"
+                onChangeText={(text) => setOpttion(text)}
+              />
+            </View>
+          </View>
+          <View style={styles.itemInfos}>
+            <View style={styles.itemTitleInfoField}>
+              <Text style={styles.txtInfoField}>
+                Người Tạo: {profileStore?.responseProfile?.full_name}
+              </Text>
+              <Text style={styles.txtInfoField}>
+                Điện thoại: {profileStore?.responseProfile?.phone_numbers}
+              </Text>
+              <Text style={styles.txtInfoField}>
+                Sân Bóng: {fieldChoose?.name ? fieldChoose?.name : 'Chưa có'}
+              </Text>
+              <Text style={styles.txtInfoField}>Giá sân: {numberFormat.format(priceField)}</Text>
+              <Text style={styles.txtInfoField}>
+                Địa Chỉ: {fieldChoose?.address ? fieldChoose?.address : 'Không xác định'}
+              </Text>
+            </View>
+          </View>
         </View>
         <View style={styles.descriptionRoom}>
           <TextInput
-            style={styles.txtInputNameMatches}
-            placeholder="Nhập Tên Trận Bạn muốn tạo"
-            placeholderTextColor="grey"
-            onChangeText={(text) => setNameRoom(text)}
-          />
-          <TextInput
             style={styles.textArea}
             underlineColorAndroid="transparent"
-            placeholder="Ghi chú !"
+            placeholder="Mô tả !"
             placeholderTextColor="grey"
             numberOfLines={10}
             multiline={true}
@@ -446,13 +493,6 @@ const styles = StyleSheet.create({
     height: 110,
     margin: (20 / startWidth) * width,
   },
-  txtInputNameMatches: {
-    borderColor: Color.txtLevel3,
-    borderWidth: 0.5,
-    height: 40,
-    borderRadius: 4,
-    color: Color.txtLevel1,
-  },
   textArea: {
     marginTop: 10,
     height: 80,
@@ -468,5 +508,60 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 60,
+  },
+  titleInfo: {
+    width: width,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtInfo: {
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  informationUser: {
+    flexDirection: 'row',
+    width: width,
+  },
+  itemInfo: {
+    flex: 1,
+    alignItems: 'center',
+    borderColor: Color.error,
+    borderRightWidth: 2,
+  },
+  itemInfos: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  infomationMatches: {
+    width: '80%',
+  },
+  txtInputNameMatches: {
+    borderColor: Color.txtLevel3,
+    borderBottomWidth: 0.5,
+    height: 50,
+    borderRadius: 4,
+    color: Color.txtLevel1,
+  },
+  txtInputNameMatcheses: {
+    borderColor: Color.txtLevel3,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
+    height: 50,
+    borderRadius: 4,
+    color: Color.txtLevel1,
+  },
+  chosePayment: {
+    backgroundColor: Colors.backgroud,
+    height: 40,
+    borderColor: Color.txtLevel3,
+    borderBottomWidth: 0.5,
+  },
+  itemTitleInfoField: {
+    width: '90%',
+  },
+  txtInfoField: {
+    fontSize: Font.font_description,
+    lineHeight: 30,
   },
 });
