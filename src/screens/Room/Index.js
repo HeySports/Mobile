@@ -229,7 +229,7 @@ const Room = (props) => {
             <View style={styles.infomationMatches}>
               <TextInput
                 style={styles.txtInputNameMatches}
-                placeholder="Tên Trận Đấu"
+                placeholder="Tên đội"
                 placeholderTextColor="grey"
                 onChangeText={(text) => setNameRoom(text)}
               />

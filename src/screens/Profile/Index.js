@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
+ActivityIndicator,
 } from 'react-native';
 import Color from '../../themes/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
