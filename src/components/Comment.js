@@ -44,7 +44,7 @@ const Comment = (props) => {
               <TouchableOpacity style={styles.btnIconComment} onPress={props.function}>
                 <Icon name="edit" style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btnIconComment} >
+              <TouchableOpacity style={styles.btnIconComment} onPress={deleteComment}>
                 <Icon name="trash-alt" style={styles.icon} />
               </TouchableOpacity>
             </View>
