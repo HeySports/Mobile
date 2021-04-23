@@ -5,7 +5,7 @@ import Fonts from '../themes/font';
 import Colors from '../themes/colors';
 import Button from './DoubleButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { pushScreen } from '../navigation/pushScreen';
+import { goBack, pushScreen } from '../navigation/pushScreen';
 import { useDispatch } from 'react-redux';
 import FieldActions from '../redux/FieldRedux/actions';
 import Star from '../components/Star';
@@ -19,6 +19,7 @@ const ItemField = (props) => {
       type_field: typeFiled,
     };
     await dispatch(FieldActions.userGetPriceField(data));
+    // goBack(props.idProps);
     pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', true, '', '');
   };
   const detailField = () => {

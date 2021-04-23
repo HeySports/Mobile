@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
   TextInput,
   ScrollView,
 } from 'react-native';
@@ -22,9 +21,8 @@ import ModelNotification from '../../components/modelNotification';
 import Loading from '../../components/Loading';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
-import { RadioButton } from 'react-native-paper';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-const Room = (props) => {
+const RoomForm = (props) => {
   const fields = useSelector((state) => state.fields);
   const profileStore = useSelector((state) => state.profile);
   const matches = useSelector((state) => state.matches);
@@ -38,9 +36,6 @@ const Room = (props) => {
   var id_field_choose = props.data;
   const listChidField = fields?.responseGetChildField;
   const listField = fields?.responseField;
-
-
-  const [methodPay, setMethodPay] = useState(1);
 
   const [error, setError] = useState('');
   const [checkModel, setCheckModel] = useState(false);
@@ -122,7 +117,7 @@ const Room = (props) => {
     setCheckModel(true);
   };
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {checkModel && (
         <ModelNotification
           showModel={setModel}
@@ -190,15 +185,7 @@ const Room = (props) => {
           </View>
         </View>
         {haveField ? (
-          <View style={styles.txtInputNameMatches}>
-           <TextInput
-                style={[styles.txtInputNameMatches, { borderBottomWidth: 0}]}
-                placeholder="Nhập thông tin sân"
-                placeholderTextColor="grey"
-                onChangeText={(text) => {}}
-                //chưa viết function
-              />
-          </View>
+          <View />
         ) : (
           <View style={styles.chooseField}>
             <View style={styles.itemChooseField}>
@@ -235,129 +222,19 @@ const Room = (props) => {
           </View>
         )}
         <View style={styles.titleInfo}>
-          <Text style={styles.txtInfo}>Thông Tin Sân Đấu</Text>
+          <Text style={styles.txtInfo}>Thông Tin Trận Đấu</Text>
         </View>
         <View style={styles.informationUser}>
-          <View style={[styles.itemInfo, {justifyContent: 'center', alignItems: 'center', width: 300}]}>
-            <Image source={require('../../image/field.png')} style={styles.imgField} />
-          </View>
-          <View style={styles.itemInfos}>
-            <View style={styles.itemTitleInfoField}>
-              
-              <Text style={styles.txtInfoField}>
-                Sân: {fieldChoose?.name ? fieldChoose?.name : 'Chưa có'}
-              </Text>
-              <Text style={styles.txtInfoField}>Giá sân: {numberFormat.format(priceField)}</Text>
-              <Text style={styles.txtInfoField}>
-                Địa Chỉ: {fieldChoose?.address ? fieldChoose?.address : 'Không xác định'}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={[styles.informationUser,{marginTop:10}]}>
-          <View>
-            <Text style={[styles.txtInfoField, {   marginLeft: 20,}]}>Hình thức thanh toán: </Text>
-            <Text style={[styles.txtInfoField, {   marginLeft: 20,}]}>Tiền cọc: </Text>
-          </View>
-          <View style={styles.itemInfos}>
-            <View >
-
-                    <View style={styles.flexRow}>
-                    <RadioButton
-              color={Color.primary}
-                value="Tại địa điểm"
-                status={ methodPay === 1 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(1)}
-              />
-              <Text style={styles.txtInfoField}>
-              Tại địa điểm
-              </Text>
-                    </View>
-            <View style={styles.flexRow}>
-            <RadioButton
-               color={Color.primary}
-                value="Thanh toán MOMO"
-                status={ methodPay === 2 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(2)}
-              />
-              <Text style={styles.txtInfoField}>
-              Thanh toán MOMO
-              </Text>
-            </View>
-            <View style={styles.flexRow}>
-            <RadioButton
-               color={Color.primary}
-                value="Thẻ ATM"
-                status={ methodPay === 3 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(3)}
-              />
-              <Text style={styles.txtInfoField}>
-              Thẻ ATM
-              </Text>
-            </View>
-
-             
-              
-              {/* radio box herer  */}
-
-            </View>
-          </View>
-        </View>
-        <View style={[styles.chooseField, {marginTop: 20}]}>
-            <View style={styles.itemChooseField}>
-            <TextInput
-                style={[styles.txtInputNameMatches, {marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0}]}
+          <View style={styles.itemInfo}>
+            <View style={styles.infomationMatches}>
+              <TextInput
+                style={styles.txtInputNameMatches}
                 placeholder="Tên đội"
                 placeholderTextColor="grey"
                 onChangeText={(text) => setNameRoom(text)}
               />
-            </View>
-            <View style={styles.itemChooseField}>
-              <View style={styles.itemItem}>
-                <Picker
-                  style={styles.chooseChildField}
-                  selectedValue={IdField}
-                  onValueChange={(text) => setOpttion(text)}
-                >
-                 
-                        <Picker.Item
-                          label="Tìm đội đấu"
-                          value={1}
-                          style={styles.itemChooseChildField}
-                        />
-                        <Picker.Item
-                          label="Tìm cầu thủ"
-                          value={2}
-                          style={styles.itemChooseChildField}
-                        />
-                  
-                </Picker>
-              </View>
-            </View>
-          </View>
-          <View style={styles.titleInfo}>
-          <Text style={styles.txtInfo}>Thông Tin Trận Đấu</Text>
-        </View>
-        <Text style={[styles.txtInfoField, {marginLeft: 20}]}>
-                Tên: {profileStore?.responseProfile?.full_name}
-              </Text>
-              <Text style={[styles.txtInfoField, {marginLeft: 20}]}>
-                Điện thoại: {profileStore?.responseProfile?.phone_numbers}
-              </Text>
-        <View style={[styles.chooseField, {marginTop: 20}]}>
-            <View style={styles.itemChooseField}>
-            <TextInput
-                style={[styles.txtInputNameMatches, {marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0}]}
-                placeholder="Số cầu thủ đã có"
-                placeholderTextColor="grey"
-                onChangeText={(text) => setMembersHave(text)}
-                keyboardType="number-pad"
-              />
-            </View>
-            <View style={styles.itemChooseField}>
-              <View style={styles.itemItem}>
               <Picker
-                style={styles.chooseChildField}
+                style={styles.chosePayment}
                 selectedValue={payment}
                 onValueChange={(itemValue) => setPayment(itemValue)}
               >
@@ -367,15 +244,39 @@ const Room = (props) => {
                 <Picker.Item label="5 / 5" value="5 / 5" />
                 <Picker.Item label="100" value="100" />
               </Picker>
-              </View>
+              <TextInput
+                style={styles.txtInputNameMatcheses}
+                placeholder="Số cầu thủ đã có"
+                placeholderTextColor="grey"
+                onChangeText={(text) => setMembersHave(text)}
+                keyboardType="number-pad"
+              />
+              <TextInput
+                style={styles.txtInputNameMatches}
+                placeholder="Hình thức"
+                placeholderTextColor="grey"
+                onChangeText={(text) => setOpttion(text)}
+              />
             </View>
           </View>
-          <View style={[styles.infomationMatches]}>
-             
-              
-             
-             
+          <View style={styles.itemInfos}>
+            <View style={styles.itemTitleInfoField}>
+              <Text style={styles.txtInfoField}>
+                Người Tạo: {profileStore?.responseProfile?.full_name}
+              </Text>
+              <Text style={styles.txtInfoField}>
+                Điện thoại: {profileStore?.responseProfile?.phone_numbers}
+              </Text>
+              <Text style={styles.txtInfoField}>
+                Sân Bóng: {fieldChoose?.name ? fieldChoose?.name : 'Chưa có'}
+              </Text>
+              <Text style={styles.txtInfoField}>Giá sân: {numberFormat.format(priceField)}</Text>
+              <Text style={styles.txtInfoField}>
+                Địa Chỉ: {fieldChoose?.address ? fieldChoose?.address : 'Không xác định'}
+              </Text>
             </View>
+          </View>
+        </View>
         <View style={styles.descriptionRoom}>
           <TextInput
             style={styles.textArea}
@@ -386,14 +287,6 @@ const Room = (props) => {
             multiline={true}
             onChangeText={(text) => setDescriptionRoom(text)}
           />
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={[styles.txtInfoField,{marginLeft: 20}]}>
-            Tổng số tiền: 
-          </Text>
-          <Text style={[styles.txtInfoField, {marginRight: 20, color: Color.primary}]}>
-          {numberFormat.format(priceField)}
-          </Text>
         </View>
         <View style={styles.bottomRoom}>
           <View style={styles.viewError}>
@@ -407,22 +300,13 @@ const Room = (props) => {
           />
         </View>
       </ScrollView>
-    </ScrollView>
+    </View>
   );
 };
-export default Room;
+export default RoomForm;
 const { width } = Dimensions.get('window');
 const startWidth = 360;
 const styles = StyleSheet.create({
-  flexRow: {
-    flexDirection: 'row',
-    marginLeft: -20,
-  },
-  imgField: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
   container: {
     width: width,
   },
@@ -629,7 +513,7 @@ const styles = StyleSheet.create({
     width: width,
     height: 50,
     justifyContent: 'center',
-    marginLeft: 20,
+    alignItems: 'center',
   },
   txtInfo: {
     fontSize: 20,
@@ -642,7 +526,7 @@ const styles = StyleSheet.create({
   itemInfo: {
     flex: 1,
     alignItems: 'center',
-    borderColor: Color.primary,
+    borderColor: Color.error,
     borderRightWidth: 2,
   },
   itemInfos: {
