@@ -7,7 +7,7 @@ import { makeSkipIntro } from '../../redux/AppRedux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import ItemIntro from './Item';
 import Button from '../../components/Button';
-import intro1 from '../../image/player.png';
+import intro1 from '../../image/player.jpg';
 import intro2 from '../../image/field.png';
 import intro3 from '../../image/logo.png';
 import Colors from '../../themes/colors';
