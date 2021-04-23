@@ -9,3 +9,6 @@ export async function userGetDetailMatchApi(id) {
 export async function userPostMatchApi(data) {
   return http.post('/match/postMatch', data);
 }
+export async function getListMatchFindMemberApi() {
+  return http.get('/match/getListMatchFindMember');
+}

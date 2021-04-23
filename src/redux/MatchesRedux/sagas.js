@@ -1,11 +1,19 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { matchesTypes } from './actions';
 import MatchesAction from './actions';
-import { getListMatchesApi, userGetDetailMatchApi, userPostMatchApi } from '../../api/matches';
+import { getListMatchFindMemberApi, getListMatchesApi, userGetDetailMatchApi, userPostMatchApi } from '../../api/matches';
 export function* getListMatches() {
   try {
     const response = yield call(getListMatchesApi);
     yield put(MatchesAction.getListMatchesSuccess(response.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+export function* getListMatchFindMember() {
+  try {
+    const response = yield call(getListMatchFindMemberApi);
+    yield put(MatchesAction.getListMatchFindMemberSuccess(response.data));
   } catch (error) {
     console.log(error);
   }
@@ -29,6 +37,7 @@ export function* userPostMatch({ data }) {
 }
 const matchesSagas = () => [
   takeLatest(matchesTypes.GET_LIST_MATCHES, getListMatches),
+  takeLatest(matchesTypes.GET_LIST_MATCH_FIND_MEMBER, getListMatchFindMember),
   takeLatest(matchesTypes.USER_GET_DETAIL_MATCH, userGetDetailMatch),
   takeLatest(matchesTypes.USER_POST_MATCH, userPostMatch),
 ];

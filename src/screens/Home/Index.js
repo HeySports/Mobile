@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
 import ItemRoom from '../../components/ItemRoom';
+import HomeItemRoom from '../../components/HomeItemRoom';
 import RoomItem from '../../components/Room';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
@@ -54,6 +55,7 @@ const Home = (props) => {
   useEffect(() => {
     SplashScreen.hide();
     dispatch(MatchesAction.getListMatches());
+    dispatch(MatchesAction.getListMatchFindMember());
     dispatch(FieldAction.getListField());
     dispatch(ProfileAction.userGetProfile());
     dispatch(UserAction.getAllUsers());
@@ -62,6 +64,7 @@ const Home = (props) => {
   // selector
   var matches = [];
   var fields = [];
+  var listMatchFindMember = [];
   const users = useSelector((state) => state.users);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
@@ -69,6 +72,9 @@ const Home = (props) => {
   // function
   if (listMatches.responseMatches) {
     matches = listMatches.responseMatches;
+  }
+  if (listMatches.responseMatchFindMember) {
+    listMatchFindMember = listMatches.responseMatchFindMember;
   }
   if (listField.responseField) {
     fields = listField.responseField;
@@ -163,7 +169,7 @@ const Home = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               {matches.map((item, index) => {
-                return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
+                return <HomeItemRoom key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}
@@ -171,7 +177,7 @@ const Home = (props) => {
         <View style={styles.listRoom}>
           <Text style={styles.row} />
           <Title title="Các đội tìm thành viên" functionViewMore={viewMoreRoom} />
-          {listMatches.loadingMatches ? (
+          {listMatches.loadingMatchFindMember ? (
             <View style={styles.containerLoading}>
               <ActivityIndicator size="large" color="#0000ff" />
             </View>
@@ -182,8 +188,8 @@ const Home = (props) => {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              {matches.map((item, index) => {
-                return <RoomItem styleHomepage={styles.styleHomepage} key={index} idComponent={props.componentId} room={item} />;
+              {listMatchFindMember.map((item, index) => {
+                return <HomeItemRoom isFindMember={true} key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}
@@ -358,7 +364,7 @@ const styles = StyleSheet.create({
   },
   listScroll: {
     marginTop: 10,
-    height: (140 / startWidth) * startWidth,
+    height: (200 / startWidth) * startWidth,
   },
   listScrolls: {
     marginTop: 10,

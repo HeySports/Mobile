@@ -4,6 +4,8 @@ import { matchesTypes } from './actions';
 const INITIAL_STATE = Immutable({
   loadingMatches: false,
   responseMatches: null,
+  responseMatchFindMember: null,
+  loadingMatchFindMember: true,
   errorMatches: null,
   typeMatches: '',
   loadingDetailMatches: false,
@@ -30,6 +32,21 @@ export const getListMatchesSuccess = (state, { response }) =>
     responseMatches: response,
     errorMatches: null,
     typeMatches: 'GET_LIST_MATCHES_SUCCESS',
+  });
+  export const getListMatchFindMember = (state) =>
+  state.merge({
+    loadingMatchFindMember: true,
+    responseMatchFindMember: null,
+    errorMatches: null,
+    typeMatches: 'GET_LIST_MATCH_FIND_MEMBER',
+  });
+
+export const getListMatchFindMemberSuccess = (state, { response }) =>
+  state.merge({
+    loadingMatchFindMember: false,
+    responseMatchFindMember: response,
+    errorMatches: null,
+    typeMatches: 'GET_LIST_MATCH_FIND_MEMBER_SUCCESS',
   });
 export const userGetDetailMatch = (state) =>
   state.merge({
@@ -67,6 +84,8 @@ export const userPostMatchFailure = (state, { error }) =>
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.GET_LIST_MATCHES]: getListMatches,
   [matchesTypes.GET_LIST_MATCHES_SUCCESS]: getListMatchesSuccess,
+  [matchesTypes.GET_LIST_MATCH_FIND_MEMBER]: getListMatchFindMember,
+  [matchesTypes.GET_LIST_MATCH_FIND_MEMBER_SUCCESS]: getListMatchFindMemberSuccess,
   [matchesTypes.USER_GET_DETAIL_MATCH]: userGetDetailMatch,
   [matchesTypes.USER_GET_DETAIL_MATCH_SUCCESS]: userGetDetailMatchSuccess,
   [matchesTypes.USER_POST_MATCH]: userPostMatch,
