@@ -1,4 +1,4 @@
-/* eslint-disable no-alert */
+
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -51,8 +51,6 @@ const Field = () => {
 };
 export default Field;
 const { height, width } = Dimensions.get('window');
-const startWidth = 360;
-const startHeight = 640;
 const styles = StyleSheet.create({
   mapContainer: {
     height: height,

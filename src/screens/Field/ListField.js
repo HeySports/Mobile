@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Text,
 } from 'react-native';
 import Colors from '../../themes/colors';
 import Fonts from '../../themes/font';

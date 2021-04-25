@@ -38,15 +38,15 @@ const Detail = (props) => {
   const listItem = [
     {
       icon: 'map-marker-alt',
-      content: field.address,
+      content: field?.address,
     },
     {
       icon: 'phone-alt',
-      content: field.phone_numbers,
+      content: field?.phone_numbers,
     },
     {
       icon: 'envelope',
-      content: field.email_field,
+      content: field?.email_field,
     },
     {
       icon: 'clock',
@@ -62,6 +62,19 @@ const Detail = (props) => {
   };
   const setModel = () => {
     setCheckShowModel(false);
+  };
+  const setModelTrue = () => {
+    setCheckShowModel(true);
+  };
+  const elementDetailField = (icon, functionOnpress) => {
+    return (
+      <TouchableOpacity
+        style={checkShowModel ? styles.choseBtn : styles.itemMenuTab}
+        onPress={() => functionOnpress()}
+      >
+        <Icon name={icon} style={checkShowModel ? styles.iconItemMenus : styles.iconItemMenu} />
+      </TouchableOpacity>
+    );
   };
   return (
     <>
@@ -88,21 +101,9 @@ const Detail = (props) => {
             </View>
             <View style={styles.body}>
               <View style={styles.menuTab}>
-                <TouchableOpacity style={styles.itemMenuTab}>
-                  <Icon name="calendar-alt" style={styles.iconItemMenu} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemMenuTab}>
-                  <Icon name="paper-plane" style={styles.iconItemMenu} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={checkShowModel ? styles.choseBtn : styles.itemMenuTab}
-                  onPress={() => setCheckShowModel(true)}
-                >
-                  <Icon
-                    name="comment-dots"
-                    style={checkShowModel ? styles.iconItemMenus : styles.iconItemMenu}
-                  />
-                </TouchableOpacity>
+                {elementDetailField('calendar-alt', setModelTrue)}
+                {elementDetailField('paper-plane', setModelTrue)}
+                {elementDetailField('comment-dots', setModelTrue)}
               </View>
               <View style={styles.contentField}>
                 <View style={styles.nameField}>
@@ -132,7 +133,7 @@ const Detail = (props) => {
               <View style={styles.comment}>
                 <View style={styles.rating}>
                   <Text style={styles.titleDescriptions}>Đánh Giá</Text>
-                  <Star star={field.rating} />
+                  <Star star={field?.rating} />
                 </View>
                 {comments.loading ? (
                   <Loading />
@@ -158,7 +159,7 @@ const Detail = (props) => {
   );
 };
 export default Detail;
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     width: width,

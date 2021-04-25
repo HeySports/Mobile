@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: (240 / startWidth) * width,
-    height: (240 / startWidth) * width,
-    borderRadius: ((240 / startWidth) * width) / 2,
+    width: (200 / startWidth) * width,
+    height: (200 / startWidth) * width,
+    borderRadius: ((200 / startWidth) * width) / 2,
   },
   center: {
     marginTop: 0,

@@ -7,21 +7,18 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-ActivityIndicator,
+  ActivityIndicator,
 } from 'react-native';
 import Color from '../../themes/colors';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Font from '../../themes/font';
 import avatar from '../../image/thanh.jpg';
 import Title from '../../components/TitleView';
 import ItemRoom from '../../components/ItemRoom';
-import Room from '../../components/Room';
 import { pushScreen } from '../../navigation/pushScreen';
 import { useSelector, useDispatch } from 'react-redux';
 import Star from '../../components/Star';
 import ProfileAction from '../../redux/ProfileRedux/actions';
-import Loading from '../../components/Loading';
 const Profile = (props) => {
   var user = [];
   var histories = [false];
@@ -39,6 +36,24 @@ const Profile = (props) => {
   useEffect(() => {
     dispatch(ProfileAction.userGetHistories());
   }, [dispatch]);
+
+  const btnprofile = (icon, title, functionOnPress) => {
+    return (
+      <TouchableOpacity style={styles.btnContent} onPress={() => functionOnPress()}>
+        <Icons name={icon} style={styles.iconContent} />
+        <Text style={styles.txtContent}>{title}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const handleInfomationBtn = () => {
+    alert('Info');
+  };
+  const handlefindMatchesBtn = () => {
+    alert('find matches');
+  };
+  const handleCreateNewTeam = () => {
+    alert('create Team');
+  };
   return (
     <View style={styles.container}>
       {profileStore.loadingProfile ? (
@@ -67,18 +82,9 @@ const Profile = (props) => {
             </View>
             <ScrollView style={styles.content}>
               <View style={styles.informations}>
-                <TouchableOpacity style={styles.btnContent}>
-                  <Icon name="information-outline" style={styles.iconContent} />
-                  <Text style={styles.txtContent}>Thông tin</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnContent}>
-                  <Icons name="search" style={styles.iconContent} />
-                  <Text style={styles.txtContent}>Tìm đội</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnContent}>
-                  <Icon name="plus-circle-outline" style={styles.iconContent} />
-                  <Text style={styles.txtContent}>Tạo trận</Text>
-                </TouchableOpacity>
+                {btnprofile('info-circle', 'Thông Tin', handleInfomationBtn)}
+                {btnprofile('search', 'Tìm Trận', handleInfomationBtn)}
+                {btnprofile('plus-circle', 'Tạo Trận', handleCreateNewTeam)}
               </View>
               <Title title="Trận đấu sắp tới" checkTitle={true} />
               <ScrollView style={styles.listScroll} horizontal={true}>
@@ -87,29 +93,6 @@ const Profile = (props) => {
                 <ItemRoom />
               </ScrollView>
               <Title title="Lịch sử thi đấu" checkTitle={true} />
-              <ScrollView style={styles.viewRoom}>
-                {profileStore.loadingHistories ? (
-                  <Loading checkLoading={true} />
-                ) : (
-                  histories &&
-                  histories.map((item, index) => {
-                    return (
-                      <Room
-                        key={index}
-                        nameRoom={item.name_room}
-                        typeField={item.type_field}
-                        timeStart={item.time_start_play}
-                        timeEnd={item.time_end_play}
-                        nameTeam1="Bách Khoa"
-                        nameTeam2="Sư Phạm"
-                        datePlay="01-04-2021"
-                        nameFiled="Sân Duy Tân"
-                        address="101B Lê Hữu Trác, Quận Sơn Trà"
-                      />
-                    );
-                  })
-                )}
-              </ScrollView>
             </ScrollView>
           </View>
         </View>
@@ -170,7 +153,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     borderWidth: 2,
     borderColor: '#f8f8ff',
-    borderRadius: 15,
+    borderRadius: 4,
   },
   backgroundIcon: {
     flexDirection: 'row',

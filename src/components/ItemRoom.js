@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'rea
 import imageGroup from '../image/room.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../themes/colors';
-import Font from '../themes/font';
+import ImageAvatar from '../image/avatar.png';
 import Star from '../components/Star';
 import { pushScreen } from '../navigation/pushScreen';
 const ItemRoom = (props) => {
@@ -14,7 +14,7 @@ const ItemRoom = (props) => {
   var team_a = [];
   var team_b = [];
   // GET INFORMATION TEAM A
-  if (room?.team_a?.members.length > 0) {
+  if (room?.team_a?.members.length) {
     let rating_team = 0;
     let name_team = room.team_a.members[0]?.team_name;
     let team_members = room.team_a.members.length;
@@ -25,18 +25,6 @@ const ItemRoom = (props) => {
         name_team = element.team_name;
       }
     });
-    const itemRoom = {
-      name_team: name_team,
-      rating_team: rating_team,
-      team_members: team_members,
-      time_histories: time_histories,
-    };
-    team_a.push(itemRoom);
-  } else {
-    let rating_team = 0;
-    let name_team = 'Team_A';
-    let team_members = 0;
-    let time_histories = 0;
     const itemRoom = {
       name_team: name_team,
       rating_team: rating_team,
@@ -70,51 +58,103 @@ const ItemRoom = (props) => {
     let team_members = 0;
     let time_histories = 0;
     const itemRoom = {
-      name_team: name_team,
+      name_team: name_team ? name_team : 'Team A',
       rating_team: rating_team,
       team_members: team_members,
       time_histories: time_histories,
     };
     team_b.push(itemRoom);
   }
-  return (
-    <TouchableOpacity onPress={detailRoom}>
-      <View style={styles.room}>
-        <Text style={styles.nameRoom}> {room && room.match.name_room}</Text>
-        <View style={styles.groupRoom}>
-          <View style={styles.logoGroup}>
-            <View style={styles.txtViewNumber}>
-              <Text style={styles.txtNumberMatches}> {team_a[0]?.team_members} </Text>
+  console.log('====================================');
+  console.log(
+    room?.match?.time_start_play.slice(10, 16) +
+      ' Ngày ' +
+      room?.match?.time_start_play.slice(0, 10),
+  );
+  console.log('====================================');
+  const itemTeam = (checkTeam) => {
+    return (
+      <View>
+        {checkTeam ? (
+          <View style={styles.team}>
+            <View style={styles.imageTeam}>
+              <Image source={imageGroup} style={styles.image} />
+              <View style={styles.memberOfTeam}>
+                <Text style={styles.txtMemberOfTeam}>{team_a[0]?.team_members}</Text>
+              </View>
             </View>
-            <Image source={imageGroup} style={styles.imageLogoGroup} />
+            <View style={styles.informationOfMatches}>
+              <Text style={styles.txtNameTeam}>{team_a[0]?.name_team?.toUpperCase()}</Text>
+              <View style={styles.listIconStar}>
+                <Star star={team_a[0]?.rating_team} />
+              </View>
+            </View>
           </View>
+        ) : (
+          <View style={styles.team}>
+            <View style={styles.imageTeam}>
+              <Image source={imageGroup} style={styles.image} />
+              <View style={styles.memberOfTeam}>
+                <Text style={styles.txtMemberOfTeam}>{team_b[0]?.team_members}</Text>
+              </View>
+            </View>
+            <View style={styles.informationOfMatches}>
+              <Text style={styles.txtNameTeam}>{team_b[0]?.name_team?.toUpperCase()}</Text>
+              <View style={styles.listIconStar}>
+                <Star star={team_b[0]?.rating_team} />
+              </View>
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const team = () => {
+    return (
+      <View style={styles.team}>
+        <View style={styles.imageTeam}>
+          <Image source={ImageAvatar} style={styles.imgWaiting} />
+        </View>
+        <View style={styles.informatch}>
+          <Text style={styles.txtInformatch}>Đang đợi ...</Text>
+        </View>
+      </View>
+    );
+  };
+  return (
+    <TouchableOpacity onPress={detailRoom} style={styles.room}>
+      <View style={styles.container}>
+        <View style={styles.headerRoom}>
+          <Text style={styles.nameRoom}>{room?.match?.name_room?.toUpperCase()}</Text>
+        </View>
+        <View style={styles.teamInfo}>
+          {room?.team_a?.matches_number ? itemTeam(true) : team()}
           <View style={styles.iconMatch}>
             <Icon name="futbol" style={styles.iconFootball} />
           </View>
-          <View style={styles.logoGroup}>
-            <View style={styles.txtViewNumber}>
-              <Text style={styles.txtNumberMatches}>{team_b[0]?.team_members} </Text>
-            </View>
-            <Image source={imageGroup} style={styles.imageLogoGroup} />
-          </View>
+          {room?.team_b?.matches_number ? itemTeam(false) : team()}
         </View>
-        <View style={styles.descriptionRoom}>
-          <View style={styles.descriptionDetail}>
-            <Text style={styles.txtNameGroup}> {team_a[0]?.name_team}</Text>
-            <View style={styles.listIcon}>
-              <Star star={team_a[0]?.rating_team} />
+        <View style={styles.bottomRoom}>
+          <View style={styles.itemBottom}>
+            <View style={styles.icon}>
+              <Icon name="map-marker-alt" style={styles.styleIcon} />
             </View>
-            <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-            <Text style={styles.txtNumberMatch}>{team_a[0]?.time_histories}</Text>
+            <View style={styles.txtDescription}>
+              <Text style={styles.txt}>{'Sân bóng ' + room?.match?.field}</Text>
+            </View>
           </View>
-          <View style={styles.space} />
-          <View style={styles.descriptionDetail}>
-            <Text style={styles.txtNameGroup}>{team_b[0]?.name_team}</Text>
-            <View style={styles.listIcon}>
-              <Star star={team_b[0]?.rating_team} />
+          <View style={styles.itemBottom}>
+            <View style={styles.icon}>
+              <Icon name="clock" style={styles.styleIcon} />
             </View>
-            <Text style={styles.txtNumberMatch}>Số trận tham gia</Text>
-            <Text style={styles.txtNumberMatch}>{team_b[0]?.time_histories}</Text>
+            <View style={styles.txtDescription}>
+              <Text style={styles.txt}>
+                {room?.match?.time_start_play.slice(10, 16) +
+                  ' Ngày ' +
+                  room?.match?.time_start_play.slice(0, 10)}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -123,99 +163,121 @@ const ItemRoom = (props) => {
 };
 
 export default ItemRoom;
-const { width } = Dimensions.get('window');
-const startWidth = 360;
+const { width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
-  room: {
-    width: (160 / startWidth) * width,
-    height: (120 / startWidth) * startWidth,
-    backgroundColor: Color.backgroud,
-    marginLeft: 7,
-    marginRight: 7,
-    marginTop: 15,
-    // eslint-disable-next-line no-dupe-keys
+  container: {
+    width: '100%',
+    height: 125,
     backgroundColor: Color.field,
     borderRadius: 4,
   },
+  room: {
+    width: width / 2 - 14,
+    height: 120,
+    marginLeft: 7,
+    marginRight: 7,
+    marginTop: 15,
+    backgroundColor: Color.field,
+    borderRadius: 4,
+  },
+  headerRoom: {
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   nameRoom: {
+    fontSize: 14,
     color: Color.white,
-    fontSize: Font.font_description,
     fontWeight: '700',
-    width: '100%',
-    textAlign: 'center',
-    marginTop: 2,
-    height: '15%',
-  },
-  groupRoom: {
-    flexDirection: 'row',
-    height: '40%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  descriptionRoom: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  space: {
-    flex: 1,
-  },
-  descriptionDetail: {
-    flex: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  txtNameGroup: {
-    fontSize: 9,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  listIcon: {
-    flexDirection: 'row',
-  },
-  iconRating: {
-    fontSize: 9,
-    color: Color.icon,
-  },
-  txtNumberMatch: {
-    fontSize: 7,
-    fontWeight: '700',
-    textAlign: 'center',
-    color: Color.white,
-  },
-  logoGroup: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    bottom: 4,
   },
   iconMatch: {
-    flex: 1,
+    width: 20,
+    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconFootball: {
-    fontSize: Font.title_child2,
+    fontSize: 15,
   },
-  imageLogoGroup: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  teamInfo: {
+    flexDirection: 'row',
+    height: 70,
   },
-  txtViewNumber: {
-    backgroundColor: Color.primary,
-    height: 15,
-    width: 15,
+  team: {
+    width: 70,
+  },
+  memberOfTeam: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15 / 2,
-    marginLeft: '5%',
+    position: 'absolute',
   },
-  txtNumberMatches: {
+  txtMemberOfTeam: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  imageTeam: {
+    width: '100%',
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: 40,
+    width: 40,
+  },
+  informationOfMatches: {
+    height: 25,
+    width: '100%',
+  },
+  txtNameTeam: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  listIconStar: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomRoom: {
+    height: 30,
+  },
+  itemBottom: {
+    flexDirection: 'row',
+    height: 15,
+  },
+  icon: {
+    height: 15,
+    width: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtDescription: {
+    width: 135,
+    justifyContent: 'center',
+  },
+  txt: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  styleIcon: {
+    fontSize: 11,
+    color: Color.primary,
+    fontWeight: '700',
+  },
+  informatch: {
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtInformatch: {
     fontSize: 12,
     fontWeight: '700',
-    color: Color.white,
+  },
+  imgWaiting: {
+    height: 40,
+    width: 40,
+    borderRadius: 21,
   },
 });

@@ -38,7 +38,6 @@ const Comment = (props) => {
           <View style={styles.contents}>
             <Text style={styles.txtContent}>{comments?.description}</Text>
           </View>
-
           {props.checkUser ? (
             <View style={styles.iconComment}>
               <TouchableOpacity style={styles.btnIconComment} onPress={props.function}>

@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
@@ -19,7 +18,6 @@ import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
 import ItemRoom from '../../components/ItemRoom';
 import HomeItemRoom from '../../components/HomeItemRoom';
-import RoomItem from '../../components/Room';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
@@ -156,7 +154,7 @@ const Home = (props) => {
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Các đội tìm đấu thủ" functionViewMore={viewMoreRoom} />
+          <Title title="Cáp Kèo" functionViewMore={viewMoreRoom} />
           {listMatches.loadingMatches ? (
             <View style={styles.containerLoading}>
               <ActivityIndicator size="large" color="#0000ff" />
@@ -169,7 +167,7 @@ const Home = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               {matches.map((item, index) => {
-                return <HomeItemRoom key={index} idComponent={props.componentId} room={item} />;
+                return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}
@@ -189,14 +187,21 @@ const Home = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               {listMatchFindMember.map((item, index) => {
-                return <HomeItemRoom isFindMember={true} key={index} idComponent={props.componentId} room={item} />;
+                return (
+                  <HomeItemRoom
+                    isFindMember={true}
+                    key={index}
+                    idComponent={props.componentId}
+                    room={item}
+                  />
+                );
               })}
             </ScrollView>
           )}
         </View>
         <View style={styles.listRoom}>
           <Text style={styles.row} />
-          <Title title="Danh sách sân bóng" functionViewMore={viewMorePitch} />
+          <Title title="Sân Bóng" functionViewMore={viewMorePitch} />
           {listField.loadingField ? (
             <View style={styles.containerLoading}>
               <ActivityIndicator size="large" color="#0000ff" />
@@ -255,7 +260,6 @@ const Home = (props) => {
 };
 export default Home;
 const { width } = Dimensions.get('window');
-const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
     width: width,
@@ -363,8 +367,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   listScroll: {
-    marginTop: 10,
-    height: (200 / startWidth) * startWidth,
+    height: 140,
   },
   listScrolls: {
     marginTop: 10,
