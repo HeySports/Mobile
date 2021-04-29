@@ -29,7 +29,7 @@ import Player from '../../components/Player';
 import UserAction from '../../redux/UserRedux/actions';
 import Loading from '../../components/Loading';
 import SplashScreen from 'react-native-splash-screen';
-
+import ItemFindMembers from '../../components/ItemFindMembers';
 const data = {
   dataSlide: [
     {
@@ -181,14 +181,13 @@ const Home = (props) => {
             </View>
           ) : (
             <ScrollView
-              style={styles.listScroll}
               horizontal={true}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
               {listMatchFindMember.map((item, index) => {
                 return (
-                  <HomeItemRoom
+                  <ItemFindMembers
                     isFindMember={true}
                     key={index}
                     idComponent={props.componentId}

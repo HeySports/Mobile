@@ -65,13 +65,6 @@ const ItemRoom = (props) => {
     };
     team_b.push(itemRoom);
   }
-  console.log('====================================');
-  console.log(
-    room?.match?.time_start_play.slice(10, 16) +
-      ' Ngày ' +
-      room?.match?.time_start_play.slice(0, 10),
-  );
-  console.log('====================================');
   const itemTeam = (checkTeam) => {
     return (
       <View>
@@ -204,7 +197,7 @@ const styles = StyleSheet.create({
     height: 70,
   },
   team: {
-    width: 70,
+    width: (width / 2 - 14) / 2 - 20,
   },
   memberOfTeam: {
     justifyContent: 'center',

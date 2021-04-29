@@ -39,7 +39,6 @@ const Room = (props) => {
   const listChidField = fields?.responseGetChildField;
   const listField = fields?.responseField;
 
-
   const [methodPay, setMethodPay] = useState(1);
 
   const [error, setError] = useState('');
@@ -191,13 +190,13 @@ const Room = (props) => {
         </View>
         {haveField ? (
           <View style={styles.txtInputNameMatches}>
-           <TextInput
-                style={[styles.txtInputNameMatches, { borderBottomWidth: 0}]}
-                placeholder="Nhập thông tin sân"
-                placeholderTextColor="grey"
-                onChangeText={(text) => {}}
-                //chưa viết function
-              />
+            <TextInput
+              style={[styles.txtInputNameMatches, { borderBottomWidth: 0 }]}
+              placeholder="Nhập thông tin sân"
+              placeholderTextColor="grey"
+              onChangeText={(text) => {}}
+              //chưa viết function
+            />
           </View>
         ) : (
           <View style={styles.chooseField}>
@@ -238,12 +237,16 @@ const Room = (props) => {
           <Text style={styles.txtInfo}>Thông Tin Sân Đấu</Text>
         </View>
         <View style={styles.informationUser}>
-          <View style={[styles.itemInfo, {justifyContent: 'center', alignItems: 'center', width: 300}]}>
+          <View
+            style={[
+              styles.itemInfo,
+              { justifyContent: 'center', alignItems: 'center', width: 300 },
+            ]}
+          >
             <Image source={require('../../image/field.png')} style={styles.imgField} />
           </View>
           <View style={styles.itemInfos}>
             <View style={styles.itemTitleInfoField}>
-              
               <Text style={styles.txtInfoField}>
                 Sân: {fieldChoose?.name ? fieldChoose?.name : 'Chưa có'}
               </Text>
@@ -254,108 +257,94 @@ const Room = (props) => {
             </View>
           </View>
         </View>
-        <View style={[styles.informationUser,{marginTop:10}]}>
+        <View style={[styles.informationUser, { marginTop: 10 }]}>
           <View>
-            <Text style={[styles.txtInfoField, {   marginLeft: 20,}]}>Hình thức thanh toán: </Text>
-            <Text style={[styles.txtInfoField, {   marginLeft: 20,}]}>Tiền cọc: </Text>
+            <Text style={[styles.txtInfoField, { marginLeft: 20 }]}>Hình thức thanh toán: </Text>
+            <Text style={[styles.txtInfoField, { marginLeft: 20 }]}>Tiền cọc: </Text>
           </View>
           <View style={styles.itemInfos}>
-            <View >
+            <View>
+              <View style={styles.flexRow}>
+                <RadioButton
+                  color={Color.primary}
+                  value="Tại địa điểm"
+                  status={methodPay === 1 ? 'checked' : 'unchecked'}
+                  onPress={() => setMethodPay(1)}
+                />
+                <Text style={styles.txtInfoField}>Tại địa điểm</Text>
+              </View>
+              <View style={styles.flexRow}>
+                <RadioButton
+                  color={Color.primary}
+                  value="Thanh toán MOMO"
+                  status={methodPay === 2 ? 'checked' : 'unchecked'}
+                  onPress={() => setMethodPay(2)}
+                />
+                <Text style={styles.txtInfoField}>Thanh toán MOMO</Text>
+              </View>
+              <View style={styles.flexRow}>
+                <RadioButton
+                  color={Color.primary}
+                  value="Thẻ ATM"
+                  status={methodPay === 3 ? 'checked' : 'unchecked'}
+                  onPress={() => setMethodPay(3)}
+                />
+                <Text style={styles.txtInfoField}>Thẻ ATM</Text>
+              </View>
 
-                    <View style={styles.flexRow}>
-                    <RadioButton
-              color={Color.primary}
-                value="Tại địa điểm"
-                status={ methodPay === 1 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(1)}
-              />
-              <Text style={styles.txtInfoField}>
-              Tại địa điểm
-              </Text>
-                    </View>
-            <View style={styles.flexRow}>
-            <RadioButton
-               color={Color.primary}
-                value="Thanh toán MOMO"
-                status={ methodPay === 2 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(2)}
-              />
-              <Text style={styles.txtInfoField}>
-              Thanh toán MOMO
-              </Text>
-            </View>
-            <View style={styles.flexRow}>
-            <RadioButton
-               color={Color.primary}
-                value="Thẻ ATM"
-                status={ methodPay === 3 ? 'checked' : 'unchecked' }
-                onPress={() => setMethodPay(3)}
-              />
-              <Text style={styles.txtInfoField}>
-              Thẻ ATM
-              </Text>
-            </View>
-
-             
-              
               {/* radio box herer  */}
-
             </View>
           </View>
         </View>
-        <View style={[styles.chooseField, {marginTop: 20}]}>
-            <View style={styles.itemChooseField}>
+        <View style={[styles.chooseField, { marginTop: 20 }]}>
+          <View style={styles.itemChooseField}>
             <TextInput
-                style={[styles.txtInputNameMatches, {marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0}]}
-                placeholder="Tên đội"
-                placeholderTextColor="grey"
-                onChangeText={(text) => setNameRoom(text)}
-              />
-            </View>
-            <View style={styles.itemChooseField}>
-              <View style={styles.itemItem}>
-                <Picker
-                  style={styles.chooseChildField}
-                  selectedValue={IdField}
-                  onValueChange={(text) => setOpttion(text)}
-                >
-                 
-                        <Picker.Item
-                          label="Tìm đội đấu"
-                          value={1}
-                          style={styles.itemChooseChildField}
-                        />
-                        <Picker.Item
-                          label="Tìm cầu thủ"
-                          value={2}
-                          style={styles.itemChooseChildField}
-                        />
-                  
-                </Picker>
-              </View>
+              style={[
+                styles.txtInputNameMatches,
+                { marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0 },
+              ]}
+              placeholder="Tên đội"
+              placeholderTextColor="grey"
+              onChangeText={(text) => setNameRoom(text)}
+            />
+          </View>
+          <View style={styles.itemChooseField}>
+            <View style={styles.itemItem}>
+              <Picker
+                style={styles.chooseChildField}
+                selectedValue={IdField}
+                onValueChange={(text) => setOpttion(text)}
+              >
+                <Picker.Item label="Tìm đội đấu" value={1} style={styles.itemChooseChildField} />
+                <Picker.Item label="Tìm cầu thủ" value={2} style={styles.itemChooseChildField} />
+              </Picker>
             </View>
           </View>
-          <View style={styles.titleInfo}>
+        </View>
+        <View style={styles.titleInfo}>
           <Text style={styles.txtInfo}>Thông Tin Trận Đấu</Text>
         </View>
-        <Text style={[styles.txtInfoField, {marginLeft: 20}]}>
-                Tên: {profileStore?.responseProfile?.full_name}
-              </Text>
-              <Text style={[styles.txtInfoField, {marginLeft: 20}]}>
-                Điện thoại: {profileStore?.responseProfile?.phone_numbers}
-              </Text>
-        <View style={[styles.chooseField, {marginTop: 20}]}>
-            <View style={styles.itemChooseField}>
+        <Text style={[styles.txtInfoField, { marginLeft: 20 }]}>
+          Tên: {profileStore?.responseProfile?.full_name}
+        </Text>
+        <Text style={[styles.txtInfoField, { marginLeft: 20 }]}>
+          Điện thoại: {profileStore?.responseProfile?.phone_numbers}
+        </Text>
+        <View style={[styles.chooseField, { marginTop: 20 }]}>
+          <View style={styles.itemChooseField}>
             <TextInput
-                style={[styles.txtInputNameMatches, {marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0}]}
-                placeholder="Số cầu thủ đã có"
-                placeholderTextColor="grey"
-                onChangeText={(text) => setMembersHave(text)}
-                keyboardType="number-pad"
-              />
-            </View>
-            <View style={styles.itemChooseField}>
-              <View style={styles.itemItem}>
+              style={[
+                styles.txtInputNameMatches,
+                { marginLeft: -20, borderBottomColor: 'none', borderBottomWidth: 0 },
+              ]}
+              placeholder="Số cầu thủ đã có"
+              placeholderTextColor="grey"
+              onChangeText={(text) => setMembersHave(text)}
+              keyboardType="number-pad"
+            />
+          </View>
+          <View style={styles.itemChooseField}>
+            <View style={styles.itemItem}>
               <Picker
                 style={styles.chooseChildField}
                 selectedValue={payment}
@@ -367,15 +356,10 @@ const Room = (props) => {
                 <Picker.Item label="5 / 5" value="5 / 5" />
                 <Picker.Item label="100" value="100" />
               </Picker>
-              </View>
             </View>
           </View>
-          <View style={[styles.infomationMatches]}>
-             
-              
-             
-             
-            </View>
+        </View>
+        <View style={[styles.infomationMatches]}></View>
         <View style={styles.descriptionRoom}>
           <TextInput
             style={styles.textArea}
@@ -387,12 +371,10 @@ const Room = (props) => {
             onChangeText={(text) => setDescriptionRoom(text)}
           />
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={[styles.txtInfoField,{marginLeft: 20}]}>
-            Tổng số tiền: 
-          </Text>
-          <Text style={[styles.txtInfoField, {marginRight: 20, color: Color.primary}]}>
-          {numberFormat.format(priceField)}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.txtInfoField, { marginLeft: 20 }]}>Tổng số tiền:</Text>
+          <Text style={[styles.txtInfoField, { marginRight: 20, color: Color.primary }]}>
+            {numberFormat.format(priceField)}
           </Text>
         </View>
         <View style={styles.bottomRoom}>

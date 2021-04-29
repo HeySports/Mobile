@@ -88,55 +88,64 @@ const HomeItemRoom = (props) => {
           <View style={styles.iconMatch}>
             <Icon name="futbol" style={styles.iconFootball} />
           </View>
-            <Text style={[styles.txtNameGroup, {fontSize: 13}]}>
-              {room.match.type_field +' vs '+ room.match.type_field + ' '}
-            </Text>
-            <Text style={[styles.txtNameGroup, {fontSize: 13}]}>
-              từ 20:30 - 21-30
-            </Text>
+          <Text style={[styles.txtNameGroup, { fontSize: 13 }]}>
+            {room.match.type_field + ' vs ' + room.match.type_field + ' '}
+          </Text>
+          <Text style={[styles.txtNameGroup, { fontSize: 13 }]}>từ 20:30 - 21-30</Text>
         </View>
         <View style={styles.flexRow}>
-            <Text style={[styles.txtNameGroup, {fontSize: 13}]}>
-              ngày 20-04-2021
-            </Text> 
+          <Text style={[styles.txtNameGroup, { fontSize: 13 }]}>ngày 20-04-2021</Text>
         </View>
-        <View style={[styles.flexRow, {justifyContent: 'space-around', marginTop: 10}]}>
+        <View style={[styles.flexRow, { justifyContent: 'space-around', marginTop: 10 }]}>
           <View style={styles.logoGroup}>
-              <Image source={imageGroup} style={styles.imageLogoGroup} />
-            </View>
-            <View style={styles.logoGroup}>
-              <Image source={props.isFindMember ?imageWaitingMember : imageWaiting} style={[styles.imageLogoGroup]} />
-            </View>
+            <Image source={imageGroup} style={styles.imageLogoGroup} />
+          </View>
+          <View style={styles.logoGroup}>
+            <Image
+              source={props.isFindMember ? imageWaitingMember : imageWaiting}
+              style={[styles.imageLogoGroup]}
+            />
+          </View>
         </View>
-        <View style={[styles.flexRow, {justifyContent: 'space-around'}]}>
+        <View style={[styles.flexRow, { justifyContent: 'space-around' }]}>
           <Text style={styles.txtNameGroup}> {team_a[0]?.name_team}</Text>
-          <Text style={styles.txtNameGroup}>{!props.isFindMember ? ('Đang chờ...') : ('Thiếu ('+ (props.room.missing_members - 6)+'-'
-          + props.room.missing_members +') cầu...')} </Text>
+          <Text style={styles.txtNameGroup}>
+            {!props.isFindMember
+              ? 'Đang chờ...'
+              : 'Thiếu (' +
+                (props.room.missing_members - 6) +
+                '-' +
+                props.room.missing_members +
+                ') cầu...'}{' '}
+          </Text>
         </View>
-        <View style={[styles.flexRow, {alignItems: 'center'}]}>
-            <View  style={[styles.flexRow, {marginRight: 10}]}>
+        <View style={[styles.flexRow, { alignItems: 'center' }]}>
+          <View style={[styles.flexRow, { marginRight: 10 }]}>
             <View style={styles.iconMatch}>
-            <Icon name="futbol" style={[styles.iconFootball, {fontSize: 12}]} />
+              <Icon name="futbol" style={[styles.iconFootball, { fontSize: 12 }]} />
+            </View>
+            <Text style={styles.txtNumberMatch}>{team_a[0]?.time_histories}</Text>
           </View>
-               <Text style={styles.txtNumberMatch}>{team_a[0]?.time_histories}</Text>
-            </View>
-            <View style={[styles.listIcon, {marginRight: 10}]}>
-              <Star star={team_a[0]?.rating_team} />
-            </View>
-            <Text style={styles.txtNumberMatch}>Phí: {room.match.lose_pay}</Text>
+          <View style={[styles.listIcon, { marginRight: 10 }]}>
+            <Star star={team_a[0]?.rating_team} />
+          </View>
+          <Text style={styles.txtNumberMatch}>Phí: {room.match.lose_pay}</Text>
         </View>
-        <View style={[styles.flexRow, {marginLeft: 10}]}>
-            <View style={styles.iconMatch}>
-              <Icons name="soccer-field" style={[styles.iconFootball, {fontSize: 12}]} />
-            </View>
-              <Text style={styles.txtNumberMatch}>{room?.match.field}</Text>
+        <View style={[styles.flexRow, { marginLeft: 10 }]}>
+          <View style={styles.iconMatch}>
+            <Icons name="soccer-field" style={[styles.iconFootball, { fontSize: 12 }]} />
           </View>
-          <View style={styles.flexRow}>
-            <View style={[styles.iconMatch]}>
-              <Icon name="map-marker-alt" style={[styles.iconFootball, {marginLeft: 5, fontSize: 12}]} />
-            </View>
-            <Text style={styles.txtNumberMatch}>{room?.match?.address}</Text>
+          <Text style={styles.txtNumberMatch}>{room?.match.field}</Text>
+        </View>
+        <View style={styles.flexRow}>
+          <View style={[styles.iconMatch]}>
+            <Icon
+              name="map-marker-alt"
+              style={[styles.iconFootball, { marginLeft: 5, fontSize: 12 }]}
+            />
           </View>
+          <Text style={styles.txtNumberMatch}>{room?.match?.address}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -150,11 +159,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 5,
     marginTop: 5,
-     },
+  },
   room: {
-    width: ( 190/ startWidth) * width,
+    width: (190 / startWidth) * width,
     height: (240 / startWidth) * startWidth,
-    backgroundColor: Color.backgroud,
     marginLeft: 7,
     marginRight: 7,
     marginTop: 15,
@@ -215,13 +223,13 @@ const styles = StyleSheet.create({
     bottom: 4,
   },
   iconMatch: {
-    marginHorizontal:3,
+    marginHorizontal: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconFootball: {
     fontSize: 15,
-    color: Color.primary
+    color: Color.primary,
   },
   imageLogoGroup: {
     width: 40,
