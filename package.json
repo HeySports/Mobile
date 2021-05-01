@@ -7,7 +7,13 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "fix-xcode": "react-native-schemes-manager all",
+    "newclear": "yarn run removeCachedFiles && yarn run removeCachedMetro && yarn podNewCLear && yarn install --verbose && yarn run android:clean && yarn run fix-xcode && yarn run createIconFont",
+    "podInstall": "cd ios && pod install && cd ..",
+    "podNewCLear": "cd ios && rm -rf Pods/* && rm -rf Podfile.lock && cd ..",
+    "openXcode": "xed -b ios",
+    "fix-lint": "eslint --fix src -c .eslintrc.json --ext js,jsx"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",

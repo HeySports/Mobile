@@ -9,7 +9,7 @@ import { pushScreen } from '../navigation/pushScreen';
 const ItemRoom = (props) => {
   const room = props.room;
   const detailRoom = () => {
-    pushScreen(props.idComponent, 'DetailRoom', room.match.id, 'DetailRoom', false, '', '');
+    pushScreen(props.idComponent, 'RoomDetail', room.match.id, 'RoomDetail', false, '', '');
   };
   var team_a = [];
   var team_b = [];
