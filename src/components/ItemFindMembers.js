@@ -4,24 +4,40 @@ import Colors from '../themes/colors';
 import Font from '../themes/font';
 import img from '../image/team.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-const ItemFindMembers = () => {
+import { pushScreen } from '../navigation/pushScreen';
+const ItemFindMembers = (props) => {
+  const room = props.room.match;
+  const detailScreen = () => {
+    pushScreen(props.idComponent, 'DetailRoom', room.id, 'DetailRoom', false, '', '');
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.body}>
+      <TouchableOpacity style={styles.body} onPress={detailScreen}>
         <View style={styles.bodyRoom}>
           <View style={styles.imageRoom}>
             <Image source={img} style={styles.image} />
             <View style={styles.title}>
-              <Text style={styles.txtTitle}>HA NOI FC</Text>
+              <Text style={styles.txtTitle}>{(room?.name_room).toUpperCase()}</Text>
             </View>
           </View>
         </View>
         <View style={styles.bodyContent}>
-          <ItemContent icon="futbol" title="5 người Vs 5 người" />
+          <ItemContent
+            icon="futbol"
+            title={room?.type_field + ' người Vs ' + room?.type_field + ' người'}
+          />
           <ItemContent icon="user" title="1/10 người" />
-          <ItemContent icon="map-marker-alt" title="Sân Duy Tân" />
-          <ItemContent icon="clock" title="10:30 ngày 20-11-2021" />
-          <ItemContent icon="balance-scale-right" title="7/3 | 250.000 VND" />
+          <ItemContent icon="map-marker-alt" title={room?.field} />
+          <ItemContent
+            icon="clock"
+            title={
+              room?.time_start_play.slice(10, 16) + ' Ngày ' + room?.time_start_play.slice(0, 10)
+            }
+          />
+          <ItemContent
+            icon="balance-scale-right"
+            title={room?.lose_pay + '|   ' + (room?.price).slice(0, 3) + ' 000 VND'}
+          />
         </View>
       </TouchableOpacity>
       <TouchableOpacity style={styles.btnJoinTeam}>

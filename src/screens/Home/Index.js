@@ -17,7 +17,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
 import ItemRoom from '../../components/ItemRoom';
-import HomeItemRoom from '../../components/HomeItemRoom';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
@@ -186,14 +185,7 @@ const Home = (props) => {
               showsHorizontalScrollIndicator={false}
             >
               {listMatchFindMember.map((item, index) => {
-                return (
-                  <ItemFindMembers
-                    isFindMember={true}
-                    key={index}
-                    idComponent={props.componentId}
-                    room={item}
-                  />
-                );
+                return <ItemFindMembers key={index} idComponent={props.componentId} room={item} />;
               })}
             </ScrollView>
           )}
@@ -258,10 +250,11 @@ const Home = (props) => {
   );
 };
 export default Home;
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: width,
+    height: height,
   },
   styleHomepage: {
     flexDirection: 'row',
@@ -335,9 +328,7 @@ const styles = StyleSheet.create({
     color: Color.txtLevel3,
   },
   containerHome: {
-    marginTop: 10,
-    width: width,
-    marginBottom: 80,
+    flex: 1,
   },
   slider: {
     height: 200,
