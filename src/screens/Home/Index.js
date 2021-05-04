@@ -254,7 +254,7 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height,
+    flex: 1,
   },
   styleHomepage: {
     flexDirection: 'row',
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
   },
   listUserRating: {
     width: width,
-    marginTop: 10,
-    height: 100,
+    marginTop: 20,
+    height: 110,
   },
 });
