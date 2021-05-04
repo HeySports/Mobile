@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import sanbong from '../../image/sanbong.jpg';
 import logoTeam from '../../image/team.jpg';
@@ -27,6 +28,7 @@ import Loading from '../../components/Loading';
 const RoomDetail = (props) => {
   const id_room = props.data;
   const matches = useSelector((state) => state.matches);
+  const [active, setActive] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(MatchesAction.userGetDetailMatch(id_room));
@@ -38,8 +40,33 @@ const RoomDetail = (props) => {
     members_length: matches?.responseDetailMatches?.team_a?.members?.length,
     listMatch: matches?.responseMatches,
   };
-  const name = 'hà Nội FC';
-
+  var ownerRoom = false;
+  const userActive = useSelector((state) => state.profile.responseProfile);
+  if (!active) {
+    if (userActive?.id === dataRoom?.dataMatch?.id_user) {
+      setActive(true);
+      console.log('a');
+    }
+  }
+  console.log('====================================');
+  console.log(active);
+  console.log('====================================');
+  const name = 'HA NOI FC';
+  const handleAccept = () => {
+    if (!ownerRoom) {
+      Alert.alert('THÔNG BÁO', 'Trận đấu này là do bạn tạo bạn không thể nhận kèo này được !', [
+        {
+          text: 'Xác nhận',
+          style: 'btnAccept',
+        },
+      ]);
+    } else {
+      alert('Success');
+    }
+  };
+  const orders = () => {
+    alert('orders success');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <TitleView title="CHI TIẾT KÈO ĐẤU" idComponent={props.componentId} />
@@ -84,7 +111,7 @@ const RoomDetail = (props) => {
             <View style={styles.teamB}>
               <View style={styles.joinTeam}>
                 <View style={styles.borderJoinTeam}>
-                  <TouchableOpacity style={styles.btnJoinTeam}>
+                  <TouchableOpacity style={styles.btnJoinTeam} onPress={handleAccept}>
                     <Text style={styles.txtBtnJoinTeam}>NHẬN KÈO</Text>
                   </TouchableOpacity>
                 </View>
@@ -143,8 +170,8 @@ const RoomDetail = (props) => {
             />
           </View>
           <View style={styles.bottomDetail}>
-            <TouchableOpacity style={styles.btnBottom}>
-              <Text style={styles.txtBtnBottom}>Nhận Kèo</Text>
+            <TouchableOpacity style={styles.btnBottom} onPress={ownerRoom ? handleAccept : orders}>
+              <Text style={styles.txtBtnBottom}> NHẬN KÈO</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.title}>

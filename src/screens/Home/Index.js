@@ -250,7 +250,7 @@ const Home = (props) => {
   );
 };
 export default Home;
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: width,
