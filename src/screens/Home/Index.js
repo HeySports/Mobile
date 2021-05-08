@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
@@ -29,6 +30,7 @@ import UserAction from '../../redux/UserRedux/actions';
 import Loading from '../../components/Loading';
 import SplashScreen from 'react-native-splash-screen';
 import ItemFindMembers from '../../components/ItemFindMembers';
+import LoadingView from '../../components/Loading';
 const data = {
   dataSlide: [
     {
@@ -59,20 +61,12 @@ const Home = (props) => {
     dispatch(FieldAction.userGetChildField());
   }, [dispatch]);
   // selector
-  var matches = [];
   var fields = [];
-  var listMatchFindMember = [];
   const users = useSelector((state) => state.users);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
+  // data of all list
   var listUsers = [];
-  // function
-  if (listMatches.responseMatches) {
-    matches = listMatches.responseMatches;
-  }
-  if (listMatches.responseMatchFindMember) {
-    listMatchFindMember = listMatches.responseMatchFindMember;
-  }
   if (listField.responseField) {
     fields = listField.responseField;
   }
@@ -80,7 +74,15 @@ const Home = (props) => {
     pushScreen(props.componentId, 'Search', '', 'Search', false, '', '');
   };
   const viewMoreRoom = () => {
-    pushScreen(props.componentId, 'ListRoom', matches, 'ListRoom', false, '', '');
+    pushScreen(
+      props.componentId,
+      'ListRoom',
+      listMatches?.responseMatches,
+      'ListRoom',
+      false,
+      '',
+      '',
+    );
   };
   const viewMorePitch = () => {
     pushScreen(props.componentId, 'Field', '', 'Field', false, '', '');
@@ -122,82 +124,68 @@ const Home = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView
-        style={styles.containerHome}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View style={styles.slider}>
-          <Carousel
-            style={styles.containerSlide}
-            data={dataSlide}
-            renderItem={_renderItem}
-            onSnapToItem={(index) => setActivity(index)}
-            sliderWidth={width}
-            itemWidth={width}
-            windowSize={1}
-          />
-          {(() => {
-            return (
-              <View style={styles.pagination}>
-                <Pagination
-                  dotsLength={dataSlide.length}
-                  activeDotIndex={activity}
-                  dotStyle={styles.styleDot}
-                  inactiveDotStyle={styles.dot}
-                  inactiveDotScale={1}
-                />
-              </View>
-            );
-          })()}
-        </View>
-        <View style={styles.listRoom}>
-          <Text style={styles.row} />
-          <Title title="Cáp Kèo" functionViewMore={viewMoreRoom} />
-          {listMatches.loadingMatches ? (
-            <View style={styles.containerLoading}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
-            <ScrollView
-              style={styles.listScroll}
-              horizontal={true}
-              showsVerticalScrollIndicator={false}
+
+      {listMatches?.loadingMatches ||
+      listMatches?.loadingMatchFindMember ||
+      users?.loading ||
+      listField?.loadingField ? (
+        <LoadingView />
+      ) : (
+        <ScrollView style={styles.containerHome} showsVerticalScrollIndicator={false}>
+          <View style={styles.slider}>
+            <Carousel
+              style={styles.containerSlide}
+              data={dataSlide}
+              renderItem={_renderItem}
+              onSnapToItem={(index) => setActivity(index)}
+              sliderWidth={width}
+              itemWidth={width}
+              windowSize={1}
+            />
+            {(() => {
+              return (
+                <View style={styles.pagination}>
+                  <Pagination
+                    dotsLength={dataSlide.length}
+                    activeDotIndex={activity}
+                    dotStyle={styles.styleDot}
+                    inactiveDotStyle={styles.dot}
+                    inactiveDotScale={1}
+                  />
+                </View>
+              );
+            })()}
+          </View>
+          <View style={styles.listRoom}>
+            <Text style={styles.row} />
+            <Title title="Cáp Kèo" functionViewMore={viewMoreRoom} />
+
+            <FlatList
+              data={listMatches?.responseMatches}
+              renderItem={({ item }) => <ItemRoom room={item} />}
+              keyExtractor={(item) => item.id}
+              horizontal
+              idComponent={props.componentI}
               showsHorizontalScrollIndicator={false}
-            >
-              {matches.map((item, index) => {
-                return <ItemRoom key={index} idComponent={props.componentId} room={item} />;
-              })}
-            </ScrollView>
-          )}
-        </View>
-        <View style={styles.listRoom}>
-          <Text style={styles.row} />
-          <Title title="Các đội tìm thành viên" functionViewMore={viewMoreRoom} />
-          {listMatches.loadingMatchFindMember ? (
-            <View style={styles.containerLoading}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
-            <ScrollView
-              horizontal={true}
-              showsVerticalScrollIndicator={false}
+            />
+          </View>
+          <View style={styles.listRoom}>
+            <Text style={styles.row} />
+            <Title title="Các đội tìm thành viên" functionViewMore={viewMoreRoom} />
+
+            <FlatList
+              data={listMatches?.responseMatchFindMember}
+              renderItem={({ item }) => <ItemFindMembers room={item} />}
+              keyExtractor={(item) => item.id}
+              horizontal
+              idComponent={props.componentI}
               showsHorizontalScrollIndicator={false}
-            >
-              {listMatchFindMember.map((item, index) => {
-                return <ItemFindMembers key={index} idComponent={props.componentId} room={item} />;
-              })}
-            </ScrollView>
-          )}
-        </View>
-        <View style={styles.listRoom}>
-          <Text style={styles.row} />
-          <Title title="Sân Bóng" functionViewMore={viewMorePitch} />
-          {listField.loadingField ? (
-            <View style={styles.containerLoading}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
+            />
+          </View>
+          <View style={styles.listRoom}>
+            <Text style={styles.row} />
+            <Title title="Sân Bóng" functionViewMore={viewMorePitch} />
+
             <ScrollView
               style={styles.listScrolls}
               horizontal={true}
@@ -218,14 +206,11 @@ const Home = (props) => {
                 );
               })}
             </ScrollView>
-          )}
-        </View>
-        <View style={styles.listRoom}>
-          <Text style={styles.row} />
-          <Title title="Cầu thủ tiềm năng" checkTitle={true} />
-          {users?.loading ? (
-            <Loading />
-          ) : (
+          </View>
+          <View style={styles.listRoom}>
+            <Text style={styles.row} />
+            <Title title="Cầu thủ tiềm năng" checkTitle={true} />
+
             <ScrollView
               style={styles.listUserRating}
               horizontal={true}
@@ -243,9 +228,9 @@ const Home = (props) => {
                 );
               })}
             </ScrollView>
-          )}
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 };

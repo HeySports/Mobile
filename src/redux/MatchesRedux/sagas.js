@@ -1,7 +1,12 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { matchesTypes } from './actions';
 import MatchesAction from './actions';
-import { getListMatchFindMemberApi, getListMatchesApi, userGetDetailMatchApi, userPostMatchApi } from '../../api/matches';
+import {
+  getListMatchFindMemberApi,
+  getListMatchesApi,
+  userGetDetailMatchApi,
+  userPostMatchApi,
+} from '../../api/matches';
 export function* getListMatches() {
   try {
     const response = yield call(getListMatchesApi);

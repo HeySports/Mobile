@@ -33,7 +33,7 @@ export const getListMatchesSuccess = (state, { response }) =>
     errorMatches: null,
     typeMatches: 'GET_LIST_MATCHES_SUCCESS',
   });
-  export const getListMatchFindMember = (state) =>
+export const getListMatchFindMember = (state) =>
   state.merge({
     loadingMatchFindMember: true,
     responseMatchFindMember: null,

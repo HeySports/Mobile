@@ -48,9 +48,6 @@ const RoomDetail = (props) => {
       console.log('a');
     }
   }
-  console.log('====================================');
-  console.log(active);
-  console.log('====================================');
   const name = 'HA NOI FC';
   const handleAccept = () => {
     if (!ownerRoom) {
