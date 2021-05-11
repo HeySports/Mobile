@@ -5,7 +5,7 @@ import Fonts from '../themes/font';
 import Colors from '../themes/colors';
 import Button from './DoubleButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { goBack, pushScreen } from '../navigation/pushScreen';
+import { pushScreen, goBack } from '../navigation/pushScreen';
 import { useDispatch } from 'react-redux';
 import FieldActions from '../redux/FieldRedux/actions';
 import Star from '../components/Star';
@@ -18,12 +18,12 @@ const ItemField = (props) => {
       id_field: field.id,
       type_field: typeFiled,
     };
+    await dispatch(FieldActions.userGetChildField(field.id));
     await dispatch(FieldActions.userGetPriceField(data));
-    // goBack(props.idProps);
-    pushScreen(props.idProps, 'Room', field.id, 'Room', false, '', true, '', '');
+    await goBack(props.idComponent);
   };
   const detailField = () => {
-    pushScreen(props.idProps, 'Detail', field.id, 'Detail', false, '', '');
+    pushScreen(props.idComponent, 'Detail', field.id, 'Detail', false, '', '');
   };
   return (
     <View style={styles.container}>

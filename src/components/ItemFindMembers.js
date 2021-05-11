@@ -6,10 +6,7 @@ import img from '../image/team.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { pushScreen } from '../navigation/pushScreen';
 const ItemFindMembers = (props) => {
-  console.log('==============iutem======================');
-  console.log(props.room);
-  console.log('====================================');
-  const room = props.room.match;
+  const room = props.room?.match;
   const detailScreen = () => {
     pushScreen(props.idComponent, 'DetailRoom', room.id, 'DetailRoom', false, '', '');
   };

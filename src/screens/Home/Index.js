@@ -7,7 +7,6 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -27,7 +26,6 @@ import ProfileAction from '../../redux/ProfileRedux/actions';
 import FieldAction from '../../redux/FieldRedux/actions';
 import Player from '../../components/Player';
 import UserAction from '../../redux/UserRedux/actions';
-import Loading from '../../components/Loading';
 import SplashScreen from 'react-native-splash-screen';
 import ItemFindMembers from '../../components/ItemFindMembers';
 import LoadingView from '../../components/Loading';
@@ -58,7 +56,6 @@ const Home = (props) => {
     dispatch(FieldAction.getListField());
     dispatch(ProfileAction.userGetProfile());
     dispatch(UserAction.getAllUsers());
-    dispatch(FieldAction.userGetChildField());
   }, [dispatch]);
   // selector
   var fields = [];

@@ -9,9 +9,15 @@ const Room = (props) => {
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.btnFindMembers}
-        onPress={() => pushScreenToScreen('FindMember')}
+        onPress={() => pushScreenToScreen('FindMember', true)}
       >
         <Text>Tìm cầu chơi</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btnFindMembers}
+        onPress={() => pushScreenToScreen('FindMember', false)}
+      >
+        <Text>Tìm đối thủ</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -23,9 +23,9 @@ export function* getDetailField({ id }) {
     console.log(error);
   }
 }
-export function* userGetChildField() {
+export function* userGetChildField({ id }) {
   try {
-    const response = yield call(userGetChildFieldApi);
+    const response = yield call(userGetChildFieldApi, id);
     yield put(FieldActions.userGetChildFieldSuccess(response.data));
   } catch (error) {
     console.log('====================================');
@@ -35,6 +35,9 @@ export function* userGetChildField() {
 }
 export function* userGetPriceField({ data }) {
   try {
+    console.log('==============data======================');
+    console.log(data);
+    console.log('====================================');
     const response = yield call(userGetPriceFieldApi, data);
     yield put(FieldActions.userGetPriceFieldSuccess(response.data));
   } catch (error) {

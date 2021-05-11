@@ -21,9 +21,11 @@ const ListField = (props) => {
       setListField(fields);
     }
   }, [fields]);
+
   const goBackScreen = () => {
     goBack(props.componentId);
   };
+
   const searchField = (text) => {
     const dataSearch = text;
     const resultSearch = [];
@@ -34,6 +36,7 @@ const ListField = (props) => {
     });
     setListField(resultSearch);
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -64,7 +67,7 @@ const ListField = (props) => {
             <ItemField
               key={index}
               field={item}
-              idProps={props.componentId}
+              idComponent={props.componentId}
               typeField={props.data}
             />
           );
