@@ -1,7 +1,7 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { LoginTypes } from './actions';
 import AuthAction from './actions';
-import { userLoginApi } from '../../api/auth';
+import { userLoginApi, userRegisterApi } from '../../api/auth';
 import { userStartApp } from '../AppRedux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 export function* userLogin({ data }) {
@@ -14,7 +14,15 @@ export function* userLogin({ data }) {
     yield put(AuthAction.userLoginFailure(error));
   }
 }
-
+export function* userRegister({ data }) {
+  try {
+    console.log('register saga: ');
+    const response = yield call(userRegisterApi, data);
+    yield put(userStartApp());
+  } catch (error) {
+    yield put(AuthAction.userRegisterFailure(error));
+  }
+}
 export function* userLogout() {
   yield AsyncStorage.clear();
   yield AsyncStorage.setItem('skip', JSON.stringify(true));
@@ -22,6 +30,7 @@ export function* userLogout() {
 }
 const userAuthSagas = () => [
   takeLatest(LoginTypes.USER_LOGIN, userLogin),
+  takeLatest(LoginTypes.USER_REGISTER, userRegister),
   takeLatest(LoginTypes.USER_LOGOUT, userLogout),
 ];
 export default userAuthSagas();

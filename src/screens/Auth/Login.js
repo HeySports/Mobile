@@ -80,7 +80,7 @@ const Login = (props) => {
         <TouchableOpacity style={styles.forgotPass} onPress={() => forgot()}>
           <Text style={styles.txtForgot}>Quên mật khẩu !</Text>
         </TouchableOpacity>
-        {storeLogin.loadingLogin && <ActivityIndicator size="small" color="#0000ff" />}
+        {storeLogin.loadingLogin && <ActivityIndicator size="small" color={Color.primary} />}
         {storeLogin.checkLoginFail && (
           <View style={styles.error}>
             <Text style={styles.txtError}>{storeLogin.responseLogin}</Text>

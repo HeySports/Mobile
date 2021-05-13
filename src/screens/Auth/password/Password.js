@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -31,13 +32,40 @@ const Password = (props) => {
       </View>
       <View style={styles.bottom}>
         <View style={styles.content}>
-          <Input title="Mật khẩu mới" checkPass={true} icon="low-vision" />
-          <Input title="Nhập lại mật khẩu" checkPass={true} icon="low-vision" />
+          <Input
+            title="Mật khẩu mới"
+            tinColorIcon={Color.secondary}
+            checkPass={true}
+            icon="low-vision"
+          />
+          <Input
+            title="Nhập lại mật khẩu"
+            tinColorIcon={Color.secondary}
+            checkPass={true}
+            icon="low-vision"
+          />
         </View>
         <View style={styles.buttonBottom}>
           <Button titleBtn="Xác Nhận" checkBtn={true} checkColor={true} function={savePassword} />
-          <View style={styles.number}>
-            <Text>3</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View elevation={5} style={[styles.number, { backgroundColor: 'white' }]}>
+              <Text elevation={5} style={[styles.txtNumber, { color: Color.secondary }]}>
+                1
+              </Text>
+            </View>
+            <View
+              elevation={5}
+              style={[styles.number, { marginHorizontal: 20, backgroundColor: 'white' }]}
+            >
+              <Text elevation={5} style={[styles.txtNumber, { color: Color.secondary }]}>
+                2
+              </Text>
+            </View>
+            <View elevation={5} style={[styles.number]}>
+              <Text elevation={5} style={[styles.txtNumber]}>
+                3
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -107,14 +135,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   number: {
-    marginTop: (65 / startHeight) * height,
-    width: 30,
-    height: 30,
-    backgroundColor: Color.backgroud,
+    marginTop: (30 / startHeight) * height,
+    width: 25,
+    height: 25,
+    backgroundColor: Color.secondary,
     borderRadius: 15,
     fontSize: Font.font_description,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  txtNumber: {
+    color: '#F9F3F3',
   },
   txtNotification: {
     textAlign: 'center',

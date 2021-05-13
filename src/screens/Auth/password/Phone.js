@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
@@ -7,9 +8,19 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Back from '../../../components/Back';
 import { pushScreen, goBack } from '../../../navigation/pushScreen';
+import UserActions from '../../../redux/UserRedux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 const Phone = (props) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
   const pushNextScreen = () => {
-    pushScreen(props.componentId, 'Code', '', 'Code', false, '', '');
+    if (phoneNumber === '' || phoneNumber.length > 13 || phoneNumber.length < 10) {
+      dispatch(UserActions.checkPhoneNumberExisted({ phone_numbers: phoneNumber }));
+      setError('Số điện thoại của bạn không đúng !');
+    } else {
+      pushScreen(props.componentId, 'Code', phoneNumber, 'Code', false, '', '');
+    }
   };
   const goBackScreen = () => {
     goBack(props.componentId);
@@ -34,12 +45,41 @@ const Phone = (props) => {
           <Text style={styles.txtNotification}>
             Vui Lòng Nhập Số Điện Thoại Của Bạn Để Nhận Mã Xác Minh.
           </Text>
-          <Input title="Số Điện Thoại" checkPass={false} />
+          <Input
+            title="Số điện thoại"
+            icon="phone"
+            checkPass={false}
+            txtChange={(text) => setPhoneNumber(text)}
+            checkTypeInput="phone-pad"
+            tinColorIcon={Color.secondary}
+          />
         </View>
         <View style={styles.buttonBottom}>
           <Button titleBtn="Gửi mã" checkBtn={true} checkColor={true} function={pushNextScreen} />
-          <View style={styles.number}>
-            <Text>1</Text>
+          {error && (
+            <View style={styles.viewError}>
+              <Text style={styles.txtError}>{error}</Text>
+            </View>
+          )}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View elevation={5} style={[styles.number]}>
+              <Text elevation={5} style={[styles.txtNumber]}>
+                1
+              </Text>
+            </View>
+            <View
+              elevation={5}
+              style={[styles.number, { marginHorizontal: 20, backgroundColor: 'white' }]}
+            >
+              <Text elevation={5} style={[styles.txtNumber, { color: Color.secondary }]}>
+                2
+              </Text>
+            </View>
+            <View elevation={5} style={[styles.number, { backgroundColor: 'white' }]}>
+              <Text elevation={5} style={[styles.txtNumber, { color: Color.secondary }]}>
+                3
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -51,6 +91,18 @@ const startWidth = 360;
 const startHeight = 640;
 export default Phone;
 const styles = StyleSheet.create({
+  viewError: {
+    height: 40,
+    marginBottom: -30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width,
+  },
+  txtError: {
+    fontSize: Font.title_child4,
+    color: Color.error,
+    fontWeight: '700',
+  },
   header: {
     width: width,
     height: (231 / startHeight) * height,
@@ -109,14 +161,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   number: {
-    marginTop: (100 / startHeight) * height,
-    width: 30,
-    height: 30,
-    backgroundColor: Color.backgroud,
+    marginTop: (50 / startHeight) * height,
+    width: 25,
+    height: 25,
+    backgroundColor: Color.secondary,
     borderRadius: 15,
     fontSize: Font.font_description,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  txtNumber: {
+    color: '#F9F3F3',
   },
   txtNotification: {
     textAlign: 'center',

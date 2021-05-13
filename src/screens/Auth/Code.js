@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable radix */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { goBack } from '../../navigation/pushScreen';
@@ -7,15 +19,57 @@ import Font from '../../themes/font';
 import Colors from '../../themes/colors';
 import Back from '../../components/Back';
 import Button from '../../components/Button';
+import setupFirebase from '../../../setupFirebase';
+import LoginActions from '../../redux/AuthRedux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import auth from '@react-native-firebase/auth';
+import { loginScreen } from '../../navigation/pushScreen';
 const Code = (props) => {
   const [code, setCode] = useState('');
+  const [confirm, setConfirm] = useState(null);
+  const [loading, setloading] = useState(true);
+  const dispatch = useDispatch();
+  const storeLogin = useSelector((state) => state.auth);
+  useEffect(() => {
+    signInWithPhoneNumber();
+  }, []);
   const goBackScreen = () => {
     goBack(props.componentId);
   };
-  const submitCode = () => {
-    alert(code);
+  const submitCode = async () => {
+    try {
+      await confirm.confirm(code);
+      dispatch(
+        LoginActions.userRegister({
+          id_roles: 1,
+          phone_numbers: props.data.phone_numbers,
+          password: props.data.password,
+          full_name: props.data.fullName,
+          confirm_password: props.data.confirm_password,
+          age: parseInt(props.data.age),
+          email: props.data.email,
+          address: props.data.address,
+          description: props.data.description,
+        }),
+      );
+    } catch (e) {
+      alert('Kiểm tra số điện thoại hoặc mã');
+    }
   };
-  return (
+  const signInWithPhoneNumber = async () => {
+    try {
+      const formatPhoneNumberFirebase =
+        '+84' + props.data.phone_numbers.substring(1, props.data.phone_numbers.length);
+      // signInWithPhoneNumber(formatPhoneNumberFirebase);
+      setloading(false);
+      const confirmation = await auth().signInWithPhoneNumber(formatPhoneNumberFirebase);
+      setloading(true);
+      setConfirm(confirmation);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return loading ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <Back goBack={goBackScreen} />
@@ -33,7 +87,7 @@ const Code = (props) => {
           <View style={styles.bottomBody}>
             <View style={styles.topBottom}>
               <Text style={styles.txtTopBottom}>
-                Vui Lòng Nhập 4 Mã Số Đã Được Gửi Đến Số Điện Thoại Của Bạn
+                Vui Lòng Nhập 6 Mã Số Đã Được Gửi Đến Số Điện Thoại Của Bạn
               </Text>
             </View>
             <View style={styles.bodyBottom}>
@@ -42,7 +96,7 @@ const Code = (props) => {
                 cellStyleFocused={styles.txtCode}
                 value={code}
                 onTextChange={(text) => setCode(text)}
-                codeLength={4}
+                codeLength={6}
               />
             </View>
             <View style={styles.bottomBottom}>
@@ -50,10 +104,25 @@ const Code = (props) => {
                 <Text style={styles.txtBtnCode}>Gửi Lại Mã</Text>
               </TouchableOpacity>
               <Button titleBtn="Xác Nhận" checkBtn={true} function={submitCode} />
+              {storeLogin.loadingRegister && (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              )}
             </View>
           </View>
         </View>
       </ScrollView>
+    </View>
+  ) : (
+    <View
+      style={{
+        width: width,
+        height: height,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.backgroud,
+      }}
+    >
+      <ActivityIndicator size="large" color={Colors.primary} />
     </View>
   );
 };

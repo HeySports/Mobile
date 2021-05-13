@@ -1,5 +1,14 @@
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Dimensions, Image } from 'react-native';
+import {
+  ScrollView,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Image,
+} from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import logo from '../../image/logo.png';
@@ -7,13 +16,19 @@ import { loginScreen, pushScreen } from '../../navigation/pushScreen';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import AsyncStorage from '@react-native-community/async-storage';
+
 const Register = (props) => {
+  // const { auth } = setupFirebase();
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [address, setAddress] = useState('');
+  const [age, setAge] = useState('');
+  const [description, setDescription] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
+
   useEffect(() => {
     getStore();
   }, []);
@@ -32,16 +47,21 @@ const Register = (props) => {
       password: password,
       confirm_password: confirmPassword,
       address: address,
+      age: age,
+      email: email,
+      description: description,
     };
     if (
       dataRegister.phone_numbers === '' ||
       dataRegister.fullName === '' ||
+      dataRegister.age === '' ||
+      dataRegister.email === '' ||
       dataRegister.password === ''
     ) {
       setError('Bạn phải nhập đầy đủ thông tin bắt buộc !');
     } else if (dataRegister.password !== dataRegister.confirm_password) {
       setError('Mật khẩu không khớp !');
-    } else if (dataRegister.phone_numbers.length > 11 || dataRegister.phone_numbers.length < 10) {
+    } else if (dataRegister.phone_numbers.length > 13 || dataRegister.phone_numbers.length < 10) {
       setError('Số điện thoại của bạn không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
@@ -74,6 +94,12 @@ const Register = (props) => {
             txtChange={(text) => setFullName(text)}
           />
           <Input
+            title="Email"
+            icon="envelope"
+            checkPass={false}
+            txtChange={(text) => setEmail(text)}
+          />
+          <Input
             title="Mật khẩu"
             icon="low-vision"
             checkPass={true}
@@ -85,6 +111,32 @@ const Register = (props) => {
             checkPass={true}
             txtChange={(text) => setConfirmPassword(text)}
           />
+          <View style={styles.flexRow}>
+            <Input
+              style={styles.inputAge}
+              title="Tuổi"
+              icon="low-vision"
+              checkPass={false}
+              checkTypeInput="phone-pad"
+              txtChange={(text) => setAge(text)}
+            />
+            <Input
+              style={styles.inputAddress}
+              title="Địa chỉ"
+              icon="map-marker-alt"
+              checkPass={false}
+              txtChange={(text) => setAddress(text)}
+            />
+          </View>
+          <Input
+            title="Mô tả"
+            icon="clipboard"
+            multiline={true}
+            numberOfLines={12}
+            textAlignVertical="top"
+            checkPass={false}
+            txtChange={(text) => setDescription(text)}
+          />
         </View>
         <View style={styles.bottom}>
           {error && (
@@ -92,7 +144,7 @@ const Register = (props) => {
               <Text style={styles.txtError}>{error}</Text>
             </View>
           )}
-          <Button titleBtn="Đăng Ký" checkBtn={true} function={register} />
+          <Button titleBtn="Đăng Ký" checkBtn={true} function={() => register()} />
           <Button
             titleBtn="Đăng Nhập ngay"
             checkBtn={false}
@@ -109,6 +161,16 @@ const { height, width } = Dimensions.get('window');
 const startWidth = 360;
 const startHeight = 640;
 const styles = StyleSheet.create({
+  flexRow: {
+    flexDirection: 'row',
+  },
+  inputAge: {
+    width: 100,
+    marginRight: 10,
+  },
+  inputAddress: {
+    width: 210,
+  },
   container: {
     width: width,
     backgroundColor: Color.backgroud,

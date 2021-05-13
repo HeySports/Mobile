@@ -16,29 +16,39 @@ const Input = (props) => {
             onChangeText={props.txtChange}
             keyboardType={props.checkTypeInput}
             returnKeyType={'next'}
-            autoFocus={true}
           />
           {checkInput ? (
             <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckInput(false)}>
-              <Icon name={props.icon} style={styles.iconInputs} />
+              <Icon
+                name={props.icon}
+                style={[styles.iconInputs, props.tinColorIcon && { color: props.tinColorIcon }]}
+              />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={styles.btnIcon} onPress={() => setCheckInput(true)}>
-              <Icon name="eye" style={styles.iconInputs} />
+              <Icon
+                name="eye"
+                style={[styles.iconInputs, props.tinColorIcon && { color: props.tinColorIcon }]}
+              />
             </TouchableOpacity>
           )}
         </View>
       ) : (
-        <View style={styles.itemInput}>
+        <View style={[styles.itemInput, props.style && props.style]}>
           <TextInput
             style={styles.input}
             secureTextEntry={props.checkPass}
             onChangeText={props.txtChange}
             keyboardType={props.checkTypeInput}
             returnKeyType={'next'}
-            autoFocus={true}
+            multiline={props.multiline ? true : false}
+            numberOfLines={props.numberOfLines && props.numberOfLines}
+            textAlignVertical={props.textAlignVertical && props.textAlignVertical}
           />
-          <Icon name={props.icon} style={styles.iconInput} />
+          <Icon
+            name={props.icon}
+            style={[styles.iconInput, props.tinColorIcon && { color: props.tinColorIcon }]}
+          />
         </View>
       )}
     </View>
