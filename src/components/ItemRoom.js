@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   imageTeam: {
     width: '100%',
-    height: 45,
+    height: 35,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -227,6 +227,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 10,
     fontWeight: '700',
+    marginTop: 1,
   },
   listIconStar: {
     width: '100%',
@@ -234,11 +235,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottomRoom: {
-    height: 30,
+    height: 28,
   },
   itemBottom: {
     flexDirection: 'row',
-    height: 15,
+    height: 14,
   },
   icon: {
     height: 15,

@@ -14,9 +14,9 @@ const getListMatches = () => makeActionCreator(matchesTypes.GET_LIST_MATCHES);
 const getListMatchesSuccess = (response) =>
   makeActionCreator(matchesTypes.GET_LIST_MATCHES_SUCCESS, { response });
 
-  const getListMatchFindMember = () => makeActionCreator(matchesTypes.GET_LIST_MATCH_FIND_MEMBER);
-  const getListMatchFindMemberSuccess = (response) =>
-    makeActionCreator(matchesTypes.GET_LIST_MATCH_FIND_MEMBER_SUCCESS, { response });
+const getListMatchFindMember = () => makeActionCreator(matchesTypes.GET_LIST_MATCH_FIND_MEMBER);
+const getListMatchFindMemberSuccess = (response) =>
+  makeActionCreator(matchesTypes.GET_LIST_MATCH_FIND_MEMBER_SUCCESS, { response });
 
 const userGetDetailMatch = (id) => makeActionCreator(matchesTypes.USER_GET_DETAIL_MATCH, { id });
 const userGetDetailMatchSuccess = (response) =>

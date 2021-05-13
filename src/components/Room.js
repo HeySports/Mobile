@@ -14,16 +14,14 @@ const RoomItem = (props) => {
   return (
     <TouchableOpacity onPress={detailRoom}>
       <View style={[styles.container, props.styleHomepage && props.styleHomepage]}>
-        {
-           props.styleHomepage ?
-           console.log('no')
-           :
-           <View style={styles.imageRoom}>
-          <Image source={pitch} style={styles.imgRoom} />
-        </View>
-        
-        }
-        
+        {props.styleHomepage ? (
+          console.log('no')
+        ) : (
+          <View style={styles.imageRoom}>
+            <Image source={pitch} style={styles.imgRoom} />
+          </View>
+        )}
+
         <View style={styles.detailRoom}>
           <Text style={styles.titleDetail}>{room?.match.name_room}</Text>
           <View style={styles.row}>
@@ -47,7 +45,7 @@ const RoomItem = (props) => {
             <View style={styles.viewTxtDetails}>
               <Text style={styles.txtDetails}>{room?.match?.type_field} người</Text>
               <Icon name="people-arrows" style={[styles.iconDetail, styles.iconLosePay]} />
-              <Text style={[styles.txtDetails,styles.txtLosePay]}>{room?.match?.lose_pay}</Text>
+              <Text style={[styles.txtDetails, styles.txtLosePay]}>{room?.match?.lose_pay}</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -71,9 +69,7 @@ const RoomItem = (props) => {
               <Icon name="clock" style={styles.iconDetail} />
             </View>
             <View style={styles.viewTxtDetails}>
-              <Text style={styles.txtDetailTime}>
-                {room?.match.time_start_play}
-              </Text>
+              <Text style={styles.txtDetailTime}>{room?.match.time_start_play}</Text>
             </View>
           </View>
         </View>
@@ -89,8 +85,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   txtLosePay: {
-    marginLeft: 5
-  },  
+    marginLeft: 5,
+  },
   container: {
     flexDirection: 'row',
     flex: 1,
@@ -100,7 +96,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 0,
   },
-  
+
   imageRoom: {
     flex: 2,
     justifyContent: 'center',

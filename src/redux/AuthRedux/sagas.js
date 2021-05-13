@@ -8,7 +8,7 @@ export function* userLogin({ data }) {
   try {
     const response = yield call(userLoginApi, data);
     yield AsyncStorage.setItem('token', response.data.access_token);
-    yield put(AuthAction.userLoginSuccess(response));
+    yield put(AuthAction.userLoginSuccess(response?.data));
     yield put(userStartApp());
   } catch (error) {
     yield put(AuthAction.userLoginFailure(error));

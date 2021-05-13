@@ -20,6 +20,7 @@ import field from '../../image/duytan.jpg';
 import logo from '../../image/logo.png';
 import { pushScreen } from '../../navigation/pushScreen';
 import { useDispatch, useSelector } from 'react-redux';
+import ActionMatch from '../../redux/MatchesRedux/actions';
 import Star from '../../components/Star';
 const FindMembers = (props) => {
   const dataTypeField = [
@@ -27,6 +28,11 @@ const FindMembers = (props) => {
       title: '5 vs 5',
       value: 5,
     },
+    {
+      title: 'Loại Sân',
+      value: 5,
+    },
+
     {
       title: '7 vs 7',
       value: 7,
@@ -36,14 +42,13 @@ const FindMembers = (props) => {
       value: 11,
     },
   ];
-
   const dataPayment = [
     {
-      title: 'Tỉ lệ',
+      title: '5/ 5',
       value: '5/ 5',
     },
     {
-      title: '5/ 5',
+      title: 'Tỉ lệ',
       value: '5/ 5',
     },
     {
@@ -59,6 +64,7 @@ const FindMembers = (props) => {
       value: '8/ 2',
     },
   ];
+  const dispatch = useDispatch();
   const fields = useSelector((state) => state.fields);
   const user = useSelector((state) => state.profile?.responseProfile);
   const [mode, setMode] = useState('time');
@@ -72,8 +78,11 @@ const FindMembers = (props) => {
   const [members, setMembers] = useState('');
   const [error, setError] = useState(false);
   const [childFieldChoose, setChildFieldChoose] = useState('');
-  const [losePayment, setLosePayment] = useState('5/5');
+  const [losePayment, setLosePayment] = useState('');
   const [nameRoom, setNameRoom] = useState('');
+  const [address, setAddress] = useState('');
+  const [price, setPrice] = useState(0);
+  const [nameField, setNameField] = useState('');
   // field
   //information field chooses
   const listField = fields?.responseField;
@@ -226,21 +235,23 @@ const FindMembers = (props) => {
   const handleCreateMatch = () => {
     if (!nameRoom) {
       setError('Bạn cần nhập tên của trận đấu !');
+    } else if (members === '') {
+      setError('Bạn cần nhập số cầu thủ bạn hiện có !');
     } else {
-      const dataOrder = {
+      const dataMatch = {
         name_room: nameRoom,
         user_id: user?.id,
         time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
         price: checkField ? 0 : priceField,
         type: optionMatch ? 1 : 0,
         lose_pay: losePayment,
-        method_pay: Math.random(0, 2),
+        method_pay: 0,
         type_field: typeField,
         numbers_user_added: members,
+        description: description,
+        lock: 0,
       };
-      console.log('===============Post=====================');
-      console.log(dataOrder);
-      console.log('====================================');
+      dispatch(ActionMatch.userPostMatch(dataMatch));
     }
   };
   return (
@@ -275,9 +286,51 @@ const FindMembers = (props) => {
               <Image source={field} style={styles.imageField} />
             </View>
             <View style={styles.rightBodyRoom}>
-              <ItemMatches icon="futbol" title="Sân bóng duy tân" />
-              <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
-              <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="futbol" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập tên sân bóng"
+                      onChangeText={(text) => setNameField(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="futbol" title="Sân bóng duy tân" />
+              )}
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="map-marked-alt" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập địa chỉ bạn chơi"
+                      onChangeText={(text) => setAddress(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
+              )}
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="money-bill-wave" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập giá sân bóng"
+                      onChangeText={(text) => setPrice(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+              )}
               <ItemMatches
                 icon="balance-scale"
                 checkRender={true}
@@ -289,7 +342,7 @@ const FindMembers = (props) => {
                 </View>
                 <View>
                   <TextInput
-                    placeholder={props.placeholder}
+                    placeholder="Nhập số cầu bạn đã có"
                     keyboardType="number-pad"
                     onChangeText={(text) => setMembers(text)}
                   />
@@ -310,10 +363,56 @@ const FindMembers = (props) => {
             </View>
             <View style={styles.rightBodyRoom}>
               <ItemMatches icon="phone" title="0946613608" />
-              <ItemMatches icon="futbol" title="Sân bóng duy Tân" />
-              <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
-              <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
-              <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="futbol" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập tên sân bóng"
+                      onChangeText={(text) => setNameField(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="futbol" title="Sân bóng duy tân" />
+              )}
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="map-marked-alt" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập địa chỉ bạn chơi"
+                      onChangeText={(text) => setAddress(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
+              )}
+              {checkField ? (
+                <View style={styleComponent.itemMatches}>
+                  <View style={styleComponent.leftItemMatches}>
+                    <Icons name="money-bill-wave" style={styleComponent.iconItemMatches} />
+                  </View>
+                  <View>
+                    <TextInput
+                      placeholder="Nhập giá sân bóng"
+                      onChangeText={(text) => setPrice(text)}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+              )}
+              <ItemMatches
+                icon="balance-scale"
+                checkRender={true}
+                render={<TypeField data={dataPayment} paymentType={true} />}
+              />
             </View>
           </View>
         )}

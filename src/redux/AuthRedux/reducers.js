@@ -19,7 +19,7 @@ export const userLoginSuccess = (state, { response }) =>
     loadingLogin: false,
     errorLogin: null,
     responseLogin: response.user,
-    token: response.token,
+    token: response.access_token,
     type: 'User login success',
     checkLoginFail: false,
   });

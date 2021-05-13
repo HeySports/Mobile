@@ -159,10 +159,9 @@ const Home = (props) => {
 
             <FlatList
               data={listMatches?.responseMatches}
-              renderItem={({ item }) => <ItemRoom room={item} />}
+              renderItem={({ item }) => <ItemRoom room={item} idComponent={props.componentId} />}
               keyExtractor={(item) => item.id}
               horizontal
-              idComponent={props.componentI}
               showsHorizontalScrollIndicator={false}
             />
           </View>
@@ -172,10 +171,11 @@ const Home = (props) => {
 
             <FlatList
               data={listMatches?.responseMatchFindMember}
-              renderItem={({ item }) => <ItemFindMembers room={item} />}
+              renderItem={({ item }) => (
+                <ItemFindMembers room={item} idComponent={props.componentId} />
+              )}
               keyExtractor={(item) => item.id}
               horizontal
-              idComponent={props.componentI}
               showsHorizontalScrollIndicator={false}
             />
           </View>
