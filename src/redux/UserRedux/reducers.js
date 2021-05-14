@@ -10,6 +10,9 @@ const INITIAL_STATE = Immutable({
   errorCheckPhone: null,
   loadingCheckPhone: false,
   responseCheckPhone: null,
+  loadingResetPassword: false,
+  responseResetPassword: null,
+  errorResetPassword: null,
 });
 export const getAllUser = (state) =>
   state.merge({
@@ -39,6 +42,27 @@ export const checkPhoneFail = (state, { error }) =>
     errorCheckPhone: error,
     type: 'CHECK PHONE NUMBER EXISTED FAIL',
   });
+export const resetPassword = (state) =>
+  state.merge({
+    loadingResetPassword: true,
+    // responseResetPassword: null,
+    errorResetPassword: null,
+    type: 'RESET PASSWORD',
+  });
+export const resetPasswordSuccess = (state, { response }) =>
+  state.merge({
+    loadingResetPassword: false,
+    responseResetPassword: response,
+    errorResetPassword: null,
+    type: 'RESET PASSWORD SUCCESS',
+  });
+export const resetPasswordFail = (state, { error }) =>
+  state.merge({
+    loadingResetPassword: true,
+    responseResetPassword: null,
+    errorResetPassword: error,
+    type: 'RESET PASSWORD FAIL',
+  });
 export const getAllUserSuccess = (state, { response }) =>
   state.merge({
     loading: false,
@@ -52,5 +76,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [userTypes.CHECK_PHONE]: checkPhone,
   [userTypes.CHECK_PHONE_SUCCESS]: checkPhoneSuccess,
   [userTypes.CHECK_PHONE_FAIL]: checkPhoneFail,
+  [userTypes.RESET_PASSWORD]: resetPassword,
+  [userTypes.RESET_PASSWORD_SUCCESS]: resetPasswordSuccess,
+  [userTypes.RESET_PASSWORD_FAIL]: resetPasswordFail,
 });
 export default reducer;

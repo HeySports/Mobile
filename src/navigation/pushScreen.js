@@ -61,6 +61,7 @@ export const loginScreen = () => {
         children: [
           {
             component: {
+              id: 'login',
               name: 'Login',
               options: {
                 topBar: {

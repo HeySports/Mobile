@@ -10,5 +10,5 @@ export function* getNotification() {
     yield put(NotificationTypes.getNotificationFail(error));
   }
 }
-const notificationSagas = () => [takeLatest(NotificationTypes.START_APP, getNotification)];
+const notificationSagas = () => [takeLatest(NotificationTypes.GET_NOTIFICATION, getNotification)];
 export default notificationSagas();

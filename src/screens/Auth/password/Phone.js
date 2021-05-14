@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
@@ -14,12 +16,22 @@ const Phone = (props) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const pushNextScreen = () => {
+  const responseCheckPhone = useSelector((state) => state.users.responseCheckPhone);
+  // useEffect(() => {
+  //   if (responseCheckPhone !== null && responseCheckPhone.length > 0) {
+  //     pushScreen(props.componentId, 'Code', phoneNumber, 'Code', false, '', '');
+  //   }
+  // }, [responseCheckPhone]);
+  const pushNextScreen = async () => {
     if (phoneNumber === '' || phoneNumber.length > 13 || phoneNumber.length < 10) {
-      dispatch(UserActions.checkPhoneNumberExisted({ phone_numbers: phoneNumber }));
       setError('Số điện thoại của bạn không đúng !');
     } else {
-      pushScreen(props.componentId, 'Code', phoneNumber, 'Code', false, '', '');
+      try {
+        dispatch(UserActions.checkPhoneNumberExisted({ phone_numbers: phoneNumber }));
+      } catch (error) {
+        console.log(error);
+        setError('Số điện thoại của bạn không đúng !');
+      }
     }
   };
   const goBackScreen = () => {

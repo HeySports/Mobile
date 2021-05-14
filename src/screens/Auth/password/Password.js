@@ -1,22 +1,39 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
 import Font from '../../../themes/font';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Back from '../../../components/Back';
+import Error from '../../../components/Error';
 import { pushScreen, goBack } from '../../../navigation/pushScreen';
+import UserActions from '../../../redux/UserRedux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 const Password = (props) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorLogin, setErrorLogin] = useState(false);
+  const dispatch = useDispatch();
   const savePassword = () => {
-    alert('Save Pass');
+    if (password !== confirmPassword) {
+      setErrorLogin('Không khớp mật khẩu?');
+    } else {
+      dispatch(
+        UserActions.resetPassword({
+          phone_numbers: props.data,
+          password: password,
+          confirm_password: confirmPassword,
+        }),
+      );
+    }
   };
   const goBackScreen = () => {
     goBack(props.componentId);
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.top}>
           <Back goBack={goBackScreen} />
@@ -37,15 +54,18 @@ const Password = (props) => {
             tinColorIcon={Color.secondary}
             checkPass={true}
             icon="low-vision"
+            txtChange={(text) => setPassword(text)}
           />
           <Input
             title="Nhập lại mật khẩu"
             tinColorIcon={Color.secondary}
             checkPass={true}
             icon="low-vision"
+            txtChange={(text) => setConfirmPassword(text)}
           />
         </View>
         <View style={styles.buttonBottom}>
+          {errorLogin && <Error messageError={errorLogin} />}
           <Button titleBtn="Xác Nhận" checkBtn={true} checkColor={true} function={savePassword} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <View elevation={5} style={[styles.number, { backgroundColor: 'white' }]}>
@@ -69,7 +89,7 @@ const Password = (props) => {
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const { height, width } = Dimensions.get('window');

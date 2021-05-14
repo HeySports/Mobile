@@ -3,6 +3,7 @@ import { LoginTypes } from './actions';
 import AuthAction from './actions';
 import { userLoginApi, userRegisterApi } from '../../api/auth';
 import { userStartApp } from '../AppRedux/actions';
+import { pushScreen, goBack } from '../../navigation/pushScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 export function* userLogin({ data }) {
   try {
@@ -21,6 +22,7 @@ export function* userRegister({ data }) {
     yield put(userStartApp());
   } catch (error) {
     yield put(AuthAction.userRegisterFailure(error));
+    goBack();
   }
 }
 export function* userLogout() {
