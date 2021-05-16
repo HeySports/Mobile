@@ -7,6 +7,7 @@ import fields from './FieldRedux/reducers';
 import search from './SearchRedux/reducers';
 import users from './UserRedux/reducers';
 import comment from './CommentRedux/reducers';
+import orders from './OrdersRedux/reducers';
 const rootReducer = combineReducers({
   app,
   auth,
@@ -16,5 +17,6 @@ const rootReducer = combineReducers({
   search,
   users,
   comment,
+  orders,
 });
 export default rootReducer;

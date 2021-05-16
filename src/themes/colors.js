@@ -14,5 +14,6 @@ const Colors = {
   white: '#F9F3F3',
   icon: '#daa520',
   error: '#ff0000',
+  black: '#000000',
 };
 export default Colors;

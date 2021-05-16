@@ -22,6 +22,8 @@ import { pushScreen } from '../../navigation/pushScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionMatch from '../../redux/MatchesRedux/actions';
 import Star from '../../components/Star';
+import Loading from '../../components/Loading';
+import ModelNotification from '../../components/modelNotification';
 const FindMembers = (props) => {
   const dataTypeField = [
     {
@@ -44,13 +46,14 @@ const FindMembers = (props) => {
   ];
   const dataPayment = [
     {
-      title: '5/ 5',
-      value: '5/ 5',
-    },
-    {
       title: 'Tỉ lệ',
       value: '5/ 5',
     },
+    {
+      title: '5/ 5',
+      value: '5/ 5',
+    },
+
     {
       title: '6/ 4',
       value: '6/ 4',
@@ -67,6 +70,8 @@ const FindMembers = (props) => {
   const dispatch = useDispatch();
   const fields = useSelector((state) => state.fields);
   const user = useSelector((state) => state.profile?.responseProfile);
+  const matches = useSelector((state) => state.matches);
+  const orders = useSelector((state) => state.orders.orders);
   const [mode, setMode] = useState('time');
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -78,11 +83,12 @@ const FindMembers = (props) => {
   const [members, setMembers] = useState('');
   const [error, setError] = useState(false);
   const [childFieldChoose, setChildFieldChoose] = useState('');
-  const [losePayment, setLosePayment] = useState('');
+  const [losePayment, setLosePayment] = useState('5/5');
   const [nameRoom, setNameRoom] = useState('');
   const [address, setAddress] = useState('');
   const [price, setPrice] = useState(0);
   const [nameField, setNameField] = useState('');
+  const [checkModel, setCheckModel] = useState(false);
   // field
   //information field chooses
   const listField = fields?.responseField;
@@ -93,7 +99,7 @@ const FindMembers = (props) => {
     listChildFields.forEach((element) => {
       let data = {
         title: element.name_field,
-        value: element.name_field,
+        value: element.id,
       };
       dataListChildField.push(data);
     });
@@ -177,16 +183,30 @@ const FindMembers = (props) => {
             onChange={onChange}
           />
         )}
-        <View style={styleComponent.rightChooseTime}>
-          <TouchableOpacity style={styleComponent.btnChooseTime} onPress={showTimepicker}>
+        <View
+          style={styleComponent.rightChooseTime}
+          backgroundColor={orders?.orderInfo ? Colors.txtLevel2 : null}
+        >
+          <TouchableOpacity
+            style={styleComponent.btnChooseTime}
+            onPress={orders?.orderInfo ? null : showTimepicker}
+          >
             <Text style={styleComponent.txtBtnChooseTime}>
-              {moment(time).format('hh:mm') +
-                ' ngày ' +
-                moment(time).format('DD') +
-                ' tháng ' +
-                moment(time).format('MM') +
-                ' năm ' +
-                moment(time).format('YYYY')}
+              {orders?.orderInfo
+                ? moment(orders?.orderInfo?.time_start).format('hh:mm') +
+                  ' ngày ' +
+                  moment(time).format('DD') +
+                  ' tháng ' +
+                  moment(time).format('MM') +
+                  ' năm ' +
+                  moment(time).format('YYYY')
+                : moment(time).format('hh:mm') +
+                  ' ngày ' +
+                  moment(time).format('DD') +
+                  ' tháng ' +
+                  moment(time).format('MM') +
+                  ' năm ' +
+                  moment(time).format('YYYY')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -229,10 +249,19 @@ const FindMembers = (props) => {
     );
   };
   //  function
-  const pushScreenToScreen = (screen, data) => {
-    pushScreen(props.componentId, screen, data, screen, false, '', '');
+  const pushScreenToScreen = (screen, data, time) => {
+    if (time) {
+      const dataChoose = {
+        type: typeField,
+        time: time,
+        option: optionMatch,
+      };
+      pushScreen(props.componentId, screen, dataChoose, screen, false, '', '');
+    } else {
+      pushScreen(props.componentId, screen, data, screen, false, '', '');
+    }
   };
-  const handleCreateMatch = () => {
+  const handleCreateMatch = async () => {
     if (!nameRoom) {
       setError('Bạn cần nhập tên của trận đấu !');
     } else if (members === '') {
@@ -242,26 +271,70 @@ const FindMembers = (props) => {
         name_room: nameRoom,
         user_id: user?.id,
         time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
-        price: checkField ? 0 : priceField,
-        type: optionMatch ? 1 : 0,
+        price: checkField ? price : priceField,
+        type: optionMatch ? 0 : 1,
         lose_pay: losePayment,
         method_pay: 0,
         type_field: typeField,
         numbers_user_added: members,
         description: description,
         lock: 0,
+        address: checkField ? address : null,
+        name_field: checkField ? nameField : null,
       };
-      dispatch(ActionMatch.userPostMatch(dataMatch));
+      await dispatch(ActionMatch.userPostMatch(dataMatch));
+      setTimeout(function () {
+        setCheckModel(true);
+      }, 1000);
     }
   };
+  const setModel = () => {
+    setCheckModel(false);
+  };
+
+  // Order success
+  var childFieldHaveChose = '';
+  var fieldHaveChoose = [];
+  listChildFields?.forEach((element) => {
+    if (orders?.orderInfo?.id_child_field === element.id) {
+      childFieldHaveChose = element.name_field;
+    }
+  });
+  listField?.forEach((element) => {
+    if (priceField?.[0]?.id_field === element.id) {
+      let data = {
+        name: element?.name,
+        address: element?.address,
+      };
+      fieldHaveChoose.push(data);
+    }
+  });
+  console.log('===============fieldHaveChoose=====================');
+  console.log(fieldHaveChoose);
+  console.log('====================================');
   return (
     <SafeAreaView style={styles.container}>
+      {checkModel && (
+        <ModelNotification
+          showModel={setModel}
+          function={setMode}
+          success="Bạn đã tạo trận thành công !"
+          description={matches?.error?.data?.error}
+        />
+      )}
+      {matches?.loading && <Loading />}
       <Header title="Tạo Trận" idComponent={props.componentId} />
       <ScrollView style={styles.containerBody} showsVerticalScrollIndicator={false}>
         <View style={styles.headerCreateRoom}>
           <ChooseOption
             icon="users"
-            content={<TypeField data={dataTypeField} chooseTypeField={true} />}
+            content={
+              orders?.orderInfo ? (
+                <Text>{'Loại sân ' + priceField?.[0].type_field + ' người'}</Text>
+              ) : (
+                <TypeField data={dataTypeField} chooseTypeField={true} />
+              )
+            }
           />
           <ChooseOption content={<HaveField />} />
         </View>
@@ -269,12 +342,25 @@ const FindMembers = (props) => {
           <ChooseOption content={<ItemTime />} />
         </View>
         {checkField ? null : (
-          <View style={styles.chooseTime}>
+          <View
+            style={styles.chooseTime}
+            backgroundColor={orders?.orderInfo ? Colors.backgroud : null}
+          >
             <ChooseField
-              title="Chọn Sân"
-              function={() => pushScreenToScreen('ListField', typeField)}
+              title={orders?.orderInfo ? fieldHaveChoose?.[0]?.name : 'Chọn Sân'}
+              function={
+                orders?.orderInfo ? null : () => pushScreenToScreen('ListField', typeField, time)
+              }
             />
-            <ChooseOption content={<TypeField data={dataListChildField} listChild={true} />} />
+            <ChooseOption
+              content={
+                orders?.orderInfo ? (
+                  <Text>{childFieldHaveChose}</Text>
+                ) : (
+                  <TypeField data={dataListChildField} listChild={true} />
+                )
+              }
+            />
           </View>
         )}
         <View style={styles.title}>
@@ -299,7 +385,14 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="futbol" title="Sân bóng duy tân" />
+                <ItemMatches
+                  icon="futbol"
+                  title={
+                    orders?.orderInfo
+                      ? 'Sân ' + childFieldHaveChose + ' sân ' + fieldHaveChoose?.[0]?.name
+                      : 'Sân bóng bạn chọn'
+                  }
+                />
               )}
               {checkField ? (
                 <View style={styleComponent.itemMatches}>
@@ -314,7 +407,10 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
+                <ItemMatches
+                  icon="map-marked-alt"
+                  title={orders?.orderInfo ? fieldHaveChoose?.[0]?.address : 'Địa chỉ sân'}
+                />
               )}
               {checkField ? (
                 <View style={styleComponent.itemMatches}>
@@ -329,7 +425,10 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+                <ItemMatches
+                  icon="money-bill-wave"
+                  title={orders?.orderInfo ? orders?.orderInfo?.price + ' đ' : 0 + ' đ'}
+                />
               )}
               <ItemMatches
                 icon="balance-scale"

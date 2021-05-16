@@ -33,15 +33,13 @@ export function* userGetDetailMatch({ id }) {
 }
 export function* userPostMatch({ data }) {
   try {
-    console.log('================data====================');
-    console.log(data);
-    console.log('====================================');
     const response = yield call(userPostMatchApi, data);
-    console.log('============post match========================');
-    console.log(response);
-    console.log('====================================');
     yield put(MatchesAction.userPostMatchSuccess(response.data));
-    yield put(MatchesAction.getListMatches());
+    if (data?.type === 0) {
+      yield put(MatchesAction.getListMatchFindMember());
+    } else {
+      yield put(MatchesAction.getListMatches());
+    }
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
   }

@@ -9,18 +9,26 @@ import { pushScreen, goBack } from '../navigation/pushScreen';
 import { useDispatch } from 'react-redux';
 import FieldActions from '../redux/FieldRedux/actions';
 import Star from '../components/Star';
+import moment from 'moment';
 const ItemField = (props) => {
   const field = props.field;
-  const typeFiled = props.typeField;
+  const data = props.data;
   const dispatch = useDispatch();
   const chooseField = async () => {
-    const data = {
-      id_field: field.id,
-      type_field: typeFiled,
+    const dataPrice = {
+      id_field: field?.id,
+      type_field: data?.type,
+      time: moment(data?.time).format('hh:mm:ss'),
+    };
+    const dataPush = {
+      id_field: field?.id,
+      type_field: data?.type,
+      time: data?.time,
+      option: data?.option,
     };
     await dispatch(FieldActions.userGetChildField(field.id));
-    await dispatch(FieldActions.userGetPriceField(data));
-    await goBack(props.idComponent);
+    await dispatch(FieldActions.userGetPriceField(dataPrice));
+    await pushScreen(props.idComponent, 'Orders', dataPush, 'Orders', false, '', '');
   };
   const detailField = () => {
     pushScreen(props.idComponent, 'Detail', field.id, 'Detail', false, '', '');

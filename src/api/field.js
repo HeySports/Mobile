@@ -6,12 +6,19 @@ export async function getDetailFieldApi(id) {
   return http.get('/field/getDetailField/' + id);
 }
 export async function userGetChildFieldApi(id) {
-  console.log('==============id======================');
-  console.log(id);
-  console.log('====================================');
   return http.get('/field/getChildField/' + id);
 }
 
 export async function userGetPriceFieldApi(data) {
-  return http.get('/match/price/' + data.id_field + '/field/by/' + data.type_field);
+  console.log('====================================');
+  console.log(data);
+  console.log('====================================');
+  return http.get(
+    '/match/price/' +
+      data?.id_field +
+      '/field/byType/' +
+      data?.type_field +
+      '/and/byTime/' +
+      data?.time,
+  );
 }

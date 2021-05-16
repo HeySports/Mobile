@@ -1,3 +1,4 @@
 import RoomDetail from './Room/RoomDetail';
 import FindMember from './Room/FindMembers';
-export { RoomDetail, FindMember };
+import Orders from './Orders';
+export { RoomDetail, FindMember, Orders };

@@ -28,22 +28,15 @@ export function* userGetChildField({ id }) {
     const response = yield call(userGetChildFieldApi, id);
     yield put(FieldActions.userGetChildFieldSuccess(response.data));
   } catch (error) {
-    console.log('====================================');
     console.log(error);
-    console.log('====================================');
   }
 }
 export function* userGetPriceField({ data }) {
   try {
-    console.log('==============data======================');
-    console.log(data);
-    console.log('====================================');
     const response = yield call(userGetPriceFieldApi, data);
     yield put(FieldActions.userGetPriceFieldSuccess(response.data));
   } catch (error) {
-    console.log('===============Get Price=====================');
     console.log(error);
-    console.log('====================================');
   }
 }
 const fieldSagas = () => [

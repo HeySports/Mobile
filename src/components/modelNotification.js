@@ -4,7 +4,6 @@ import Color from '../themes/colors';
 import Font from '../themes/font';
 const ModelComment = (props) => {
   const [modalVisible, setModalVisible] = useState(true);
-
   const closeModel = () => {
     setModalVisible(false);
     props.showModel();
@@ -19,13 +18,11 @@ const ModelComment = (props) => {
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalView}>
           <View style={styles.title}>
-            <Text style={styles.txtTitle}>{props.title}</Text>
+            <Text style={styles.txtTitle}>{props.description ? 'THẤT BẠI' : 'THÀNH CÔNG'}</Text>
           </View>
           <View style={styles.bodyModel}>
             <Text style={styles.txtDescription}>
-              {props.description
-                ? props.description
-                : 'Bạn đã Tạo Trận Thành Công, Hãy Xác nhận để xem chi tiết trận đấu'}
+              {props.description ? props.description : props.checkMessage}
             </Text>
           </View>
           {props.checkModel ? (
@@ -93,6 +90,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   bodyModel: {
+    marginTop: 10,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
   },
   bottomModel: {
     width: '100%',
-    flex: 1.2,
+    flex: 1.3,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -124,7 +122,9 @@ const styles = StyleSheet.create({
   txtDescription: {
     fontSize: Font.font_description,
     alignContent: 'center',
+    justifyContent: 'center',
     textAlign: 'center',
+    lineHeight: 20,
   },
   bottomDoubleButton: {
     width: '100%',

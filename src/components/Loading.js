@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, ActivityIndicator, View, Dimensions } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, Dimensions, SafeAreaView } from 'react-native';
 
 const Loading = (props) => {
   return (
-    <View style={props.checkLoading ? styles.container : styles.containerLoading}>
+    <SafeAreaView style={props.checkLoading ? styles.container : styles.containerLoading}>
       <ActivityIndicator size="large" color="#0000ff" />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   containerLoading: {
     height: height,
     width: width,
+    backgroundColor: '#dcdcdc',
     justifyContent: 'center',
     alignItems: 'center',
   },

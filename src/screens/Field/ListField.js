@@ -36,7 +36,6 @@ const ListField = (props) => {
     });
     setListField(resultSearch);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -68,7 +67,7 @@ const ListField = (props) => {
               key={index}
               field={item}
               idComponent={props.componentId}
-              typeField={props.data}
+              data={props?.data}
             />
           );
         })}
