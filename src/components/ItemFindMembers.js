@@ -5,10 +5,11 @@ import Font from '../themes/font';
 import img from '../image/team.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { pushScreen } from '../navigation/pushScreen';
+import moment from 'moment';
 const ItemFindMembers = (props) => {
-  const room = props.room?.match;
+  const room = props.room;
   const detailScreen = () => {
-    pushScreen(props.idComponent, 'DetailRoom', room.id, 'DetailRoom', false, '', '');
+    pushScreen(props.idComponent, 'DetailRoom', room?.match?.id, 'DetailRoom', false, '', '');
   };
   return (
     <View style={styles.container}>
@@ -17,26 +18,34 @@ const ItemFindMembers = (props) => {
           <View style={styles.imageRoom}>
             <Image source={img} style={styles.image} />
             <View style={styles.title}>
-              <Text style={styles.txtTitle}>{(room?.name_room).toUpperCase()}</Text>
+              <Text style={styles.txtTitle}>{room?.match?.name_room?.toUpperCase()}</Text>
             </View>
           </View>
         </View>
         <View style={styles.bodyContent}>
           <ItemContent
             icon="futbol"
-            title={room?.type_field + ' người Vs ' + room?.type_field + ' người'}
+            title={room?.match?.type_field + ' người Vs ' + room?.match?.type_field + ' người'}
           />
-          <ItemContent icon="user" title="1/10 người" />
-          <ItemContent icon="map-marker-alt" title={room?.field} />
           <ItemContent
-            icon="clock"
+            icon="user"
+            title={room?.team_a?.matches_number + ' /' + room?.match?.type_field * 2 + ' Người'}
+          />
+          <ItemContent
+            icon="map-marker-alt"
             title={
-              room?.time_start_play.slice(10, 16) + ' Ngày ' + room?.time_start_play.slice(0, 10)
+              room?.field_play
+                ? 'Sân Bóng : ' + room?.field_play?.[0]?.name
+                : 'Địa chỉ' + room?.match?.address
             }
           />
           <ItemContent
+            icon="clock"
+            title={moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY')}
+          />
+          <ItemContent
             icon="balance-scale-right"
-            title={room?.lose_pay + '|   ' + (room?.price).slice(0, 3) + ' 000 VND'}
+            title={room?.match?.lose_pay + '|  ' + room?.match?.price + ' VND'}
           />
         </View>
       </TouchableOpacity>

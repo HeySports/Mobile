@@ -24,7 +24,6 @@ import Star from '../../components/Star';
 import Loading from '../../components/Loading';
 import ModelNotification from '../../components/modelNotification';
 import TeamActions from '../../redux/TeamRedux/actions';
-import { Navigation } from 'react-native-navigation';
 const FindMembers = (props) => {
   useEffect(() => {
     optionMatch ? null : dispatch(TeamActions.userGetTeam(user?.id));

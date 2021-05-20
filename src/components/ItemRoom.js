@@ -6,10 +6,11 @@ import Color from '../themes/colors';
 import ImageAvatar from '../image/avatar.png';
 import Star from '../components/Star';
 import { pushScreen } from '../navigation/pushScreen';
+import moment from 'moment';
 const ItemRoom = (props) => {
   const room = props.room;
   const detailRoom = () => {
-    pushScreen(props.idComponent, 'RoomDetail', room.match.id, 'RoomDetail', false, '', '');
+    pushScreen(props.idComponent, 'RoomDetail', room?.match?.id, 'RoomDetail', false, '', '');
   };
   var team_a = [];
   var team_b = [];
@@ -134,7 +135,11 @@ const ItemRoom = (props) => {
               <Icon name="map-marker-alt" style={styles.styleIcon} />
             </View>
             <View style={styles.txtDescription}>
-              <Text style={styles.txt}>{'Sân bóng ' + room?.match?.field}</Text>
+              <Text style={styles.txt}>
+                {room?.field_play
+                  ? 'Sân bóng ' + room?.field_play?.[0]?.name
+                  : room?.match?.address}
+              </Text>
             </View>
           </View>
           <View style={styles.itemBottom}>
@@ -143,9 +148,7 @@ const ItemRoom = (props) => {
             </View>
             <View style={styles.txtDescription}>
               <Text style={styles.txt}>
-                {room?.match?.time_start_play.slice(10, 16) +
-                  ' Ngày ' +
-                  room?.match?.time_start_play.slice(0, 10)}
+                {moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY')}
               </Text>
             </View>
           </View>
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   },
   room: {
     width: width / 2 - 14,
-    height: 120,
+    height: 130,
     marginLeft: 7,
     marginRight: 7,
     marginTop: 15,
@@ -194,7 +197,7 @@ const styles = StyleSheet.create({
   },
   teamInfo: {
     flexDirection: 'row',
-    height: 70,
+    height: 78,
   },
   team: {
     width: (width / 2 - 14) / 2 - 20,
@@ -235,11 +238,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottomRoom: {
-    height: 28,
+    height: 30,
   },
   itemBottom: {
     flexDirection: 'row',
-    height: 14,
+    height: 15,
   },
   icon: {
     height: 15,

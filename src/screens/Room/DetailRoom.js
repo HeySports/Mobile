@@ -41,10 +41,7 @@ const DetailRoom = (props) => {
       typeField = <Field11 />;
     }
   }
-  const numberFormat = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  });
+
   useEffect(() => {
     dispatch(MatchesAction.userGetDetailMatch(id));
   }, [dispatch, id]);
@@ -89,7 +86,7 @@ const DetailRoom = (props) => {
     {
       icon: 'map-marker-alt',
       title: 'Giá sân',
-      description: numberFormat.format(detail?.match?.price),
+      description: detail?.match?.price + 'VND',
     },
     {
       icon: 'balance-scale-right',

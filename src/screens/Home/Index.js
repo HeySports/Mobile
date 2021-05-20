@@ -153,13 +153,14 @@ const Home = (props) => {
               );
             })()}
           </View>
-          <View style={styles.listRoom}>
+          <View style={styles.listRoomFirst}>
             <Text style={styles.row} />
             <Title title="Cáp Kèo" functionViewMore={viewMoreRoom} />
-
             <FlatList
               data={listMatches?.responseMatches}
-              renderItem={({ item }) => <ItemRoom room={item} idComponent={props.componentId} />}
+              renderItem={({ item, index }) => (
+                <ItemRoom room={item} idComponent={props.componentId} key={index} />
+              )}
               keyExtractor={(item) => item.id}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -168,11 +169,10 @@ const Home = (props) => {
           <View style={styles.listRoom}>
             <Text style={styles.row} />
             <Title title="Các đội tìm thành viên" functionViewMore={viewMoreRoom} />
-
             <FlatList
               data={listMatches?.responseMatchFindMember}
-              renderItem={({ item }) => (
-                <ItemFindMembers room={item} idComponent={props.componentId} />
+              renderItem={({ item, index }) => (
+                <ItemFindMembers room={item} idComponent={props.componentId} key={index} />
               )}
               keyExtractor={(item) => item.id}
               horizontal
@@ -337,6 +337,10 @@ const styles = StyleSheet.create({
   row: { borderTopWidth: 1, borderColor: Color.txtLevel3, width: '70%', marginLeft: '15%' },
   listRoom: {
     marginBottom: 20,
+  },
+  listRoomFirst: {
+    marginBottom: 20,
+    paddingBottom: 5,
   },
   listScroll: {
     height: 140,
