@@ -120,8 +120,9 @@ const Orders = (props) => {
           description={orders?.orders?.error}
           showModel={handleModelOrder}
           titleBtnLeft="Xác Nhận"
-          checkMessage="Bạn đã đặt sân thành công, Hãy chọn Xác nhận để tiếp tục tạo trận ! "
+          checkMessage="Bạn đã đặt sân thành công, Hãy chọn Tạo Trận để tiếp tục tạo trận ! "
           function={handleAccept}
+          titleBtnRight="Tạo Trận"
         />
       )}
       {orders.loading && <Loading />}

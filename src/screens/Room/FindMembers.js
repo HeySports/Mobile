@@ -10,7 +10,6 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import Header from '../../components/Header';
 import { Colors, Fonts, ScreenSize } from '../../themes';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { Picker } from '@react-native-picker/picker';
@@ -25,6 +24,7 @@ import Star from '../../components/Star';
 import Loading from '../../components/Loading';
 import ModelNotification from '../../components/modelNotification';
 import TeamActions from '../../redux/TeamRedux/actions';
+import { Navigation } from 'react-native-navigation';
 const FindMembers = (props) => {
   useEffect(() => {
     optionMatch ? null : dispatch(TeamActions.userGetTeam(user?.id));
@@ -290,7 +290,7 @@ const FindMembers = (props) => {
               description: description,
               lock: 0,
               address: address,
-              name_field: nameField,
+              field_name: nameField,
             };
             await dispatch(ActionMatch.userPostMatch(dataMatch));
             setTimeout(function () {
@@ -322,7 +322,7 @@ const FindMembers = (props) => {
                 description: description,
                 lock: 0,
                 address: fieldHaveChoose?.[0]?.address,
-                name_field: fieldHaveChoose?.[0]?.name,
+                field_name: fieldHaveChoose?.[0]?.name,
               };
               await dispatch(ActionMatch.userPostMatch(dataMatch));
               setTimeout(function () {
@@ -344,7 +344,7 @@ const FindMembers = (props) => {
               description: description,
               lock: 0,
               address: fieldHaveChoose?.[0]?.address,
-              name_field: fieldHaveChoose?.[0]?.name,
+              field_name: fieldHaveChoose?.[0]?.name,
             };
             await dispatch(ActionMatch.userPostMatch(dataMatch));
             setTimeout(function () {
@@ -379,6 +379,9 @@ const FindMembers = (props) => {
       fieldHaveChoose.push(data);
     }
   });
+  const handlePopToScreen = () => {
+    pushScreen(props.componentId, 'Room', '', '', false, true, '', '');
+  };
   return (
     <SafeAreaView style={styles.container}>
       {checkModel && (
@@ -392,7 +395,16 @@ const FindMembers = (props) => {
         />
       )}
       {matches?.loading && <Loading />}
-      <Header title="Tạo Trận" idComponent={props.componentId} />
+      <View style={styleComponent.header}>
+        <View style={styleComponent.leftHeader}>
+          <TouchableOpacity onPress={handlePopToScreen} style={styleComponent.btnBackScreen}>
+            <Icons name="caret-left" style={styleComponent.iconHeader} />
+          </TouchableOpacity>
+        </View>
+        <View style={styleComponent.titleHeader}>
+          <Text style={styleComponent.txtTitleHeader}>Tạo Trận</Text>
+        </View>
+      </View>
       <ScrollView style={styles.containerBody} showsVerticalScrollIndicator={false}>
         <View style={styles.headerCreateRoom}>
           <ChooseOption
@@ -923,5 +935,41 @@ const styleComponent = StyleSheet.create({
   iconItemMatches: {
     fontSize: 14,
     color: Colors.primary,
+  },
+  header: {
+    height: 45,
+    width: ScreenSize.Screen_Width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.txtLevel2,
+  },
+  leftHeader: {
+    width: '10%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleHeader: {
+    width: '80%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtTitleHeader: {
+    fontSize: Fonts.title_child,
+    fontWeight: '700',
+  },
+  btnBackScreen: {
+    height: 40,
+    width: 40,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconHeader: {
+    fontSize: 20,
   },
 });

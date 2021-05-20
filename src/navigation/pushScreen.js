@@ -138,6 +138,7 @@ export const homeScreen = () => {
                     children: [
                       {
                         component: {
+                          id: 'Room',
                           name: 'Room',
                           options: {
                             topBar: {
