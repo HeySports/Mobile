@@ -1,6 +1,7 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { matchesTypes } from './actions';
 import MatchesAction from './actions';
+import OrdersActions from '../OrdersRedux/actions';
 import {
   getListMatchFindMemberApi,
   getListMatchesApi,
@@ -43,6 +44,7 @@ export function* userPostMatch({ data }) {
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
   }
+  yield put(OrdersActions.userOrderFieldFailure(null));
 }
 const matchesSagas = () => [
   takeLatest(matchesTypes.GET_LIST_MATCHES, getListMatches),

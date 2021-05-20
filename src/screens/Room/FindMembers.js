@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -24,7 +24,11 @@ import ActionMatch from '../../redux/MatchesRedux/actions';
 import Star from '../../components/Star';
 import Loading from '../../components/Loading';
 import ModelNotification from '../../components/modelNotification';
+import TeamActions from '../../redux/TeamRedux/actions';
 const FindMembers = (props) => {
+  useEffect(() => {
+    optionMatch ? null : dispatch(TeamActions.userGetTeam(user?.id));
+  });
   const dataTypeField = [
     {
       title: '5 vs 5',
@@ -72,11 +76,12 @@ const FindMembers = (props) => {
   const user = useSelector((state) => state.profile?.responseProfile);
   const matches = useSelector((state) => state.matches);
   const orders = useSelector((state) => state.orders.orders);
+  const team = useSelector((state) => state.team?.team);
   const [mode, setMode] = useState('time');
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
-  const [optionMatch, setoptionMatch] = useState(props?.data);
+  const [optionMatch] = useState(props?.data);
   const [checkField, setCheckField] = useState(false);
   const [description, setDescription] = useState('');
   const [typeField, setTypeField] = useState(5);
@@ -89,8 +94,6 @@ const FindMembers = (props) => {
   const [price, setPrice] = useState(0);
   const [nameField, setNameField] = useState('');
   const [checkModel, setCheckModel] = useState(false);
-  // field
-  //information field chooses
   const listField = fields?.responseField;
   const priceField = fields?.responsePriceField;
   const listChildFields = fields?.responseGetChildField;
@@ -104,7 +107,6 @@ const FindMembers = (props) => {
       dataListChildField.push(data);
     });
   }
-  // time
   const onChange = (event, selectedValue) => {
     setShow(Platform.OS === 'ios');
     if (mode === 'time') {
@@ -135,7 +137,7 @@ const FindMembers = (props) => {
         <View style={styleComponent.buttonHaveFile}>
           <TouchableOpacity
             style={styleComponent.btnHaveField}
-            onPress={() => setCheckField(!checkField)}
+            onPress={orders?.orderInfo ? () => null : () => setCheckField(!checkField)}
           >
             <Icons
               name="check"
@@ -262,36 +264,104 @@ const FindMembers = (props) => {
     }
   };
   const handleCreateMatch = async () => {
-    if (!nameRoom) {
-      setError('Bạn cần nhập tên của trận đấu !');
-    } else if (members === '') {
-      setError('Bạn cần nhập số cầu thủ bạn hiện có !');
+    if (checkField) {
+      if (!nameRoom) {
+        setError('Bạn cần nhập tên của trận đấu!');
+      } else if (!price) {
+        setError('Bạn phải nhập giá sân bóng của bạn chơi!');
+      } else if (!address) {
+        setError('Bạn phải nhập địa chỉ sân bóng bạn chơi!');
+      } else {
+        if (optionMatch) {
+          if (!matches) {
+            setError('Bạn Cần phải nhấp số cầu thủ hiện tại bạn có!');
+          } else {
+            setError(null);
+            const dataMatch = {
+              name_room: nameRoom,
+              user_id: user?.id,
+              time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
+              price: price,
+              type: optionMatch ? 0 : 1,
+              lose_pay: losePayment,
+              method_pay: 0,
+              type_field: typeField,
+              numbers_user_added: members,
+              description: description,
+              lock: 0,
+              address: address,
+              name_field: nameField,
+            };
+            await dispatch(ActionMatch.userPostMatch(dataMatch));
+            setTimeout(function () {
+              setCheckModel(true);
+            }, 1000);
+          }
+        }
+      }
     } else {
-      const dataMatch = {
-        name_room: nameRoom,
-        user_id: user?.id,
-        time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
-        price: checkField ? price : priceField,
-        type: optionMatch ? 0 : 1,
-        lose_pay: losePayment,
-        method_pay: 0,
-        type_field: typeField,
-        numbers_user_added: members,
-        description: description,
-        lock: 0,
-        address: checkField ? address : null,
-        name_field: checkField ? nameField : null,
-      };
-      await dispatch(ActionMatch.userPostMatch(dataMatch));
-      setTimeout(function () {
-        setCheckModel(true);
-      }, 1000);
+      if (orders?.orderInfo) {
+        if (!nameRoom) {
+          setError('Bạn cần nhập tên của trận đấu !');
+        } else {
+          if (optionMatch) {
+            if (!members) {
+              setError('Bạn Cần phải nhập số cầu bạn hiện tại đac có!');
+            } else {
+              setError(null);
+              const dataMatch = {
+                name_room: nameRoom,
+                user_id: user?.id,
+                time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
+                price: orders?.orderInfo?.price,
+                type: optionMatch ? 0 : 1,
+                lose_pay: losePayment,
+                method_pay: 0,
+                type_field: typeField,
+                numbers_user_added: members,
+                description: description,
+                lock: 0,
+                address: fieldHaveChoose?.[0]?.address,
+                name_field: fieldHaveChoose?.[0]?.name,
+              };
+              await dispatch(ActionMatch.userPostMatch(dataMatch));
+              setTimeout(function () {
+                setCheckModel(true);
+              }, 1000);
+            }
+          } else {
+            setError(null);
+            const dataMatch = {
+              name_room: nameRoom,
+              user_id: user?.id,
+              time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
+              price: orders?.orderInfo?.price,
+              type: optionMatch ? 0 : 1,
+              lose_pay: losePayment,
+              method_pay: 0,
+              type_field: typeField,
+              numbers_user_added: members,
+              description: description,
+              lock: 0,
+              address: fieldHaveChoose?.[0]?.address,
+              name_field: fieldHaveChoose?.[0]?.name,
+            };
+            await dispatch(ActionMatch.userPostMatch(dataMatch));
+            setTimeout(function () {
+              setCheckModel(true);
+            }, 1000);
+          }
+        }
+      } else {
+        setError(
+          'Bạn chưa chọn sân, nếu bạn có sân rồi hãy chọn đã có sân và nhập thông tin sân của bạn!',
+        );
+      }
     }
   };
   const setModel = () => {
     setCheckModel(false);
   };
-
   // Order success
   var childFieldHaveChose = '';
   var fieldHaveChoose = [];
@@ -309,17 +379,16 @@ const FindMembers = (props) => {
       fieldHaveChoose.push(data);
     }
   });
-  console.log('===============fieldHaveChoose=====================');
-  console.log(fieldHaveChoose);
-  console.log('====================================');
   return (
     <SafeAreaView style={styles.container}>
       {checkModel && (
         <ModelNotification
           showModel={setModel}
           function={setMode}
-          success="Bạn đã tạo trận thành công !"
           description={matches?.error?.data?.error}
+          checkMessage={matches?.error?.data?.error ? null : 'Bạn đã tạo trận thành công !'}
+          titleBtnLeft="Xác Nhận"
+          titleBtnRight="Xem Chi Tiết"
         />
       )}
       {matches?.loading && <Loading />}
@@ -456,12 +525,12 @@ const FindMembers = (props) => {
                 <Image source={logo} style={styles.imgLogo} />
               </View>
               <View style={styles.informationTeam}>
-                <Star star={3.5} />
-                <Text style={styles.txtNameTeam}>DOÀN TIEENS THANH</Text>
+                <Star star={team?.[0]?.rating} />
+                <Text style={styles.txtNameTeam}>{team?.[0]?.name?.toUpperCase()}</Text>
               </View>
             </View>
             <View style={styles.rightBodyRoom}>
-              <ItemMatches icon="phone" title="0946613608" />
+              <ItemMatches icon="phone" title={user?.phone_numbers} />
               {checkField ? (
                 <View style={styleComponent.itemMatches}>
                   <View style={styleComponent.leftItemMatches}>
@@ -475,7 +544,14 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="futbol" title="Sân bóng duy tân" />
+                <ItemMatches
+                  icon="futbol"
+                  title={
+                    orders?.orderInfo
+                      ? 'Sân ' + childFieldHaveChose + ' sân ' + fieldHaveChoose?.[0]?.name
+                      : 'Sân bóng bạn chọn'
+                  }
+                />
               )}
               {checkField ? (
                 <View style={styleComponent.itemMatches}>
@@ -490,7 +566,10 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="map-marked-alt" title="Sân bóng duy Tân" />
+                <ItemMatches
+                  icon="map-marked-alt"
+                  title={orders?.orderInfo ? fieldHaveChoose?.[0]?.address : 'Địa chỉ sân'}
+                />
               )}
               {checkField ? (
                 <View style={styleComponent.itemMatches}>
@@ -505,7 +584,10 @@ const FindMembers = (props) => {
                   </View>
                 </View>
               ) : (
-                <ItemMatches icon="money-bill-wave" title="Sân bóng duy Tân" />
+                <ItemMatches
+                  icon="money-bill-wave"
+                  title={orders?.orderInfo ? orders?.orderInfo?.price + ' đ' : 0 + ' đ'}
+                />
               )}
               <ItemMatches
                 icon="balance-scale"
@@ -516,12 +598,15 @@ const FindMembers = (props) => {
           </View>
         )}
         <View style={styles.descriptionMatches}>
-          <TextInput
-            style={styles.nameRoom}
-            placeholder="Tên trận bạn muốn tạo !"
-            placeholderTextColor="grey"
-            onChangeText={(text) => setNameRoom(text)}
-          />
+          <View style={styles.roomName}>
+            <TextInput
+              style={styles.nameRoom}
+              placeholder="Tên Trận đấu"
+              placeholderTextColor="grey"
+              onChangeText={(text) => setNameRoom(text)}
+            />
+          </View>
+
           <TextInput
             style={styles.inputDescription}
             placeholder="Mô tả !"
@@ -538,10 +623,7 @@ const FindMembers = (props) => {
           </View>
         )}
         <View style={styles.bottomRoom}>
-          <TouchableOpacity
-            style={styles.btnCreateMatches}
-            onPress={checkField ? handleCreateMatch : null}
-          >
+          <TouchableOpacity style={styles.btnCreateMatches} onPress={handleCreateMatch}>
             <Text style={styles.txtBtnCreateMatches}>TẠO TRẬN</Text>
           </TouchableOpacity>
         </View>
@@ -601,12 +683,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nameRoom: {
-    width: '60%',
-    borderWidth: 0,
-    borderBottomWidth: 0.5,
-    borderBottomColor: Colors.txtLevel3,
+  roomName: {
     height: 40,
+    width: ScreenSize.Screen_Width - 150,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.txtLevel2,
   },
   inputDescription: {
     marginTop: 20,
@@ -645,6 +728,7 @@ const styles = StyleSheet.create({
   txtError: {
     fontSize: Fonts.font_description,
     color: Colors.error,
+    textAlign: 'center',
   },
   imgLogo: {
     height: 80,
@@ -666,6 +750,8 @@ const styles = StyleSheet.create({
   },
   txtNameTeam: {
     textAlign: 'center',
+    fontSize: Fonts.font_description,
+    fontWeight: '700',
   },
 });
 export const ChooseOption = (props) => {

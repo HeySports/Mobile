@@ -8,6 +8,7 @@ import searchSagas from './SearchRedux/sagas';
 import userSagas from './UserRedux/sagas';
 import commentSagas from './CommentRedux/sagas';
 import orderSagas from './OrdersRedux/sagas';
+import teamSagas from './TeamRedux/sagas';
 export default function* root() {
   yield all([
     ...appSaga,
@@ -19,5 +20,6 @@ export default function* root() {
     ...userSagas,
     ...commentSagas,
     ...orderSagas,
+    ...teamSagas,
   ]);
 }

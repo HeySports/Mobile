@@ -8,6 +8,7 @@ import search from './SearchRedux/reducers';
 import users from './UserRedux/reducers';
 import comment from './CommentRedux/reducers';
 import orders from './OrdersRedux/reducers';
+import team from './TeamRedux/reducers';
 const rootReducer = combineReducers({
   app,
   auth,
@@ -18,5 +19,6 @@ const rootReducer = combineReducers({
   users,
   comment,
   orders,
+  team,
 });
 export default rootReducer;

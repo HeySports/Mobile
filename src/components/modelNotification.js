@@ -25,7 +25,7 @@ const ModelComment = (props) => {
               {props.description ? props.description : props.checkMessage}
             </Text>
           </View>
-          {props.checkModel ? (
+          {props.checkMessage ? (
             <View style={styles.bottomDoubleButton}>
               <View style={styles.itemBtn}>
                 <TouchableOpacity onPress={closeModel} style={styles.itemBtnModel}>
@@ -34,7 +34,7 @@ const ModelComment = (props) => {
               </View>
               <View style={styles.itemBtn}>
                 <TouchableOpacity onPress={handleCloseModel} style={styles.itemBtnModel}>
-                  <Text style={styles.txtButton}>{props.titileBtnRight}</Text>
+                  <Text style={styles.txtButton}>{props.titleBtnRight}</Text>
                 </TouchableOpacity>
               </View>
             </View>
