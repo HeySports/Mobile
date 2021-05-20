@@ -7,13 +7,23 @@ export const INITIAL_STATE = Immutable({
   responseLogin: null,
   checkLoginFail: false,
   errorLogin: null,
+  errorRegister: null,
   token: null,
   type: '',
+  loadingRegister: false,
+  responseRegister: null,
+  checkRegisterFail: false,
 });
 
 export const userLogin = (state) =>
   state.merge({ loadingLogin: true, errorLogin: null, type: 'User Login', checkLoginFail: false });
-
+export const userRegister = (state) =>
+  state.merge({
+    loadingRegister: true,
+    errorRegister: null,
+    type: 'User Register',
+    checkRegisterFail: false,
+  });
 export const userLoginSuccess = (state, { response }) =>
   state.merge({
     loadingLogin: false,
@@ -32,6 +42,13 @@ export const userLoginFailure = (state, { error }) =>
     type: 'User login failure',
     checkLoginFail: true,
   });
+export const userRegisterFailure = (state, { error }) =>
+  state.merge({
+    loadingRegister: false,
+    errorRegister: error,
+    type: 'User register failure',
+    checkRegisterFail: true,
+  });
 export const userLogout = (state) =>
   state.merge({
     token: null,
@@ -42,6 +59,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [LoginTypes.USER_LOGIN]: userLogin,
   [LoginTypes.USER_LOGIN_SUCCESS]: userLoginSuccess,
   [LoginTypes.USER_LOGIN_FAILURE]: userLoginFailure,
+  [LoginTypes.USER_REGISTER]: userRegister,
+  [LoginTypes.USER_REGISTER_FAILURE]: userRegisterFailure,
   [LoginTypes.USER_LOGOUT]: userLogout,
 });
 

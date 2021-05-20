@@ -3,6 +3,7 @@ import { registerScreens } from './navigation/registerScreen';
 import { userStartApp, goToIntro } from './redux/AppRedux/actions';
 import store from './redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
+import setupFirebase from '../setupFirebase';
 const App = () => {
   Navigation.events().registerAppLaunchedListener(async () => {
     try {

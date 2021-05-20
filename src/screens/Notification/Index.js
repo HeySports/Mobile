@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemNotification from '../../components/Notification';
+import { useDispatch, useSelector } from 'react-redux';
 const Notification = () => {
   const [checkNotification, setCheckNotification] = useState(true);
+  const [listNotification, setListNotification] = useState(true);
+  const notification = useSelector((state) => state.notification.notificationData);
+  // const dispatch = useDispatch();
+  useEffect(() => {
+    setListNotification(notification);
+  }, [notification]);
   return (
     <View style={styles.container}>
       <View style={styles.header}>

@@ -9,6 +9,7 @@ import users from './UserRedux/reducers';
 import comment from './CommentRedux/reducers';
 import orders from './OrdersRedux/reducers';
 import team from './TeamRedux/reducers';
+import notification from './NotificationRedux/reducers';
 const rootReducer = combineReducers({
   app,
   auth,
@@ -20,5 +21,6 @@ const rootReducer = combineReducers({
   comment,
   orders,
   team,
+  notification,
 });
 export default rootReducer;
