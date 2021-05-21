@@ -1,6 +1,7 @@
-import { call, takeLatest, put, take } from 'redux-saga/effects';
+import { call, takeLatest, put } from 'redux-saga/effects';
 import { profileTypes } from './actions';
 import ProfileAction from './actions';
+import TeamActions from '../TeamRedux/actions';
 import {
   userGetProfileApi,
   userChangePasswordApi,
@@ -11,6 +12,7 @@ export function* userGetProfile() {
   try {
     const response = yield call(userGetProfileApi);
     yield put(ProfileAction.userGetProfileSuccess(response.data));
+    yield put(TeamActions.userGetTeam(response?.data?.id));
   } catch (error) {
     console.log(error);
   }

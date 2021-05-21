@@ -7,6 +7,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
@@ -77,7 +78,7 @@ const Detail = (props) => {
     );
   };
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       {checkShowModel ? (
         <ModelComment
           showModel={setModel}
@@ -89,7 +90,7 @@ const Detail = (props) => {
         <View />
       )}
       {detail.loadingDetailField ? (
-        <Loading />
+        <Loading loadingStyle={styles.loading} />
       ) : (
         <View style={styles.container}>
           <ScrollView style={{ height: '100%' }}>
@@ -135,36 +136,27 @@ const Detail = (props) => {
                   <Text style={styles.titleDescriptions}>Đánh Giá</Text>
                   <Star star={field?.rating} />
                 </View>
-                {comments.loading ? (
-                  <Loading />
-                ) : (
-                  <View style={styles.listComment}>
-                    {comments?.responseGetComment?.slice(0, 10).map((item, index) => {
-                      if (users === item.id_user) {
-                        return (
-                          <Comment key={index} checkUser={true} comment={item} id_field={id} />
-                        );
-                      } else {
-                        return <Comment key={index} comment={item} />;
-                      }
-                    })}
-                  </View>
-                )}
+                <View style={styles.listComment}>
+                  {comments?.responseGetComment?.slice(0, 10).map((item, index) => {
+                    if (users === item.id_user) {
+                      return <Comment key={index} checkUser={true} comment={item} id_field={id} />;
+                    } else {
+                      return <Comment key={index} comment={item} />;
+                    }
+                  })}
+                </View>
               </View>
             </View>
           </ScrollView>
         </View>
       )}
-    </>
+    </SafeAreaView>
   );
 };
 export default Detail;
-const { width, height } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
-    width: width,
-    height: height,
-    flexDirection: 'column',
     flex: 1,
   },
   header: {
@@ -294,6 +286,16 @@ const styles = StyleSheet.create({
   },
   listComment: {
     width: width,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loading: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },

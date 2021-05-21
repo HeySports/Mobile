@@ -23,11 +23,7 @@ import ActionMatch from '../../redux/MatchesRedux/actions';
 import Star from '../../components/Star';
 import Loading from '../../components/Loading';
 import ModelNotification from '../../components/modelNotification';
-import TeamActions from '../../redux/TeamRedux/actions';
 const FindMembers = (props) => {
-  useEffect(() => {
-    optionMatch ? null : dispatch(TeamActions.userGetTeam(user?.id));
-  });
   const dataTypeField = [
     {
       title: '5 vs 5',

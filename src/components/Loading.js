@@ -1,27 +1,19 @@
 import React from 'react';
-import { StyleSheet, ActivityIndicator, View, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, ActivityIndicator, SafeAreaView } from 'react-native';
 
-const Loading = (props) => {
+const Loading = ({ loadingStyle }) => {
   return (
-    <SafeAreaView style={props.checkLoading ? styles.container : styles.containerLoading}>
+    <SafeAreaView style={[styles.containerLoading, loadingStyle]}>
       <ActivityIndicator size="large" color="#0000ff" />
     </SafeAreaView>
   );
 };
 
 export default Loading;
-const { height, width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
-  container: {
-    width: width,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 150,
-  },
   containerLoading: {
-    height: height,
-    width: width,
-    backgroundColor: '#dcdcdc',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -122,10 +122,7 @@ const Home = (props) => {
         </View>
       </View>
 
-      {listMatches?.loadingMatches ||
-      listMatches?.loadingMatchFindMember ||
-      users?.loading ||
-      listField?.loadingField ? (
+      {listMatches?.loadingMatches || listMatches?.loadingMatchFindMember ? (
         <LoadingView />
       ) : (
         <ScrollView style={styles.containerHome} showsVerticalScrollIndicator={false}>
