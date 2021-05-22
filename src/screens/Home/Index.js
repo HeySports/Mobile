@@ -54,9 +54,10 @@ const Home = (props) => {
     dispatch(MatchesAction.getListMatches());
     dispatch(MatchesAction.getListMatchFindMember());
     dispatch(FieldAction.getListField());
-    dispatch(ProfileAction.userGetProfile());
     dispatch(UserAction.getAllUsers());
+    dispatch(ProfileAction.userGetProfile());
   }, [dispatch]);
+
   // selector
   var fields = [];
   const users = useSelector((state) => state.users);

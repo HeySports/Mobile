@@ -290,7 +290,32 @@ const FindMembers = (props) => {
             await dispatch(ActionMatch.userPostMatch(dataMatch));
             setTimeout(function () {
               setCheckModel(true);
-            }, 1000);
+            }, 2000);
+          }
+        } else {
+          if (!matches) {
+            setError('Bạn Cần phải nhấp số cầu thủ hiện tại bạn có!');
+          } else {
+            setError(null);
+            const dataMatch = {
+              name_room: nameRoom,
+              user_id: user?.id,
+              time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
+              price: price,
+              type: optionMatch ? 0 : 1,
+              lose_pay: losePayment,
+              method_pay: 0,
+              type_field: typeField,
+              numbers_user_added: members,
+              description: description,
+              lock: 0,
+              address: address,
+              field_name: nameField,
+            };
+            await dispatch(ActionMatch.userPostMatch(dataMatch));
+            setTimeout(function () {
+              setCheckModel(true);
+            }, 2000);
           }
         }
       }
@@ -322,7 +347,7 @@ const FindMembers = (props) => {
               await dispatch(ActionMatch.userPostMatch(dataMatch));
               setTimeout(function () {
                 setCheckModel(true);
-              }, 1000);
+              }, 2000);
             }
           } else {
             setError(null);
@@ -344,7 +369,7 @@ const FindMembers = (props) => {
             await dispatch(ActionMatch.userPostMatch(dataMatch));
             setTimeout(function () {
               setCheckModel(true);
-            }, 1000);
+            }, 2000);
           }
         }
       } else {
@@ -357,7 +382,6 @@ const FindMembers = (props) => {
   const setModel = () => {
     setCheckModel(false);
   };
-  // Order success
   var childFieldHaveChose = '';
   var fieldHaveChoose = [];
   listChildFields?.forEach((element) => {
@@ -377,12 +401,27 @@ const FindMembers = (props) => {
   const handlePopToScreen = () => {
     pushScreen(props.componentId, 'Room', '', '', false, true, '', '');
   };
+  const match_id = useSelector((state) => state.matches?.responsePostMatch?.data?.id);
+  const handleDetailScreen = async () => {
+    if (match_id) {
+      pushScreen(
+        props.componentId,
+        optionMatch ? 'DetailRoom' : 'RoomDetail',
+        match_id,
+        '',
+        false,
+        true,
+        '',
+        '',
+      );
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       {checkModel && (
         <ModelNotification
           showModel={setModel}
-          function={setMode}
+          function={handleDetailScreen}
           description={matches?.error?.data?.error}
           checkMessage={matches?.error?.data?.error ? null : 'Bạn đã tạo trận thành công !'}
           titleBtnLeft="Xác Nhận"

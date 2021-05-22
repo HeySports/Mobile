@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,17 +6,71 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  ScrollView,
+  FlatList,
 } from 'react-native';
 import { pushScreen } from '../../navigation/pushScreen';
-import { Colors, Fonts, ScreenSize } from '../../themes';
+import { Colors, Fonts } from '../../themes';
 import Images from '../../image';
 import Icons from 'react-native-vector-icons/FontAwesome5';
+import { useSelector } from 'react-redux';
+import Loading from '../../components/Loading';
+import moment from 'moment';
 const Room = (props) => {
   const [option, setOption] = useState(true);
+  const [roomList] = useState([]);
   const pushScreenToScreen = (screen, data) => {
     pushScreen(props.componentId, screen, data, screen, false, '', '');
   };
+  const dataList = useSelector((state) => state.matches?.responseMatchFindMember);
+  const user_id = useSelector((state) => state.profile?.responseProfile?.id);
+  const listData = useSelector((state) => state.matches?.responseMatches);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (roomList) {
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
+    }
+  }, [roomList]);
+  roomList.sort(function (a, b) {
+    return a.start_play - b.start_play;
+  });
+  dataList?.forEach((element) => {
+    element?.team_a?.members.forEach((item) => {
+      if (item?.id === user_id) {
+        if (roomList?.includes(element)) {
+        } else {
+          roomList.push(element);
+        }
+      }
+    });
+    element?.team_b?.members.forEach((item) => {
+      if (item?.id === user_id) {
+        if (roomList?.includes(element)) {
+        } else {
+          roomList.push(element);
+        }
+      }
+    });
+  });
+  listData?.forEach((element) => {
+    element?.team_a?.members.forEach((item) => {
+      if (item?.id === user_id) {
+        if (roomList?.includes(element)) {
+        } else {
+          roomList.push(element);
+        }
+      }
+    });
+    element?.team_b?.members.forEach((item) => {
+      if (item?.id === user_id) {
+        if (roomList?.includes(element)) {
+        } else {
+          roomList.push(element);
+        }
+      }
+    });
+  });
   const ItemMenu = ({ btnColor, txtColor, label }) => {
     return (
       <TouchableOpacity
@@ -48,6 +102,39 @@ const Room = (props) => {
       </View>
     );
   };
+  const ItemRoom = ({ item }) => {
+    return (
+      <View style={styles.itemRoom}>
+        <Image source={Images.filed} style={styles.filedImage} />
+        <Text style={styles.txtNameRoom}>{item?.match?.name_room}</Text>
+        <View style={styles.description}>
+          <DescriptionItem
+            icon="futbol"
+            title={
+              item?.field_play
+                ? 'Sân bóng ' + item?.field_play?.[0]?.name
+                : 'Sân bóng ' + item?.match?.field_name
+            }
+          />
+          <DescriptionItem
+            icon="map-marked"
+            title={item?.field_play ? item?.field_play?.[0]?.address : item?.match?.address}
+          />
+          <DescriptionItem
+            icon="clock"
+            title={
+              moment(item?.match?.time_start_play).format('hh') +
+              ' giờ ' +
+              moment(item?.match?.time_start_play).format('mm') +
+              ' phút ngày ' +
+              moment(item?.match?.time_start_play).format('DD-MM-YYYY')
+            }
+          />
+          <DescriptionItem icon="gem" title={item?.match?.type ? 'Kèo Yếu' : 'Kèo Mạnh'} />
+        </View>
+      </View>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -65,52 +152,32 @@ const Room = (props) => {
           txtColor={option ? Colors.txtLevel3 : Colors.white}
         />
       </View>
-      <View style={styles.bodyRoom}>
-        {option ? (
-          <ScrollView>
-            <View style={styles.itemRoom}>
-              <Image source={Images.filed} style={styles.filedImage} />
-              <View style={styles.description}>
-                <DescriptionItem icon="futbol" title="Sân Bóng Lê Quý Đôn" />
-                <DescriptionItem icon="map-marked" title="101B Lê Hữu Trác" />
-                <DescriptionItem icon="clock" title="10 giờ 30 phút ngày 20 -05-2000" />
-                <DescriptionItem icon="gem" title="Đội Mạnh" />
-              </View>
-            </View>
-            <View style={styles.itemRoom}>
-              <Image source={Images.filed} style={styles.filedImage} />
-              <View style={styles.description}>
-                <DescriptionItem icon="futbol" title="Sân Bóng Lê Quý Đôn" />
-                <DescriptionItem icon="map-marked" title="101B Lê Hữu Trác" />
-                <DescriptionItem icon="clock" title="10 giờ 30 phút ngày 20 -05-2000" />
-                <DescriptionItem icon="gem" title="Đội Mạnh" />
-              </View>
-            </View>
-            <View style={styles.itemRoom}>
-              <Image source={Images.filed} style={styles.filedImage} />
-              <View style={styles.description}>
-                <DescriptionItem icon="futbol" title="Sân Bóng Lê Quý Đôn" />
-                <DescriptionItem icon="map-marked" title="101B Lê Hữu Trác" />
-                <DescriptionItem icon="clock" title="10 giờ 30 phút ngày 20 -05-2000" />
-                <DescriptionItem icon="gem" title="Đội Mạnh" />
-              </View>
-            </View>
-          </ScrollView>
-        ) : (
-          <View style={styles.createMatch}>
-            <BtnCreateMatch
-              title="TÌM NGƯỜI CHƠI CÙNG"
-              icon="users"
-              handleAction={() => pushScreenToScreen('FindMember', true)}
+      {loading ? (
+        <Loading />
+      ) : (
+        <View style={styles.bodyRoom}>
+          {option ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={roomList}
+              renderItem={({ item, index }) => <ItemRoom key={index} item={item} />}
             />
-            <BtnCreateMatch
-              title="TÌM ĐỐI THỦ"
-              icon="users-cog"
-              handleAction={() => pushScreenToScreen('FindMember', false)}
-            />
-          </View>
-        )}
-      </View>
+          ) : (
+            <View style={styles.createMatch}>
+              <BtnCreateMatch
+                title="TÌM NGƯỜI CHƠI CÙNG"
+                icon="users"
+                handleAction={() => pushScreenToScreen('FindMember', true)}
+              />
+              <BtnCreateMatch
+                title="TÌM ĐỐI THỦ"
+                icon="users-cog"
+                handleAction={() => pushScreenToScreen('FindMember', false)}
+              />
+            </View>
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -233,5 +300,12 @@ const styles = StyleSheet.create({
   },
   viewIcon: {
     width: '10%',
+  },
+  txtNameRoom: {
+    position: 'absolute',
+    top: '38%',
+    left: 15,
+    fontSize: 18,
+    fontWeight: '700',
   },
 });

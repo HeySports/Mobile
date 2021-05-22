@@ -90,7 +90,7 @@ const DetailRoom = (props) => {
     {
       icon: 'clock',
       title: 'Thời Gian',
-      description: moment(room?.match?.start_play).format('hh:mm - DD/MM/YYYY'),
+      description: moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY'),
     },
     {
       icon: 'map-marker-alt',

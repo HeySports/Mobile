@@ -160,7 +160,7 @@ const RoomDetail = (props) => {
           <ItemTeam
             icon="clock"
             description={
-              'Thời Gian: ' + moment(room?.match?.start_play).format('hh:mm - DD/MM/YYYY')
+              'Thời Gian: ' + moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY')
             }
             check={true}
           />
