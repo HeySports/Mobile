@@ -17,6 +17,7 @@ export const pushScreen = (
       Navigation.push(componentId, {
         component: {
           name: screenApp,
+          id: screenApp,
           passProps: {
             data: passProps,
             title: title,

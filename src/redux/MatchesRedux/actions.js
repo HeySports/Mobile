@@ -9,6 +9,9 @@ export const matchesTypes = makeConstantCreator(
   'USER_POST_MATCH',
   'USER_POST_MATCH_SUCCESS',
   'USER_POST_MATCH_FAILURE',
+  'USER_JOIN_ACCEPT_TEAM',
+  'USER_JOIN_ACCEPT_TEAM_SUCCESS',
+  'USER_JOIN_ACCEPT_TEAM_FAILURE',
 );
 const getListMatches = () => makeActionCreator(matchesTypes.GET_LIST_MATCHES);
 const getListMatchesSuccess = (response) =>
@@ -26,6 +29,13 @@ const userPostMatchSuccess = (response) =>
   makeActionCreator(matchesTypes.USER_POST_MATCH_SUCCESS, { response });
 const userPostMatchFailure = (error) =>
   makeActionCreator(matchesTypes.USER_POST_MATCH_FAILURE, { error });
+const userAcceptTeam = ({ data }) =>
+  makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM, { data });
+const userAcceptTeamSuccess = ({ response }) =>
+  makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM_SUCCESS, { response });
+const userAcceptTeamFailure = ({ error }) =>
+  makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM_FAILURE, { error });
+
 export default {
   getListMatchFindMember,
   getListMatchFindMemberSuccess,
@@ -36,4 +46,7 @@ export default {
   userPostMatch,
   userPostMatchSuccess,
   userPostMatchFailure,
+  userAcceptTeam,
+  userAcceptTeamSuccess,
+  userAcceptTeamFailure,
 };

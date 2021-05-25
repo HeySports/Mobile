@@ -32,9 +32,10 @@ const Room = (props) => {
       }, 500);
     }
   }, [roomList]);
-  roomList.sort(function (a, b) {
-    return a.start_play - b.start_play;
+  const listRoom = roomList.slice().sort(function (a, b) {
+    return a.time_start_play - b.time_start_play;
   });
+
   dataList?.forEach((element) => {
     element?.team_a?.members.forEach((item) => {
       if (item?.id === user_id) {
@@ -104,7 +105,12 @@ const Room = (props) => {
   };
   const ItemRoom = ({ item }) => {
     return (
-      <View style={styles.itemRoom}>
+      <TouchableOpacity
+        style={styles.itemRoom}
+        onPress={() =>
+          pushScreenToScreen(item?.match?.type ? 'RoomDetail' : 'DetailRoom', item?.match?.id)
+        }
+      >
         <Image source={Images.filed} style={styles.filedImage} />
         <Text style={styles.txtNameRoom}>{item?.match?.name_room}</Text>
         <View style={styles.description}>
@@ -132,7 +138,7 @@ const Room = (props) => {
           />
           <DescriptionItem icon="gem" title={item?.match?.type ? 'Kèo Yếu' : 'Kèo Mạnh'} />
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   return (
@@ -159,7 +165,7 @@ const Room = (props) => {
           {option ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={roomList}
+              data={listRoom}
               renderItem={({ item, index }) => <ItemRoom key={index} item={item} />}
             />
           ) : (

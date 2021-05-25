@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,7 @@ import ActionMatch from '../../redux/MatchesRedux/actions';
 import Star from '../../components/Star';
 import Loading from '../../components/Loading';
 import ModelNotification from '../../components/modelNotification';
+import { Navigation } from 'react-native-navigation';
 const FindMembers = (props) => {
   const dataTypeField = [
     {
@@ -268,8 +269,10 @@ const FindMembers = (props) => {
         setError('Bạn phải nhập địa chỉ sân bóng bạn chơi!');
       } else {
         if (optionMatch) {
-          if (!matches) {
+          if (!members) {
             setError('Bạn Cần phải nhấp số cầu thủ hiện tại bạn có!');
+          } else if (members > typeField * 2) {
+            setError('Bạn đã nhập số cầu bạn có nhiều hơn loại sân bạn chọn');
           } else {
             setError(null);
             const dataMatch = {
@@ -293,30 +296,26 @@ const FindMembers = (props) => {
             }, 2000);
           }
         } else {
-          if (!matches) {
-            setError('Bạn Cần phải nhấp số cầu thủ hiện tại bạn có!');
-          } else {
-            setError(null);
-            const dataMatch = {
-              name_room: nameRoom,
-              user_id: user?.id,
-              time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
-              price: price,
-              type: optionMatch ? 0 : 1,
-              lose_pay: losePayment,
-              method_pay: 0,
-              type_field: typeField,
-              numbers_user_added: members,
-              description: description,
-              lock: 0,
-              address: address,
-              field_name: nameField,
-            };
-            await dispatch(ActionMatch.userPostMatch(dataMatch));
-            setTimeout(function () {
-              setCheckModel(true);
-            }, 2000);
-          }
+          setError(null);
+          const dataMatch = {
+            name_room: nameRoom,
+            user_id: user?.id,
+            time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
+            price: price,
+            type: optionMatch ? 0 : 1,
+            lose_pay: losePayment,
+            method_pay: 0,
+            type_field: typeField,
+            numbers_user_added: members,
+            description: description,
+            lock: 0,
+            address: address,
+            field_name: nameField,
+          };
+          await dispatch(ActionMatch.userPostMatch(dataMatch));
+          setTimeout(function () {
+            setCheckModel(true);
+          }, 2000);
         }
       }
     } else {
@@ -327,6 +326,8 @@ const FindMembers = (props) => {
           if (optionMatch) {
             if (!members) {
               setError('Bạn Cần phải nhập số cầu bạn hiện tại đac có!');
+            } else if (members > typeField * 2) {
+              setError('Bạn đã nhập số cầu bạn có nhiều hơn loại sân bạn chọn');
             } else {
               setError(null);
               const dataMatch = {
@@ -399,22 +400,24 @@ const FindMembers = (props) => {
     }
   });
   const handlePopToScreen = () => {
-    pushScreen(props.componentId, 'Room', '', '', false, true, '', '');
+    Navigation.popTo('Room');
   };
   const match_id = useSelector((state) => state.matches?.responsePostMatch?.data?.id);
   const handleDetailScreen = async () => {
-    if (match_id) {
-      pushScreen(
-        props.componentId,
-        optionMatch ? 'DetailRoom' : 'RoomDetail',
-        match_id,
-        '',
-        false,
-        true,
-        '',
-        '',
-      );
-    }
+    await setTime(function () {
+      if (match_id) {
+        pushScreen(
+          props.componentId,
+          optionMatch ? 'DetailRoom' : 'RoomDetail',
+          match_id,
+          '',
+          false,
+          true,
+          '',
+          '',
+        );
+      }
+    }, 1000);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -536,6 +539,7 @@ const FindMembers = (props) => {
                     <TextInput
                       placeholder="Nhập giá sân bóng"
                       onChangeText={(text) => setPrice(text)}
+                      keyboardType="number-pad"
                     />
                   </View>
                 </View>
@@ -556,7 +560,7 @@ const FindMembers = (props) => {
                 </View>
                 <View>
                   <TextInput
-                    placeholder="Nhập số cầu bạn đã có"
+                    placeholder={'Nhập cầu bạn có < ' + typeField * 2 + ' cầu'}
                     keyboardType="number-pad"
                     onChangeText={(text) => setMembers(text)}
                   />
@@ -626,6 +630,7 @@ const FindMembers = (props) => {
                     <TextInput
                       placeholder="Nhập giá sân bóng"
                       onChangeText={(text) => setPrice(text)}
+                      keyboardType="number-pad"
                     />
                   </View>
                 </View>

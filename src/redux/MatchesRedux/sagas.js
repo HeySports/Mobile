@@ -41,10 +41,14 @@ export function* userPostMatch({ data }) {
     } else {
       yield put(MatchesAction.getListMatches());
     }
+    yield put(OrdersActions.userOrderFieldFailure(null));
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
   }
-  yield put(OrdersActions.userOrderFieldFailure(null));
+}
+export function* userJoinAcceptTeam({ data }) {
+  try {
+  } catch (error) {}
 }
 const matchesSagas = () => [
   takeLatest(matchesTypes.GET_LIST_MATCHES, getListMatches),

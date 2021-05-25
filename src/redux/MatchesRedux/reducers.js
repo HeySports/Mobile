@@ -16,6 +16,7 @@ const INITIAL_STATE = Immutable({
   error: null,
   type: '',
   checkPostMatch: false,
+  response: null,
 });
 
 export const getListMatches = (state) =>
@@ -81,6 +82,25 @@ export const userPostMatchFailure = (state, { error }) =>
     checkPostMatch: true,
     type: 'POST MATCH FAILURE',
   });
+export const userJoinAcceptTeam = (state) =>
+  state.merge({
+    loading: true,
+    response: null,
+    type: 'Join team',
+  });
+export const userJoinAcceptTeamSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    response: response,
+    type: 'Join team Success',
+  });
+export const userJoinAcceptTeamFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    response: null,
+    type: 'Join team failure',
+    error: error,
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.GET_LIST_MATCHES]: getListMatches,
   [matchesTypes.GET_LIST_MATCHES_SUCCESS]: getListMatchesSuccess,
@@ -91,5 +111,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.USER_POST_MATCH]: userPostMatch,
   [matchesTypes.USER_POST_MATCH_SUCCESS]: userPostMatchSuccess,
   [matchesTypes.USER_POST_MATCH_FAILURE]: userPostMatchFailure,
+  [matchesTypes.USER_JOIN_ACCEPT_TEAM]: userJoinAcceptTeam,
+  [matchesTypes.USER_JOIN_ACCEPT_TEAM_SUCCESS]: userJoinAcceptTeamSuccess,
+  [matchesTypes.USER_JOIN_ACCEPT_TEAM_FAILURE]: userJoinAcceptTeamFailure,
 });
 export default reducer;

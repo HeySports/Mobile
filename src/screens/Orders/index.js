@@ -23,6 +23,7 @@ import moment from 'moment';
 import OrderAction from '../../redux/OrdersRedux/actions';
 import Loading from '../../components/Loading';
 import { pushScreen } from '../../navigation/pushScreen';
+import { Navigation } from 'react-native-navigation';
 const Orders = (props) => {
   var nameField = '';
   var listChildField = useSelector((state) => state.fields.responseGetChildField);
@@ -110,7 +111,7 @@ const Orders = (props) => {
     setModelOrders(false);
   };
   const handleAccept = () => {
-    pushScreen(props.componentId, 'FindMember', props?.data?.option, 'FindMember', false, '', '');
+    Navigation.popTo('FindMember');
   };
   return (
     <SafeAreaView style={styles.container}>
