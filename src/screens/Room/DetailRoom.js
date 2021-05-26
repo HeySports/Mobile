@@ -27,7 +27,6 @@ import moment from 'moment';
 const DetailRoom = (props) => {
   var listData = useSelector((state) => state.matches?.responseMatchFindMember);
   var users = useSelector((state) => state.profile.responseProfile);
-
   const [room, setRoom] = useState([]);
   const [id] = useState(props.data);
   const [checkUser, setCheckUser] = useState(false);
@@ -67,6 +66,7 @@ const DetailRoom = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
+
   const dataMatches = [
     {
       icon: 'user',

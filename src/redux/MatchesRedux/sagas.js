@@ -7,6 +7,7 @@ import {
   getListMatchesApi,
   userGetDetailMatchApi,
   userPostMatchApi,
+  userJoinAcceptTeamApi,
 } from '../../api/matches';
 export function* getListMatches() {
   try {
@@ -48,12 +49,21 @@ export function* userPostMatch({ data }) {
 }
 export function* userJoinAcceptTeam({ data }) {
   try {
-  } catch (error) {}
+    const response = yield call(userJoinAcceptTeamApi, data);
+    console.log('====================================');
+    console.log(response);
+    console.log('====================================');
+  } catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
+  }
 }
 const matchesSagas = () => [
   takeLatest(matchesTypes.GET_LIST_MATCHES, getListMatches),
   takeLatest(matchesTypes.GET_LIST_MATCH_FIND_MEMBER, getListMatchFindMember),
   takeLatest(matchesTypes.USER_GET_DETAIL_MATCH, userGetDetailMatch),
   takeLatest(matchesTypes.USER_POST_MATCH, userPostMatch),
+  takeLatest(matchesTypes.USER_JOIN_ACCEPT_TEAM, userJoinAcceptTeam),
 ];
 export default matchesSagas();

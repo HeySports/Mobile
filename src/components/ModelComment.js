@@ -4,7 +4,7 @@ import { Rating } from 'react-native-ratings';
 import Color from '../themes/colors';
 import Font from '../themes/font';
 import Button from '../components/DoubleButton';
-import CommentAction from '../redux/CommentRedux/actions'; 
+import CommentAction from '../redux/CommentRedux/actions';
 import { useDispatch } from 'react-redux';
 const ModelComment = (props) => {
   const [modalVisible, setModalVisible] = useState(true);

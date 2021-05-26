@@ -25,12 +25,17 @@ import ItemRoom from '../../components/ItemRoom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import moment from 'moment';
+import ModelJoinTeam from '../../components/JoinTeam/ModelJoinTeam';
 const RoomDetail = (props) => {
   const [id_room] = useState(props.data);
   const matches = useSelector((state) => state.matches);
+  const team = useSelector((state) => state.team.team);
   const [room, setRoom] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const [model, setModel] = useState(false);
+  const [nameTeam, setNameTeam] = useState('');
+  const [description, setDescription] = useState('');
   useEffect(() => {
     handleRoom();
     if (room) {
@@ -66,17 +71,37 @@ const RoomDetail = (props) => {
         },
       ]);
     } else {
-      Alert.alert('THÔNG BÁO', 'Thanh cpng !', [
-        {
-          text: 'Xác nhận',
-          style: 'btnAccept',
-        },
-      ]);
+      setModel(true);
     }
+  };
+  const handleModel = () => {
+    setModel(false);
+  };
+  const handleSubmitOffer = async () => {
+    alert(nameTeam);
   };
   return (
     <SafeAreaView style={styles.container}>
       <TitleView title="CHI TIẾT KÈO ĐẤU" idComponent={props.componentId} />
+      {model && (
+        <ModelJoinTeam
+          handleModel={handleModel}
+          labelBtn1="Trở Lại"
+          labelBtn2="Nhận Kèo"
+          title="THÔNG TIN"
+          checkModel={false}
+          styleInput2={styles.txtInputDescription}
+          multiline={true}
+          numberOfLines={4}
+          placeholderTxt2="Mô tả"
+          placeholderTxt1="Bạn chưa có đội trong app, nhập tên đội bạn"
+          value1={team?.[0]?.name}
+          styleBodyModel={styles.bodyModelJoinTeam}
+          handleAction={handleSubmitOffer}
+          setValueText1={(text) => setNameTeam(text)}
+          setValueText2={(text) => setDescription(text)}
+        />
+      )}
       {loading && <Loading />}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDetail}>
         <ImageBackground source={sanbong} style={styles.image}>
@@ -363,5 +388,12 @@ const styles = StyleSheet.create({
   },
   btnAccept: {
     backgroundColor: Color.primary,
+  },
+  txtInputDescription: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  bodyModelJoinTeam: {
+    marginTop: '39%',
   },
 });
