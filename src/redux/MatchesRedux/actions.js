@@ -29,11 +29,10 @@ const userPostMatchSuccess = (response) =>
   makeActionCreator(matchesTypes.USER_POST_MATCH_SUCCESS, { response });
 const userPostMatchFailure = (error) =>
   makeActionCreator(matchesTypes.USER_POST_MATCH_FAILURE, { error });
-const userAcceptTeam = ({ data }) =>
-  makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM, { data });
-const userAcceptTeamSuccess = ({ response }) =>
+const userAcceptTeam = (data) => makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM, { data });
+const userAcceptTeamSuccess = (response) =>
   makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM_SUCCESS, { response });
-const userAcceptTeamFailure = ({ error }) =>
+const userAcceptTeamFailure = (error) =>
   makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM_FAILURE, { error });
 
 export default {

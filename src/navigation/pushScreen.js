@@ -97,6 +97,7 @@ export const homeScreen = () => {
                       {
                         component: {
                           name: 'Home',
+                          id: 'Home',
                           options: {
                             topBar: {
                               visible: false,
@@ -118,6 +119,7 @@ export const homeScreen = () => {
                       {
                         component: {
                           name: 'Field',
+                          id: 'Field',
                           options: {
                             topBar: {
                               visible: false,
@@ -162,6 +164,7 @@ export const homeScreen = () => {
                       {
                         component: {
                           name: 'Notification',
+                          id: 'Notification',
                           options: {
                             topBar: {
                               visible: false,
@@ -182,6 +185,7 @@ export const homeScreen = () => {
                       {
                         component: {
                           name: 'Profile',
+                          id: 'Profile',
                           options: {
                             topBar: {
                               visible: false,

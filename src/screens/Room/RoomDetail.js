@@ -26,6 +26,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import moment from 'moment';
 import ModelJoinTeam from '../../components/JoinTeam/ModelJoinTeam';
+import ModelNotification from '../../components/JoinTeam/ModelJoinTeam';
+import MatchActions from '../../redux/MatchesRedux/actions';
+import Load from '../../components/Load';
+import { Navigation } from 'react-native-navigation';
+import { pushScreen } from '../../navigation/pushScreen';
 const RoomDetail = (props) => {
   const [id_room] = useState(props.data);
   const matches = useSelector((state) => state.matches);
@@ -36,6 +41,7 @@ const RoomDetail = (props) => {
   const [model, setModel] = useState(false);
   const [nameTeam, setNameTeam] = useState('');
   const [description, setDescription] = useState('');
+  const [modelNotification, setModelNotification] = useState(false);
   useEffect(() => {
     handleRoom();
     if (room) {
@@ -76,9 +82,26 @@ const RoomDetail = (props) => {
   };
   const handleModel = () => {
     setModel(false);
+    setModelNotification(false);
   };
   const handleSubmitOffer = async () => {
-    alert(nameTeam);
+    let dataOffer = {
+      id: id_room,
+      team_name: nameTeam ? nameTeam : team?.[0]?.name,
+      description: description,
+    };
+    await dispatch(MatchActions.userAcceptTeam(dataOffer));
+    setTimeout(function () {
+      setModelNotification(true);
+    }, 2000);
+  };
+  const handleModelClose = () => {
+    setModelNotification(false);
+    Navigation.popTo('Home');
+  };
+  const handleActionMatch = () => {
+    setModelNotification(false);
+    Navigation.popTo('Room');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -100,6 +123,24 @@ const RoomDetail = (props) => {
           handleAction={handleSubmitOffer}
           setValueText1={(text) => setNameTeam(text)}
           setValueText2={(text) => setDescription(text)}
+        />
+      )}
+      {modelNotification && (
+        <ModelNotification
+          labelBtn1={matches?.error ? 'Xác Nhận' : 'Màn Hình Chính'}
+          labelBtn2="Kèo Của Tôi"
+          title={matches?.error ? 'NHẬN KÈO THẤT BẠI' : 'NHẬN KÈO THÀNH CÔNG'}
+          checkModel={true}
+          checkBtn={matches?.error ? false : true}
+          description={
+            matches?.error
+              ? matches?.error?.data?.error
+              : 'Bạn đã nhận kèo thành công, Hãy xem thêm ở mục Kèo của tôi'
+          }
+          handleModel={matches?.error ? handleModel : handleModelClose}
+          styleBodyModel={styles.styleModelNotification}
+          styleDescriptionView={styles.descriptionNotification}
+          handleAction={handleActionMatch}
         />
       )}
       {loading && <Loading />}
@@ -224,6 +265,7 @@ const RoomDetail = (props) => {
           />
         </View>
       </ScrollView>
+      {matches?.loading && <Load />}
     </SafeAreaView>
   );
 };
@@ -272,9 +314,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 10,
     bottom: 10,
-    width: '50%',
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     height: 55,
   },
   txtNameClub: {
@@ -395,5 +437,11 @@ const styles = StyleSheet.create({
   },
   bodyModelJoinTeam: {
     marginTop: '39%',
+  },
+  styleModelNotification: {
+    height: 150,
+  },
+  descriptionNotification: {
+    height: 50,
   },
 });

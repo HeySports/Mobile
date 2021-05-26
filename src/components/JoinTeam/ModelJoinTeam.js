@@ -33,6 +33,8 @@ const ModelJoinTeam = ({
   setValueText1,
   setValueText2,
   handleAction,
+  styleDescriptionView,
+  checkBtn,
 }) => {
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -41,7 +43,7 @@ const ModelJoinTeam = ({
     handleModel();
   };
   const handleActionBtn = () => {
-    handleSetModel();
+    setModalVisible(false);
     handleAction();
   };
   return (
@@ -58,7 +60,7 @@ const ModelJoinTeam = ({
               <Text style={styles.txtTitle}>{title}</Text>
             </View>
             {checkModel ? (
-              <View style={styles.bodyModelInfo}>
+              <View style={[styles.bodyModelInfo, styleDescriptionView]}>
                 <Text style={[styles.description, styleDescription]}>{description}</Text>
               </View>
             ) : (
@@ -89,6 +91,18 @@ const ModelJoinTeam = ({
                 >
                   <Text style={[styles.txtBtn, styleTxtBtn1]}>{labelBtn1}</Text>
                 </TouchableOpacity>
+                {checkBtn && (
+                  <TouchableOpacity
+                    onPress={handleActionBtn}
+                    style={[
+                      styles.btn,
+                      styleBtn2,
+                      { marginLeft: '10%', backgroundColor: Colors.primary },
+                    ]}
+                  >
+                    <Text style={[styles.txtBtn, styleTxtBtn2]}>{labelBtn2}</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             ) : (
               <View style={styles.btnBottom}>
@@ -175,6 +189,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: Fonts.font_description,
     lineHeight: 20,
+    textAlign: 'center',
   },
   txtInput: {
     height: 40,

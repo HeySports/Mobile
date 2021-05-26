@@ -148,12 +148,12 @@ const Room = (props) => {
       </View>
       <View style={styles.option}>
         <ItemMenu
-          label="Kèo Sắp Tới"
+          label="KÈO CỦA TÔI"
           btnColor={option ? Colors.secondary : null}
           txtColor={option ? Colors.white : Colors.txtLevel3}
         />
         <ItemMenu
-          label="Tạo Trận"
+          label="TẠO KÈO"
           btnColor={option ? null : Colors.secondary}
           txtColor={option ? Colors.txtLevel3 : Colors.white}
         />

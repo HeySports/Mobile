@@ -87,12 +87,14 @@ export const userJoinAcceptTeam = (state) =>
     loading: true,
     response: null,
     type: 'Join team',
+    error: null,
   });
 export const userJoinAcceptTeamSuccess = (state, { response }) =>
   state.merge({
     loading: false,
     response: response,
     type: 'Join team Success',
+    error: null,
   });
 export const userJoinAcceptTeamFailure = (state, { error }) =>
   state.merge({

@@ -50,13 +50,12 @@ export function* userPostMatch({ data }) {
 export function* userJoinAcceptTeam({ data }) {
   try {
     const response = yield call(userJoinAcceptTeamApi, data);
-    console.log('====================================');
+    console.log('==============response======================');
     console.log(response);
     console.log('====================================');
+    yield put(MatchesAction.userAcceptTeamSuccess(response));
   } catch (error) {
-    console.log('====================================');
-    console.log(error);
-    console.log('====================================');
+    yield put(MatchesAction.userAcceptTeamFailure(error));
   }
 }
 const matchesSagas = () => [
