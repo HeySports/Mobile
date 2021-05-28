@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "469450007382",
+    "project_id": "hsports-76698",
+    "storage_bucket": "hsports-76698.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469450007382:android:fa46693023c3851aebacf7",
+        "android_client_info": {
+          "package_name": "com.heysports"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469450007382-ddjlq27d0i8boak75srfmdk5imq87d0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heysports",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "469450007382-ms82e2umunr9ttjplm3vpmgv337p01c7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT6ToHqvbPMZsX1NkpMpTJ7o5eDFgqOvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469450007382-ms82e2umunr9ttjplm3vpmgv337p01c7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
