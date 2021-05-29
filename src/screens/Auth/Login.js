@@ -19,6 +19,7 @@ import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
+import { LocalNotification } from '../../utils/localPushController';
 import Error from '../../components/Error';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
@@ -33,6 +34,7 @@ const Login = (props) => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
   const handleTextInput = () => {
+    // LocalNotification();
     let validatePhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     if (!phone || !password) {
       setErrorLogin('Bạn phải nhập đủ thông tin để tiến hành Login !');

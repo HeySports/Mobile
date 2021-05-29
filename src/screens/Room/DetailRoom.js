@@ -63,10 +63,10 @@ const DetailRoom = (props) => {
       });
     }
   }, [listData, id]);
+
   const goBackScreen = () => {
     goBack(props.componentId);
   };
-
   const dataMatches = [
     {
       icon: 'user',

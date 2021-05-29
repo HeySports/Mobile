@@ -10,9 +10,11 @@ buildscript {
         supportLibVersion = "28.0.0"         //ADD THIS
         googlePlayServicesVersion = "11.8.0" //ADD THIS
         androidMapsUtilsVersion = "0.5+"     //ADD THIS
+        
     }
     repositories {
         google()
+        mavenLocal()
         jcenter()
     }
     dependencies {

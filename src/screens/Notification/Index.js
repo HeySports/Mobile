@@ -4,15 +4,56 @@ import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemNotification from '../../components/Notification';
+import setupFirebase from '../../../setupFirebase';
+import messaging from '@react-native-firebase/messaging';
+// import Setup from './Setup';
 import { useDispatch, useSelector } from 'react-redux';
 const Notification = () => {
   const [checkNotification, setCheckNotification] = useState(true);
   const [listNotification, setListNotification] = useState(true);
-  const notification = useSelector((state) => state.notification.notificationData);
-  // const dispatch = useDispatch();
+  const [notification, setNotification] = useState(true);
+  // const notification = useSelector((state) => state.notification.notificationData);
+  const getToken = async () => {
+    const token = await messaging().getToken();
+    console.log('.........................: ', token);
+  };
+
   useEffect(() => {
-    setListNotification(notification);
-  }, [notification]);
+    getToken();
+    messaging().onMessage(async (remoteMessage) => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      setNotification({
+        title: remoteMessage.notification.title,
+        body: remoteMessage.notification.body,
+        image: remoteMessage.notification.android.imageUrl,
+      });
+    });
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log('onNotificationOpenedApp: ', JSON.stringify(remoteMessage));
+      setNotification({
+        title: remoteMessage.notification.title,
+        body: remoteMessage.notification.body,
+        image: remoteMessage.notification.android.imageUrl,
+      });
+    });
+    //hung add
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            JSON.stringify(remoteMessage),
+          );
+          setNotification({
+            title: remoteMessage.notification.title,
+            body: remoteMessage.notification.body,
+            image: remoteMessage.notification.android.imageUrl,
+          });
+        }
+      });
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>

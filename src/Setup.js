@@ -4,7 +4,11 @@ import { userStartApp, goToIntro } from './redux/AppRedux/actions';
 import store from './redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
 import setupFirebase from '../setupFirebase';
+import messaging from '@react-native-firebase/messaging';
 const App = () => {
+  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
   Navigation.events().registerAppLaunchedListener(async () => {
     try {
       await registerScreens();

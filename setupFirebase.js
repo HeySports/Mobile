@@ -1,6 +1,9 @@
-import * as React from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCQlMdY5FEVcS1uLmWgLKi_pC4hUa4vWA4',
@@ -14,4 +17,21 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export default { firebase, auth };
+export { firebase, auth, messaging };
+
+const setupFirebase = () => {
+  const setupCloudMessaging = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  };
+  useEffect(async () => {
+    setupCloudMessaging();
+  }, []);
+};
+export default setupFirebase;

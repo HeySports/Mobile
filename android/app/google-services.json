@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "469450007382-ddjlq27d0i8boak75srfmdk5imq87d0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heysports",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "469450007382-ms82e2umunr9ttjplm3vpmgv337p01c7.apps.googleusercontent.com",
           "client_type": 3
         }
