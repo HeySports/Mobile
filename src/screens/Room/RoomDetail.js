@@ -101,7 +101,7 @@ const RoomDetail = (props) => {
   };
   const handleActionMatch = () => {
     setModelNotification(false);
-    Navigation.popTo('Room');
+    pushScreen('RoomDetail', 'Room', '', '', false, '', '');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -439,9 +439,9 @@ const styles = StyleSheet.create({
     marginTop: '39%',
   },
   styleModelNotification: {
-    height: 150,
+    height: 170,
   },
   descriptionNotification: {
-    height: 50,
+    height: 70,
   },
 });

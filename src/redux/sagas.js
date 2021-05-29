@@ -10,6 +10,7 @@ import commentSagas from './CommentRedux/sagas';
 import orderSagas from './OrdersRedux/sagas';
 import teamSagas from './TeamRedux/sagas';
 import notificationSagas from './NotificationRedux/sagas';
+import myMatchSagas from './myMatches/sagas';
 export default function* root() {
   yield all([
     ...appSaga,
@@ -23,5 +24,6 @@ export default function* root() {
     ...orderSagas,
     ...teamSagas,
     ...notificationSagas,
+    ...myMatchSagas,
   ]);
 }

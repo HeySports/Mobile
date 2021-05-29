@@ -15,3 +15,6 @@ export async function getListMatchFindMemberApi() {
 export async function userJoinAcceptTeamApi(data) {
   return http.put('/match/joinTeamOpponent/' + data?.id, data);
 }
+export async function getMyMatchApi() {
+  return http.get('/match/getListMatchOfUser?page=1&limit=10&orderBy=createdAt:DESC');
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,66 +12,23 @@ import { pushScreen } from '../../navigation/pushScreen';
 import { Colors, Fonts } from '../../themes';
 import Images from '../../image';
 import Icons from 'react-native-vector-icons/FontAwesome5';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../../components/Loading';
+import myMatchActions from '../../redux/myMatches/actions';
 import moment from 'moment';
 const Room = (props) => {
   const [option, setOption] = useState(true);
-  const [roomList] = useState([]);
+  const room = useSelector((state) => state.myMatches);
   const pushScreenToScreen = (screen, data) => {
     pushScreen(props.componentId, screen, data, screen, false, '', '');
   };
-  const dataList = useSelector((state) => state.matches?.responseMatchFindMember);
-  const user_id = useSelector((state) => state.profile?.responseProfile?.id);
-  const listData = useSelector((state) => state.matches?.responseMatches);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (roomList) {
-      setTimeout(function () {
-        setLoading(false);
-      }, 500);
-    }
-  }, [roomList]);
-  const listRoom = roomList.slice().sort(function (a, b) {
-    return a.time_start_play - b.time_start_play;
-  });
-
-  dataList?.forEach((element) => {
-    element?.team_a?.members.forEach((item) => {
-      if (item?.id === user_id) {
-        if (roomList?.includes(element)) {
-        } else {
-          roomList.push(element);
-        }
-      }
-    });
-    element?.team_b?.members.forEach((item) => {
-      if (item?.id === user_id) {
-        if (roomList?.includes(element)) {
-        } else {
-          roomList.push(element);
-        }
-      }
-    });
-  });
-  listData?.forEach((element) => {
-    element?.team_a?.members.forEach((item) => {
-      if (item?.id === user_id) {
-        if (roomList?.includes(element)) {
-        } else {
-          roomList.push(element);
-        }
-      }
-    });
-    element?.team_b?.members.forEach((item) => {
-      if (item?.id === user_id) {
-        if (roomList?.includes(element)) {
-        } else {
-          roomList.push(element);
-        }
-      }
-    });
-  });
+    onGetMyMatches();
+  }, [onGetMyMatches]);
+  const onGetMyMatches = useCallback(async () => {
+    await dispatch(myMatchActions.userGetMyMatches());
+  }, [dispatch]);
   const ItemMenu = ({ btnColor, txtColor, label }) => {
     return (
       <TouchableOpacity
@@ -158,14 +115,14 @@ const Room = (props) => {
           txtColor={option ? Colors.txtLevel3 : Colors.white}
         />
       </View>
-      {loading ? (
+      {room?.loading ? (
         <Loading />
       ) : (
         <View style={styles.bodyRoom}>
           {option ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={listRoom}
+              data={room?.response}
               renderItem={({ item, index }) => <ItemRoom key={index} item={item} />}
             />
           ) : (

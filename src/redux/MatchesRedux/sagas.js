@@ -9,6 +9,7 @@ import {
   userPostMatchApi,
   userJoinAcceptTeamApi,
 } from '../../api/matches';
+import myMatchActions from '../myMatches/actions';
 export function* getListMatches() {
   try {
     const response = yield call(getListMatchesApi);
@@ -43,6 +44,7 @@ export function* userPostMatch({ data }) {
       yield put(MatchesAction.getListMatches());
     }
     yield put(OrdersActions.userOrderFieldFailure(null));
+    yield put(myMatchActions.userGetMyMatches());
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
   }
@@ -50,10 +52,8 @@ export function* userPostMatch({ data }) {
 export function* userJoinAcceptTeam({ data }) {
   try {
     const response = yield call(userJoinAcceptTeamApi, data);
-    console.log('==============response======================');
-    console.log(response);
-    console.log('====================================');
     yield put(MatchesAction.userAcceptTeamSuccess(response));
+    yield put(myMatchActions.userGetMyMatches());
   } catch (error) {
     yield put(MatchesAction.userAcceptTeamFailure(error));
   }
