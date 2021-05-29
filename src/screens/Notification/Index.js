@@ -37,7 +37,7 @@ const Notification = () => {
         image: remoteMessage.notification.android.imageUrl,
       });
     });
-
+//hung add
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
