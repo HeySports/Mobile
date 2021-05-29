@@ -35,6 +35,7 @@ const ModelJoinTeam = ({
   handleAction,
   styleDescriptionView,
   checkBtn,
+  keyboardType,
 }) => {
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -69,6 +70,7 @@ const ModelJoinTeam = ({
                   style={[styles.txtInput, styleInput1]}
                   placeholder={placeholderTxt1}
                   defaultValue={value1}
+                  keyboardType={keyboardType}
                   returnKeyType={'next'}
                   onChangeText={(text) => setValueText1(text)}
                 />

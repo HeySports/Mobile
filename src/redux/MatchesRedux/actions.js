@@ -38,8 +38,10 @@ const userAcceptTeamSuccess = (response) =>
 const userAcceptTeamFailure = (error) =>
   makeActionCreator(matchesTypes.USER_JOIN_ACCEPT_TEAM_FAILURE, { error });
 const userJoinMatch = (data) => makeActionCreator(matchesTypes.JOIN_MATCH, { data });
-const userJoinMatchSuccess = (response) => makeActionCreator(matchesTypes.JOIN_MATCH, { response });
-const userJoinMatchFailure = (error) => makeActionCreator(matchesTypes.JOIN_MATCH, { error });
+const userJoinMatchSuccess = (response) =>
+  makeActionCreator(matchesTypes.JOIN_MATCH_SUCCESS, { response });
+const userJoinMatchFailure = (error) =>
+  makeActionCreator(matchesTypes.JOIN_MATCH_FAILURE, { error });
 
 export default {
   getListMatchFindMember,

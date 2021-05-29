@@ -62,21 +62,12 @@ export function* userJoinAcceptTeam({ data }) {
 }
 export function* userJoinMatchApi({ data }) {
   try {
-    console.log('============data========================');
-    console.log(data);
-    console.log('====================================');
     const response = yield call(joinMatchFindMembers, data);
-    console.log('===============response=====================');
-
-    console.log(response);
-    console.log('====================================');
-    // yield put(MatchesAction.userAcceptTeamSuccess(response));
-    // yield put(myMatchActions.userGetMyMatches());
+    yield put(MatchesAction.getListMatchFindMember());
+    yield put(myMatchActions.userGetMyMatches());
+    yield put(MatchesAction.userJoinMatchSuccess(response?.data));
   } catch (error) {
-    console.log('===============error=====================');
-    console.log(error);
-    console.log('====================================');
-    // yield put(MatchesAction.userAcceptTeamFailure(error));
+    yield put(MatchesAction.userJoinMatchFailure(error));
   }
 }
 const matchesSagas = () => [

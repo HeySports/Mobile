@@ -8,12 +8,13 @@ import {
   ImageBackground,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import Font from '../../themes/font';
 import Color from '../../themes/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Back from '../../components/Back';
-import { goBack } from '../../navigation/pushScreen';
+import { goBack, pushScreen } from '../../navigation/pushScreen';
 import sanbong from '../../image/sanbong.jpg';
 import Field11 from '../../components/Field11';
 import Field5 from '../../components/Field5';
@@ -25,17 +26,24 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import ModelJoinTeam from '../../components/JoinTeam/ModelJoinTeam';
 import moment from 'moment';
 import MatchActions from '../../redux/MatchesRedux/actions';
+import ModelNotification from '../../components/JoinTeam/ModelJoinTeam';
+import Load from '../../components/Load';
+
 const DetailRoom = (props) => {
   var listData = useSelector((state) => state.matches?.responseMatchFindMember);
-  var users = useSelector((state) => state.profile.responseProfile);
+  var userActive = useSelector((state) => state?.profile?.responseProfile?.id);
+  const matches = useSelector((state) => state.matches);
   // const [room, setRoom] = useState([]);
   const [id] = useState(props.data);
   const [model, setModel] = useState(false);
   const [loading, setLoading] = useState(true);
   const [description, setDescription] = useState('');
   const [members, setMembers] = useState(1);
+  const [modelNotification, setModelNotification] = useState(false);
+
   const dispatch = useDispatch();
   const room = listData?.find((item) => item?.match?.id === id);
+
   var typeField = false;
   if (room) {
     if (room?.match?.type_field === 5) {
@@ -98,6 +106,18 @@ const DetailRoom = (props) => {
   const handleModel = () => {
     setModel(false);
   };
+  const handleOffer = () => {
+    if (room?.team_a?.members?.[0]?.id === userActive) {
+      Alert.alert('THÔNG BÁO', 'Trận đấu này là do bạn tạo bạn không thể nhận kèo này được !', [
+        {
+          text: 'Xác nhận',
+          style: styles.btnAccept,
+        },
+      ]);
+    } else {
+      setModel(true);
+    }
+  };
   const handleSubmitOffer = async () => {
     setModel(false);
     let data = {
@@ -106,6 +126,13 @@ const DetailRoom = (props) => {
       description: description,
     };
     await dispatch(MatchActions.userJoinMatch(data));
+    setTimeout(function () {
+      setModelNotification(true);
+    }, 2000);
+  };
+  const handleActionMatch = () => {
+    setModelNotification(false);
+    pushScreen('DetailRoom', 'Room', '', '', false, '', '');
   };
   return (
     <View style={styles.container}>
@@ -114,18 +141,35 @@ const DetailRoom = (props) => {
         <ModelJoinTeam
           handleModel={handleModel}
           labelBtn1="Trở Lại"
-          labelBtn2="Nhận Kèo"
+          labelBtn2="Tham gia"
           title="THÔNG TIN"
           checkModel={false}
           styleInput2={styles.txtInputDescription}
           multiline={true}
           numberOfLines={4}
+          keyboardType="number-pad"
           placeholderTxt2="Mô tả"
           placeholderTxt1="Số cầu thủ bạn có"
           styleBodyModel={styles.bodyModelJoinTeam}
           handleAction={handleSubmitOffer}
           setValueText1={(text) => setMembers(text)}
           setValueText2={(text) => setDescription(text)}
+        />
+      )}
+      {modelNotification && (
+        <ModelNotification
+          labelBtn1={matches?.error ? 'Xác Nhận' : 'Xác Nhận'}
+          labelBtn2="Kèo Của Tôi"
+          title={matches?.error ? 'THAM GIA THẤT BẠI' : 'THAM GIA THÀNH CÔNG'}
+          checkModel={true}
+          checkBtn={matches?.error ? false : true}
+          description={
+            matches?.error ? matches?.error?.data?.error : 'Bạn đã tham gia trận này thành công '
+          }
+          handleModel={matches?.error ? handleModel : handleModel}
+          styleBodyModel={styles.styleModelNotification}
+          styleDescriptionView={styles.descriptionNotification}
+          handleAction={handleActionMatch}
         />
       )}
       <View style={styles.container}>
@@ -185,11 +229,12 @@ const DetailRoom = (props) => {
             </View>
           </View>
           <View style={styles.order}>
-            <TouchableOpacity style={styles.btnOrder} onPress={() => setModel(true)}>
+            <TouchableOpacity style={styles.btnOrder} onPress={handleOffer}>
               <Text style={styles.txtBtnOrder}>THAM GIA TRẬN ĐẤU</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
+        {matches?.loading && <Load />}
       </View>
     </View>
   );
@@ -331,9 +376,9 @@ const styles = StyleSheet.create({
     marginTop: '39%',
   },
   styleModelNotification: {
-    height: 170,
+    height: 200,
   },
   descriptionNotification: {
-    height: 70,
+    height: 100,
   },
 });
