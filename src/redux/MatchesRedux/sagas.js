@@ -8,6 +8,7 @@ import {
   userGetDetailMatchApi,
   userPostMatchApi,
   userJoinAcceptTeamApi,
+  joinMatchFindMembers,
 } from '../../api/matches';
 import myMatchActions from '../myMatches/actions';
 export function* getListMatches() {
@@ -37,6 +38,7 @@ export function* userGetDetailMatch({ id }) {
 export function* userPostMatch({ data }) {
   try {
     const response = yield call(userPostMatchApi, data);
+    console.log(response?.data);
     yield put(MatchesAction.userPostMatchSuccess(response.data));
     if (data?.type === 0) {
       yield put(MatchesAction.getListMatchFindMember());
@@ -58,11 +60,31 @@ export function* userJoinAcceptTeam({ data }) {
     yield put(MatchesAction.userAcceptTeamFailure(error));
   }
 }
+export function* userJoinMatchApi({ data }) {
+  try {
+    console.log('============data========================');
+    console.log(data);
+    console.log('====================================');
+    const response = yield call(joinMatchFindMembers, data);
+    console.log('===============response=====================');
+
+    console.log(response);
+    console.log('====================================');
+    // yield put(MatchesAction.userAcceptTeamSuccess(response));
+    // yield put(myMatchActions.userGetMyMatches());
+  } catch (error) {
+    console.log('===============error=====================');
+    console.log(error);
+    console.log('====================================');
+    // yield put(MatchesAction.userAcceptTeamFailure(error));
+  }
+}
 const matchesSagas = () => [
   takeLatest(matchesTypes.GET_LIST_MATCHES, getListMatches),
   takeLatest(matchesTypes.GET_LIST_MATCH_FIND_MEMBER, getListMatchFindMember),
   takeLatest(matchesTypes.USER_GET_DETAIL_MATCH, userGetDetailMatch),
   takeLatest(matchesTypes.USER_POST_MATCH, userPostMatch),
   takeLatest(matchesTypes.USER_JOIN_ACCEPT_TEAM, userJoinAcceptTeam),
+  takeLatest(matchesTypes.JOIN_MATCH, userJoinMatchApi),
 ];
 export default matchesSagas();

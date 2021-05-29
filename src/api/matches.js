@@ -18,3 +18,6 @@ export async function userJoinAcceptTeamApi(data) {
 export async function getMyMatchApi() {
   return http.get('/match/getListMatchOfUser?page=1&limit=10&orderBy=createdAt:DESC');
 }
+export async function joinMatchFindMembers(data) {
+  return http.post('/match/postDetailMatch', data);
+}

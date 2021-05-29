@@ -17,6 +17,7 @@ const INITIAL_STATE = Immutable({
   type: '',
   checkPostMatch: false,
   response: null,
+  responseJoinMatch: null,
 });
 
 export const getListMatches = (state) =>
@@ -103,6 +104,27 @@ export const userJoinAcceptTeamFailure = (state, { error }) =>
     type: 'Join team failure',
     error: error,
   });
+export const joinMatch = (state) =>
+  state.merge({
+    loading: true,
+    responseJoinMatch: null,
+    type: 'Join match',
+    error: null,
+  });
+export const joinMatchSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    responseJoinMatch: response,
+    type: 'Join match success',
+    error: null,
+  });
+export const joinMatchFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    responseJoinMatch: null,
+    type: 'Join match failure',
+    error: error,
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.GET_LIST_MATCHES]: getListMatches,
   [matchesTypes.GET_LIST_MATCHES_SUCCESS]: getListMatchesSuccess,
@@ -116,5 +138,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [matchesTypes.USER_JOIN_ACCEPT_TEAM]: userJoinAcceptTeam,
   [matchesTypes.USER_JOIN_ACCEPT_TEAM_SUCCESS]: userJoinAcceptTeamSuccess,
   [matchesTypes.USER_JOIN_ACCEPT_TEAM_FAILURE]: userJoinAcceptTeamFailure,
+  [matchesTypes.JOIN_MATCH]: joinMatch,
+  [matchesTypes.JOIN_MATCH_SUCCESS]: joinMatchSuccess,
+  [matchesTypes.JOIN_MATCH_FAILURE]: joinMatchFailure,
 });
 export default reducer;

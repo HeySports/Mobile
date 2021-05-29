@@ -402,14 +402,30 @@ const FindMembers = (props) => {
   const handlePopToScreen = () => {
     Navigation.popTo('Room');
   };
-  const match_id = useSelector((state) => state.matches?.responsePostMatch?.data?.id);
   const handleDetailScreen = async () => {
+    let room_1 = await matches?.responseMatches?.find(
+      (item) => item?.match?.name_room === nameRoom,
+    );
+    let room_2 = await matches?.responseMatchFindMember?.find(
+      (item) => item?.match?.name_room === nameRoom,
+    );
     await setTime(function () {
-      if (match_id) {
+      if (room_1) {
         pushScreen(
-          props.componentId,
+          'FindMember',
           optionMatch ? 'DetailRoom' : 'RoomDetail',
-          match_id,
+          room_1?.match?.id,
+          '',
+          false,
+          true,
+          '',
+          '',
+        );
+      } else if (room_2) {
+        pushScreen(
+          'FindMember',
+          optionMatch ? 'DetailRoom' : 'RoomDetail',
+          room_2?.match?.id,
           '',
           false,
           true,

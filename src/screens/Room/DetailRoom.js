@@ -22,17 +22,20 @@ import Loading from '../../components/Loading';
 import profile from '../../image/thanh.jpg';
 import Player from '../../components/Player';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import ModelNotification from '../../components/modelNotification';
+import ModelJoinTeam from '../../components/JoinTeam/ModelJoinTeam';
 import moment from 'moment';
+import MatchActions from '../../redux/MatchesRedux/actions';
 const DetailRoom = (props) => {
   var listData = useSelector((state) => state.matches?.responseMatchFindMember);
   var users = useSelector((state) => state.profile.responseProfile);
-  const [room, setRoom] = useState([]);
+  // const [room, setRoom] = useState([]);
   const [id] = useState(props.data);
-  const [checkUser, setCheckUser] = useState(false);
-  const [checkShowModel, setCheckShowModel] = useState(false);
+  const [model, setModel] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [description, setDescription] = useState('');
+  const [members, setMembers] = useState(1);
   const dispatch = useDispatch();
+  const room = listData?.find((item) => item?.match?.id === id);
   var typeField = false;
   if (room) {
     if (room?.match?.type_field === 5) {
@@ -43,27 +46,13 @@ const DetailRoom = (props) => {
       typeField = <Field11 />;
     }
   }
-
   useEffect(() => {
-    handleGetListData();
     if (room) {
       setTimeout(function () {
         setLoading(false);
       }, 250);
     }
-  }, [handleGetListData, room]);
-
-  const handleGetListData = useCallback(async () => {
-    const data = await listData;
-    if (data) {
-      data.forEach((element) => {
-        if (element?.match?.id === id) {
-          setRoom(element);
-        }
-      });
-    }
-  }, [listData, id]);
-
+  }, [room]);
   const goBackScreen = () => {
     goBack(props.componentId);
   };
@@ -106,25 +95,37 @@ const DetailRoom = (props) => {
         : 'FREE',
     },
   ];
-
   const handleModel = () => {
-    setCheckShowModel(false);
+    setModel(false);
+  };
+  const handleSubmitOffer = async () => {
+    setModel(false);
+    let data = {
+      id_match: id,
+      numbers_user_added: members,
+      description: description,
+    };
+    await dispatch(MatchActions.userJoinMatch(data));
   };
   return (
     <View style={styles.container}>
       {loading && <Loading />}
-      {checkShowModel && (
-        <ModelNotification
-          titleBtnLeft="Hủy Bỏ"
-          titleBtnRight="Đặt Sân"
-          checkModel={true}
-          description={
-            'Bạn chưa đủ cầu thủ để có thể đá sân ' +
-            room?.match?.type_field +
-            ' người. Bạn có muốn tiếp tục đặt sân không?'
-          }
-          title="Thông Báo"
-          showModel={handleModel}
+      {model && (
+        <ModelJoinTeam
+          handleModel={handleModel}
+          labelBtn1="Trở Lại"
+          labelBtn2="Nhận Kèo"
+          title="THÔNG TIN"
+          checkModel={false}
+          styleInput2={styles.txtInputDescription}
+          multiline={true}
+          numberOfLines={4}
+          placeholderTxt2="Mô tả"
+          placeholderTxt1="Số cầu thủ bạn có"
+          styleBodyModel={styles.bodyModelJoinTeam}
+          handleAction={handleSubmitOffer}
+          setValueText1={(text) => setMembers(text)}
+          setValueText2={(text) => setDescription(text)}
         />
       )}
       <View style={styles.container}>
@@ -184,15 +185,9 @@ const DetailRoom = (props) => {
             </View>
           </View>
           <View style={styles.order}>
-            {checkUser ? (
-              <TouchableOpacity style={styles.btnOrder}>
-                <Text style={styles.txtBtnOrder}>ĐẶT SÂN</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity style={styles.btnOrder}>
-                <Text style={styles.txtBtnOrder}>THAM GIA TRẬN ĐẤU</Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity style={styles.btnOrder} onPress={() => setModel(true)}>
+              <Text style={styles.txtBtnOrder}>THAM GIA TRẬN ĐẤU</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
@@ -324,5 +319,21 @@ const styles = StyleSheet.create({
   txtBtnOrder: {
     fontSize: 16,
     fontWeight: '700',
+  },
+  btnAccept: {
+    backgroundColor: Color.primary,
+  },
+  txtInputDescription: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  bodyModelJoinTeam: {
+    marginTop: '39%',
+  },
+  styleModelNotification: {
+    height: 170,
+  },
+  descriptionNotification: {
+    height: 70,
   },
 });
