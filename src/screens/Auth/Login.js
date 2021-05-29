@@ -20,7 +20,6 @@ import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import { LocalNotification } from '../../utils/localPushController';
-import messaging from '@react-native-firebase/messaging';
 import Error from '../../components/Error';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
@@ -45,24 +44,13 @@ const Login = (props) => {
       setErrorLogin('Số điện thoại hoặc mật khẩu của bạn không hợp lệ !');
     } else {
       handleLogin(phone, password);
-      setErrorLogin('');
+      setErrorLogin(false);
     }
   };
   const handleLogin = (phone_numbers, password_login) => {
     Keyboard.dismiss();
-    messaging()
-      .getToken()
-      .then((token) => {
-        console.log('............', JSON.stringify(token));
-        dispatch(
-          LoginActions.userLogin({
-            phone_numbers: phone_numbers,
-            password: password_login,
-            device_token: token,
-          }),
-        );
-      })
-      .catch((error) => console.log(error));
+    setErrorLogin('');
+    dispatch(LoginActions.userLogin({ phone_numbers: phone_numbers, password: password_login }));
   };
   useEffect(() => {
     SplashScreen.hide();
