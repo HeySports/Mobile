@@ -6,6 +6,7 @@ const INITIAL_STATE = Immutable({
   team: null,
   error: null,
   type: '',
+  listTeam: null,
 });
 export const useGetTeam = (state) =>
   state.merge({
@@ -27,9 +28,33 @@ export const useGetTeamFailure = (state, { error }) =>
     error: error,
     type: 'useGetTeamError',
   });
+export const userGetListTeam = (state) =>
+  state.merge({
+    loading: true,
+    listTeam: null,
+    error: null,
+    type: 'get List Team',
+  });
+export const userGetListTeamSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    listTeam: response,
+    error: null,
+    type: 'get List Team success',
+  });
+export const userGetListTeamFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    listTeam: null,
+    error: error,
+    type: 'get List Team failure',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.USER_GET_TEAM]: useGetTeam,
   [teamTypes.USER_GET_TEAM_SUCCESS]: useGetTeamSuccess,
   [teamTypes.USER_GET_TEAM_FAILURE]: useGetTeamFailure,
+  [teamTypes.GET_LIST_TEAM]: userGetListTeam,
+  [teamTypes.GET_LIST_TEAM_SUCCESS]: userGetListTeamSuccess,
+  [teamTypes.GET_LIST_TEAM_FAILURE]: userGetListTeamFailure,
 });
 export default reducer;

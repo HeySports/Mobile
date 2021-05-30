@@ -168,13 +168,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   room: {
-    width: width / 2 - 14,
+    width: width / 2,
     height: 130,
-    marginLeft: 7,
-    marginRight: 7,
+    marginLeft: 20,
+    marginRight: 0,
     marginTop: 15,
     backgroundColor: Color.field,
     borderRadius: 4,
+    marginEnd: 5,
   },
   headerRoom: {
     height: 20,

@@ -72,9 +72,9 @@ const { width } = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    width: width / 1.3,
+    marginLeft: 20,
+    marginRight: 20,
+    width: width - 40,
     height: 300,
     borderRadius: 4,
     backgroundColor: '#fffaf0',
@@ -91,20 +91,21 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   body: {
-    height: 255,
+    height: 258,
   },
   imageRoom: {
-    height: 120,
+    height: 135,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    height: 120,
+    height: '100%',
     width: '100%',
+    borderRadius: 4,
   },
   title: {
     position: 'absolute',
-    top: 90,
+    bottom: 10,
     left: 10,
   },
   txtTitle: {
