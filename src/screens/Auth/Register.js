@@ -65,8 +65,6 @@ const Register = (props) => {
       setError('Số điện thoại của bạn không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
-    } else if (dataRegister.fullName.length < 8) {
-      setError('Tên người dùng ít nhất có 8 ký tự !');
     } else {
       setError(false);
       pushScreen(props.componentId, 'CodeRegister', dataRegister, 'CodeRegister', false, '', '');
