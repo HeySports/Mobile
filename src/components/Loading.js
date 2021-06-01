@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, ActivityIndicator, View, Dimensions, SafeAreaView } from 'react-native';
+import Colors from '../themes/colors';
 
 const Loading = (props) => {
   return (
     <SafeAreaView style={props.checkLoading ? styles.container : styles.containerLoading}>
-      <ActivityIndicator size="large" color="#0000ff" />
+      <ActivityIndicator size="large" color={Colors.primary} />
     </SafeAreaView>
   );
 };

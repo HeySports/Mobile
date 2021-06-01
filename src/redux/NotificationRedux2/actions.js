@@ -21,4 +21,4 @@ export const putStatusNotificationSuccess = (response) =>
   makeActionCreator(NotificationTypes.PUT_STATUS_NOTIFICATION_SUCCESS, { response });
 
 export const putStatusNotificationFail = (error) =>
-  makeActionCreator(NotificationTypes.PUT_STATUS_NOTIFICATION_FAIL, { error });
+  makeActionCreator(NotificationTypes.GET_NOTIFICATION_FAIL, { error });
