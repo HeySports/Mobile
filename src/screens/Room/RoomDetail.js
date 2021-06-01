@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,6 +31,7 @@ import MatchActions from '../../redux/MatchesRedux/actions';
 import Load from '../../components/Load';
 import { Navigation } from 'react-native-navigation';
 import { pushScreen } from '../../navigation/pushScreen';
+import CountDown from 'react-native-countdown-component';
 const RoomDetail = (props) => {
   const [id_room] = useState(props.data);
   const matches = useSelector((state) => state.matches);
@@ -42,6 +43,7 @@ const RoomDetail = (props) => {
   const [nameTeam, setNameTeam] = useState('');
   const [description, setDescription] = useState('');
   const [modelNotification, setModelNotification] = useState(false);
+  const [timeKeeper, setTimeKeeper] = useState(timeKeeper);
   useEffect(() => {
     handleRoom();
     if (room) {
@@ -50,6 +52,15 @@ const RoomDetail = (props) => {
       }, 250);
     }
   }, [handleRoom, room]);
+  useLayoutEffect(() => {
+    const dateFormat = 'YYYY-MM-DD HH:mm:ss';
+    // Get your start and end date/times
+    const rightNow = moment().format(dateFormat);
+    const thisTimeYesterday = moment(room?.match?.time_start_play).format(dateFormat);
+    // pass in hours as the second parameter to the diff function
+    var differenceInHours = moment(rightNow).diff(thisTimeYesterday, 'seconds');
+    setTimeKeeper(differenceInHours);
+  }, [room]);
   var data = useSelector((state) => state.matches?.responseMatches);
   const handleRoom = useCallback(async () => {
     const dataList = await data;
@@ -103,6 +114,7 @@ const RoomDetail = (props) => {
     setModelNotification(false);
     pushScreen('RoomDetail', 'Room', '', '', false, '', '');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <TitleView title="CHI TIẾT KÈO ĐẤU" idComponent={props.componentId} />
@@ -149,6 +161,20 @@ const RoomDetail = (props) => {
           <View style={styles.teamA}>
             <View style={styles.imageTeam}>
               <Image source={logoTeam} style={styles.imageLogo} />
+              <View style={styles.timer}>
+                {timeKeeper !== 0 && (
+                  <CountDown
+                    until={timeKeeper}
+                    onFinish={() => alert('finished')}
+                    onPress={() => alert('hello')}
+                    size={15}
+                    digitStyle={styles.itemTimer}
+                    digitTxtStyle={styles.digitTxtStyle}
+                    timeLabelStyle={styles.timeLabelStyle}
+                    timeLabels={{ d: 'Ngày', h: 'Giờ', m: 'Phút', s: 'Giây' }}
+                  />
+                )}
+              </View>
               <View style={styles.nameClub}>
                 <Text style={styles.txtNameClub}>
                   {room?.team_a?.members?.[0]?.team_name
@@ -187,15 +213,6 @@ const RoomDetail = (props) => {
                 <Text style={styles.txtStatus} numberOfLines={3}>
                   {room?.match?.description}
                 </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.teamB}>
-            <View style={styles.joinTeam}>
-              <View style={styles.borderJoinTeam}>
-                <TouchableOpacity style={styles.btnJoinTeam} onPress={handleOffer}>
-                  <Text style={styles.txtBtnJoinTeam}>NHẬN KÈO</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -298,16 +315,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   teamA: {
-    flex: 3,
-  },
-  teamB: {
     flex: 1,
   },
   imageTeam: {
-    height: '40%',
+    height: '50%',
   },
   imageLogo: {
-    height: 160,
+    height: '100%',
     width: '100%',
   },
   nameClub: {
@@ -416,7 +430,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color.primary,
-    borderRadius: 8,
+    borderRadius: 4,
   },
   listMatches: {
     marginBottom: 10,
@@ -443,5 +457,23 @@ const styles = StyleSheet.create({
   },
   descriptionNotification: {
     height: 70,
+  },
+  timer: {
+    position: 'absolute',
+    right: 5,
+    top: 5,
+  },
+  itemTimer: {
+    backgroundColor: Color.primary,
+  },
+  timeLabelStyle: {
+    color: Color.secondary,
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  separatorStyle: {
+    color: Color.secondary,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
