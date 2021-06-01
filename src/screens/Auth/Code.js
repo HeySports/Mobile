@@ -34,7 +34,7 @@ const Code = (props) => {
     signInWithPhoneNumber();
   }, []);
   const goBackScreen = () => {
-    goBack(props.componentId);
+    goBack('login');
   };
   const submitCode = async () => {
     try {
@@ -46,7 +46,7 @@ const Code = (props) => {
           password: props.data.password,
           full_name: props.data.fullName,
           confirm_password: props.data.confirm_password,
-          age: parseInt(props.data.age),
+          age: props.data.age,
           email: props.data.email,
           address: props.data.address,
           description: props.data.description,

@@ -7,7 +7,10 @@ const Input = (props) => {
   const [checkInput, setCheckInput] = useState(true);
   return (
     <View style={styles.container}>
-      <Text style={styles.txtInput}>{props.title}</Text>
+      <Text style={styles.txtInput}>
+        {props.title + ' '}
+        {props.required && <Text style={styles.txtInputRequired}>(*)</Text>}
+      </Text>
       {props.checkPass ? (
         <View style={styles.itemInput}>
           <TextInput
@@ -61,6 +64,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   txtInput: {
+    fontSize: Font.font_description,
+  },
+  txtInputRequired: {
+    color: Colors.error,
     fontSize: Font.font_description,
   },
   input: {

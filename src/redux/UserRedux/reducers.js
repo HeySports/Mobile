@@ -9,7 +9,7 @@ const INITIAL_STATE = Immutable({
   type: '',
   errorCheckPhone: null,
   loadingCheckPhone: false,
-  responseCheckPhone: null,
+  responseCheckPhone: true,
   loadingResetPassword: false,
   responseResetPassword: null,
   errorResetPassword: null,
@@ -24,22 +24,21 @@ export const getAllUser = (state) =>
 export const checkPhone = (state) =>
   state.merge({
     loadingCheckPhone: true,
-    responseCheckPhone: null,
+    responseCheckPhone: true,
     errorCheckPhone: null,
     type: 'CHECK PHONE NUMBER EXISTED',
   });
-export const checkPhoneSuccess = (state, { response }) =>
+export const checkPhoneSuccess = (state) =>
   state.merge({
     loadingCheckPhone: false,
-    responseCheckPhone: response,
+    responseCheckPhone: true,
     errorCheckPhone: null,
     type: 'CHECK PHONE NUMBER EXISTED SUCCESS',
   });
-export const checkPhoneFail = (state, { error }) =>
+export const checkPhoneFail = (state) =>
   state.merge({
-    loadingCheckPhone: true,
-    responseCheckPhone: null,
-    errorCheckPhone: error,
+    loadingCheckPhone: false,
+    responseCheckPhone: false,
     type: 'CHECK PHONE NUMBER EXISTED FAIL',
   });
 export const resetPassword = (state) =>

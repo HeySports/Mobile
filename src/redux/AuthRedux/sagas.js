@@ -1,7 +1,7 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { LoginTypes } from './actions';
 import AuthAction from './actions';
-import { userLoginApi, userRegisterApi } from '../../api/auth';
+import { userLoginApi, userRegisterApi, userCheckPhoneApi } from '../../api/auth';
 import { userStartApp } from '../AppRedux/actions';
 import { pushScreen, goBack } from '../../navigation/pushScreen';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -13,6 +13,16 @@ export function* userLogin({ data }) {
     yield put(userStartApp());
   } catch (error) {
     yield put(AuthAction.userLoginFailure(error));
+  }
+}
+export function* userCheckPhone({ data }) {
+  try {
+    const response = yield call(userCheckPhoneApi, data);
+    console.log('check phone..............................', JSON.stringify(response));
+    yield put(AuthAction.userCheckPhoneSuccess());
+  } catch (error) {
+    yield put(AuthAction.userCheckPhoneFailure());
+    pushScreen('login', 'CodeRegister', data, 'CodeRegister', false, '', '');
   }
 }
 export function* userRegister({ data }) {
@@ -34,5 +44,6 @@ const userAuthSagas = () => [
   takeLatest(LoginTypes.USER_LOGIN, userLogin),
   takeLatest(LoginTypes.USER_REGISTER, userRegister),
   takeLatest(LoginTypes.USER_LOGOUT, userLogout),
+  takeLatest(LoginTypes.USER_CHECK_PHONE, userCheckPhone),
 ];
 export default userAuthSagas();

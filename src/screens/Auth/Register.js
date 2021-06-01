@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
@@ -16,7 +17,9 @@ import { loginScreen, pushScreen } from '../../navigation/pushScreen';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import AsyncStorage from '@react-native-community/async-storage';
+import LoginActions from '../../redux/AuthRedux/actions';
 
+import { useDispatch, useSelector } from 'react-redux';
 const Register = (props) => {
   // const { auth } = setupFirebase();
   const [fullName, setFullName] = useState('');
@@ -28,7 +31,8 @@ const Register = (props) => {
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
-
+  const dispatch = useDispatch();
+  const checkPhone = useSelector((state) => state.auth);
   useEffect(() => {
     getStore();
   }, []);
@@ -47,7 +51,7 @@ const Register = (props) => {
       password: password,
       confirm_password: confirmPassword,
       address: address,
-      age: age,
+      age: parseInt(age),
       email: email,
       description: description,
     };
@@ -65,9 +69,15 @@ const Register = (props) => {
       setError('Số điện thoại của bạn không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
+    } else if (
+      dataRegister.age < 10 ||
+      dataRegister.age > 60 ||
+      !Number.isInteger(dataRegister.age)
+    ) {
+      setError('Số tuổi ' + dataRegister.age + ' không hợp lệ');
     } else {
       setError(false);
-      pushScreen(props.componentId, 'CodeRegister', dataRegister, 'CodeRegister', false, '', '');
+      dispatch(LoginActions.userCheckPhone(dataRegister));
     }
   };
   return (
@@ -82,6 +92,7 @@ const Register = (props) => {
         <View style={styles.center}>
           <Input
             title="Số điện thoại"
+            required={true}
             icon="phone"
             checkPass={false}
             txtChange={(text) => setPhoneNumber(text)}
@@ -89,24 +100,28 @@ const Register = (props) => {
           />
           <Input
             title="Tên người dùng"
+            required={true}
             icon="user-alt"
             checkPass={false}
             txtChange={(text) => setFullName(text)}
           />
           <Input
             title="Email"
+            required={true}
             icon="envelope"
             checkPass={false}
             txtChange={(text) => setEmail(text)}
           />
           <Input
             title="Mật khẩu"
+            required={true}
             icon="low-vision"
             checkPass={true}
             txtChange={(text) => setPassword(text)}
           />
           <Input
             title="Xác nhận mật khẩu"
+            required={true}
             icon="low-vision"
             checkPass={true}
             txtChange={(text) => setConfirmPassword(text)}
@@ -115,7 +130,8 @@ const Register = (props) => {
             <Input
               style={styles.inputAge}
               title="Tuổi"
-              icon="low-vision"
+              required={true}
+              icon="baby-carriage"
               checkPass={false}
               checkTypeInput="phone-pad"
               txtChange={(text) => setAge(text)}
@@ -123,6 +139,7 @@ const Register = (props) => {
             <Input
               style={styles.inputAddress}
               title="Địa chỉ"
+              required={true}
               icon="map-marker-alt"
               checkPass={false}
               txtChange={(text) => setAddress(text)}
@@ -139,10 +156,17 @@ const Register = (props) => {
           />
         </View>
         <View style={styles.bottom}>
-          {error && (
+          {checkPhone.loadingCheckPhone && <ActivityIndicator size="small" color={Color.primary} />}
+          {checkPhone.checkPhone ? (
             <View style={styles.viewError}>
-              <Text style={styles.txtError}>{error}</Text>
+              <Text style={styles.txtError}>Số điện thoại đã đăng kí!</Text>
             </View>
+          ) : (
+            error && (
+              <View style={styles.viewError}>
+                <Text style={styles.txtError}>{error}</Text>
+              </View>
+            )
           )}
           <Button titleBtn="Đăng Ký" checkBtn={true} function={() => register()} />
           <Button

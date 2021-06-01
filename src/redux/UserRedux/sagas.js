@@ -3,7 +3,9 @@ import { userTypes } from './actions';
 import UserAction from './actions';
 import { userStartApp } from '../AppRedux/actions';
 import { pushScreen, goBack } from '../../navigation/pushScreen';
-import { getAllUsersApi, checkPhoneNumberExistedApi, resetPasswordApi } from '../../api/users';
+import { getAllUsersApi, resetPasswordApi } from '../../api/users';
+import { userCheckPhoneApi } from '../../api/auth';
+
 export function* getAllUsers() {
   try {
     const response = yield call(getAllUsersApi);
@@ -12,27 +14,14 @@ export function* getAllUsers() {
     console.log(error);
   }
 }
-function* waitFor(selector) {
-  if (yield select(selector)) {
-    return;
-  } // (1)
-
-  while (true) {
-    yield take('*'); // (1a)
-    if (yield select(selector)) {
-      return;
-    } // (1b)
-  }
-}
 export function* checkPhoneNumberExisted({ data }) {
   try {
-    const response = yield call(checkPhoneNumberExistedApi, data.phone_numbers);
-    yield put(UserAction.checkPhoneNumberExistedSuccess(response.data));
-    yield call(waitFor, (state) => state.users.responseCheckPhone != null);
+    const response = yield call(userCheckPhoneApi, data);
+    yield put(UserAction.checkPhoneNumberExistedSuccess());
     pushScreen('login', 'Code', data.phone_numbers, 'Code', false, '', '');
   } catch (error) {
     console.log(error);
-    yield put(UserAction.checkPhoneNumberExistedFail(error));
+    yield put(UserAction.checkPhoneNumberExistedFail());
   }
 }
 export function* resetPassword({ data }) {

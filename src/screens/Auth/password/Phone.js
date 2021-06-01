@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
 import Font from '../../../themes/font';
@@ -16,12 +16,7 @@ const Phone = (props) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const responseCheckPhone = useSelector((state) => state.users.responseCheckPhone);
-  // useEffect(() => {
-  //   if (responseCheckPhone !== null && responseCheckPhone.length > 0) {
-  //     pushScreen(props.componentId, 'Code', phoneNumber, 'Code', false, '', '');
-  //   }
-  // }, [responseCheckPhone]);
+  const responseCheckPhone = useSelector((state) => state.users);
   const pushNextScreen = async () => {
     if (phoneNumber === '' || phoneNumber.length > 13 || phoneNumber.length < 10) {
       setError('Số điện thoại của bạn không đúng !');
@@ -38,7 +33,7 @@ const Phone = (props) => {
     goBack(props.componentId);
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.top}>
           <Back goBack={goBackScreen} />
@@ -67,11 +62,20 @@ const Phone = (props) => {
           />
         </View>
         <View style={styles.buttonBottom}>
+          {responseCheckPhone.loadingCheckPhone && (
+            <ActivityIndicator size="small" color={Color.secondary} />
+          )}
           <Button titleBtn="Gửi mã" checkBtn={true} checkColor={true} function={pushNextScreen} />
-          {error && (
+          {responseCheckPhone.responseCheckPhone ? (
             <View style={styles.viewError}>
-              <Text style={styles.txtError}>{error}</Text>
+              <Text style={styles.txtError}>Số điện thoại chưa được đăng kí!</Text>
             </View>
+          ) : (
+            error && (
+              <View style={styles.viewError}>
+                <Text style={styles.txtError}>{error}</Text>
+              </View>
+            )
           )}
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <View elevation={5} style={[styles.number]}>
@@ -95,7 +99,7 @@ const Phone = (props) => {
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const { height, width } = Dimensions.get('window');
