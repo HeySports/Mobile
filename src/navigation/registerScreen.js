@@ -27,7 +27,7 @@ import User from '../screens/Profile/users/Index';
 import Search from '../screens/Search/Index';
 import ListField from '../screens/Field/ListField';
 import Booking from '../screens/Booking/index';
-import { RoomDetail, FindMember, Orders } from '../screens';
+import { RoomDetail, FindMember, Orders, Team, TeamDetail } from '../screens';
 function ReduxProvider(Component) {
   return (props) => (
     <Provider store={store}>
@@ -36,6 +36,16 @@ function ReduxProvider(Component) {
   );
 }
 export function registerScreens() {
+  Navigation.registerComponent(
+    'TeamDetail',
+    () => ReduxProvider(TeamDetail),
+    () => TeamDetail,
+  );
+  Navigation.registerComponent(
+    'Team',
+    () => ReduxProvider(Team),
+    () => Team,
+  );
   Navigation.registerComponent(
     'Orders',
     () => ReduxProvider(Orders),
