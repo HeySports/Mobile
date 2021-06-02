@@ -24,11 +24,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import MatchesAction from '../../redux/MatchesRedux/actions';
 import ProfileAction from '../../redux/ProfileRedux/actions';
 import FieldAction from '../../redux/FieldRedux/actions';
-import Player from '../../components/Player';
 import UserAction from '../../redux/UserRedux/actions';
 import SplashScreen from 'react-native-splash-screen';
 import ItemFindMembers from '../../components/ItemFindMembers';
 import LoadingView from '../../components/Loading';
+import TeamActions from '../../redux/TeamRedux/actions';
+import ItemTeam from '../../components/team/ItemTeam';
 const data = {
   dataSlide: [
     {
@@ -56,15 +57,15 @@ const Home = (props) => {
     dispatch(FieldAction.getListField());
     dispatch(UserAction.getAllUsers());
     dispatch(ProfileAction.userGetProfile());
+    dispatch(TeamActions.getListTeam());
   }, [dispatch]);
 
   // selector
   var fields = [];
-  const users = useSelector((state) => state.users);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
+  const listTeam = useSelector((state) => state.team?.listTeam);
   // data of all list
-  var listUsers = [];
   if (listField.responseField) {
     fields = listField.responseField;
   }
@@ -85,24 +86,6 @@ const Home = (props) => {
   const viewMorePitch = () => {
     pushScreen(props.componentId, 'Field', '', 'Field', false, '', '');
   };
-  if (users.responseUser) {
-    const userRating = users.responseUser;
-    userRating.forEach((element) => {
-      const rating = (Number(element.skill_rating) + Number(element.attitude_rating)) / 2;
-      let user = {
-        id: element.id,
-        full_name: element.full_name,
-        image: element.image,
-        position_play: element.position_play,
-        skill_rating: rating,
-      };
-      listUsers.push(user);
-    });
-  }
-  var usersRating = [];
-  if (listUsers.length > 0) {
-    usersRating = listUsers.sort((a, b) => (a.skill_rating < b.skill_rating ? 1 : -1));
-  }
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -180,49 +163,25 @@ const Home = (props) => {
           <View style={styles.listRoom}>
             <Text style={styles.row} />
             <Title title="Sân Bóng" functionViewMore={viewMorePitch} />
-
-            <ScrollView
-              style={styles.listScrolls}
-              horizontal={true}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
-              {fields.map((item, index) => {
-                return (
-                  <Pitch
-                    key={index}
-                    id={item.id}
-                    nameField={item.name}
-                    address={item.address}
-                    timeStart="06:00"
-                    timeEnd="22:00"
-                    idProps={props.componentId}
-                  />
-                );
-              })}
-            </ScrollView>
+            <View style={styles.team}>
+              <FlatList
+                data={fields}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => <Pitch item={item} key={index} />}
+              />
+            </View>
           </View>
           <View style={styles.listRoom}>
-            <Text style={styles.row} />
-            <Title title="Cầu thủ tiềm năng" checkTitle={true} />
-
-            <ScrollView
-              style={styles.listUserRating}
-              horizontal={true}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
-              {usersRating?.slice(0, 10).map((item, index) => {
-                return (
-                  <Player
-                    idComponent={props.componentId}
-                    items={item}
-                    key={index}
-                    image={imageUser}
-                  />
-                );
-              })}
-            </ScrollView>
+            <Title title="Đội Bóng Tiềm Năng" checkTitle={true} />
+            <View style={styles.team}>
+              <FlatList
+                data={listTeam}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => <ItemTeam item={item} key={index} />}
+              />
+            </View>
           </View>
         </ScrollView>
       )}
@@ -357,5 +316,10 @@ const styles = StyleSheet.create({
     width: width,
     marginTop: 20,
     height: 110,
+  },
+  team: {
+    flex: 1,
+    paddingBottom: 20,
+    paddingTop: 20,
   },
 });

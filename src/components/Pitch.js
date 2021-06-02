@@ -5,27 +5,41 @@ import pitch from '../image/duytan.jpg';
 import Color from '../themes/colors';
 import Font from '../themes/font';
 import { pushScreen } from '../navigation/pushScreen';
-const Pitch = (props) => {
+import Star from './Star';
+const Pitch = ({ item }) => {
   const detailPitch = () => {
-    pushScreen(props.idProps, 'Detail', props.id, 'Detail', false, '', '');
+    pushScreen('Home', 'Detail', item?.id, 'Detail', false, '', '');
   };
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={detailPitch}>
         <View style={styles.image}>
           <Image source={pitch} style={styles.imagePitch} />
+          <View style={styles.rating}>
+            <Star star={item?.rating} size={15} />
+          </View>
         </View>
         <View>
           <View style={styles.detailPitch}>
             <View style={styles.title}>
-              <Text style={styles.txtTitle}>{props.nameField}</Text>
+              <Text style={styles.txtTitle}>{item?.name?.toUpperCase()}</Text>
             </View>
             <View style={styles.content}>
               <View style={styles.iconDetailPitch}>
                 <Icon name="map-marker-alt" style={styles.iconDetail} />
               </View>
               <View style={styles.txtDetailPitch}>
-                <Text style={styles.txtDetail}>{props.address}</Text>
+                <Text style={styles.txtDetail}>{item?.address}</Text>
+              </View>
+            </View>
+            <View style={styles.content}>
+              <View style={styles.iconDetailPitch}>
+                <Icon name="database" style={styles.iconDetail} />
+              </View>
+              <View style={styles.txtDetailPitch}>
+                <Text style={styles.txtDetail}>
+                  {'Số lượng sân có: ' + item?.quantities_field + ' sân'}
+                </Text>
               </View>
             </View>
             <View style={styles.content}>
@@ -33,9 +47,7 @@ const Pitch = (props) => {
                 <Icon name="clock" style={styles.iconDetail} />
               </View>
               <View style={styles.txtDetailPitch}>
-                <Text style={styles.txtDetail}>
-                  {props.timeStart} - {props.timeEnd}
-                </Text>
+                <Text style={styles.txtDetail}>5:00 am - 23:00 pm</Text>
               </View>
             </View>
           </View>
@@ -50,22 +62,31 @@ const { width } = Dimensions.get('window');
 const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
-    width: (150 / startWidth) * width,
-    height: 200,
-    marginLeft: (10 / startWidth) * width,
-    marginRight: (10 / startWidth) * width,
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: Color.txtLevel2,
+    width: width - 40,
+    height: 250,
+    marginLeft: (20 / startWidth) * width,
+    marginRight: (20 / startWidth) * width,
     borderRadius: 4,
+    shadowColor: '#000',
+    backgroundColor: Color.item,
+    shadowOffset: {
+      width: 5,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   image: {
     width: '100%',
+    borderRadius: 4,
     height: '50%',
   },
   imagePitch: {
     width: '100%',
     height: '100%',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
   },
   detailPitch: {
     width: '100%',
@@ -75,28 +96,29 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '70%',
+    height: 30,
   },
   txtTitle: {
-    fontSize: Font.title_child4,
+    fontSize: Font.title_child3,
     fontWeight: '700',
     color: Color.primary,
     textAlign: 'center',
   },
   content: {
-    height: '60%',
+    height: 30,
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
   },
   iconDetailPitch: {
-    width: '20%',
+    width: '10%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   txtDetailPitch: {
-    width: '80%',
+    width: '85%',
     justifyContent: 'center',
+    marginLeft: 8,
   },
   iconDetail: {
     fontSize: 15,
@@ -105,5 +127,10 @@ const styles = StyleSheet.create({
   txtDetail: {
     fontSize: 12,
     color: Color.primary,
+  },
+  rating: {
+    position: 'absolute',
+    bottom: 5,
+    left: 10,
   },
 });
