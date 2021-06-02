@@ -4,9 +4,17 @@ import { Colors, Fonts, ScreenSize } from '../../themes';
 import Images from '../../image/index';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Star from '../../components/Star';
+import { pushScreen } from '../../navigation/pushScreen';
+import { useDispatch } from 'react-redux';
+import TeamActions from '../../redux/TeamRedux/actions';
 const ItemTeam = ({ item }) => {
+  const dispatch = useDispatch();
+  const onDetailTeam = async () => {
+    dispatch(TeamActions.getTeamDetail(item?.id));
+    pushScreen('Home', 'TeamDetail', item?.id, false, false, false, false, false);
+  };
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onDetailTeam}>
       <View style={styles.teamImage}>
         <Image source={item?.image ? { uri: item?.image } : Images.vn} style={styles.imgTeam} />
         <View style={styles.rating}>

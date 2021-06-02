@@ -6,6 +6,9 @@ export const teamTypes = makeConstantCreator(
   'GET_LIST_TEAM',
   'GET_LIST_TEAM_SUCCESS',
   'GET_LIST_TEAM_FAILURE',
+  'GET_TEAM_DETAIL',
+  'GET_TEAM_DETAIL_SUCCESS',
+  'GET_TEAM_DETAIL_FAILURE',
 );
 const userGetTeam = (id) => makeActionCreator(teamTypes.USER_GET_TEAM, { id });
 const userGetTeamSuccess = (response) =>
@@ -15,6 +18,13 @@ const getListTeam = () => makeActionCreator(teamTypes.GET_LIST_TEAM);
 const getListTeamSuccess = (response) =>
   makeActionCreator(teamTypes.GET_LIST_TEAM_SUCCESS, { response });
 const getListTeamFailure = (error) => makeActionCreator(teamTypes.GET_LIST_TEAM_FAILURE, { error });
+const getTeamDetail = (id) => makeActionCreator(teamTypes.GET_TEAM_DETAIL, { id });
+const getTeamDetailSuccess = (response) =>
+  makeActionCreator(teamTypes.GET_TEAM_DETAIL_SUCCESS, { response });
+
+const getTeamDetailFailure = (error) =>
+  makeActionCreator(teamTypes.GET_TEAM_DETAIL_FAILURE, { error });
+
 export default {
   userGetTeam,
   userGetTeamSuccess,
@@ -22,4 +32,7 @@ export default {
   getListTeam,
   getListTeamSuccess,
   getListTeamFailure,
+  getTeamDetail,
+  getTeamDetailSuccess,
+  getTeamDetailFailure,
 };
