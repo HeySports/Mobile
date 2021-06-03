@@ -12,10 +12,13 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
 import imageUser from '../../image/thanh.jpg';
+import logo from '../../image/logo.png';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
+import slide2 from '../../image/slide2.jpg';
+import slide3 from '../../image/slide3.jpg';
 import ItemRoom from '../../components/ItemRoom';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
@@ -33,10 +36,10 @@ import ItemTeam from '../../components/team/ItemTeam';
 const data = {
   dataSlide: [
     {
-      image: slide1,
+      image: slide2,
     },
     {
-      image: slide1,
+      image: slide3,
     },
     {
       image: slide1,
@@ -91,7 +94,7 @@ const Home = (props) => {
       <View style={styles.topBar}>
         <View style={styles.borderProfile}>
           <View style={styles.imageProfile}>
-            <Image source={imageUser} style={styles.imgUser} />
+            <Image source={logo} style={styles.imgUser} />
           </View>
         </View>
         <View style={styles.searchHeader}>
@@ -208,12 +211,14 @@ const styles = StyleSheet.create({
   },
   topBar: {
     width: width,
-    height: 50,
+    height: 55,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: Color.txtLevel2,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   borderProfile: {
     flex: 2,
@@ -268,6 +273,7 @@ const styles = StyleSheet.create({
   },
   containerHome: {
     flex: 1,
+    marginTop: 5,
   },
   slider: {
     height: 200,
@@ -278,7 +284,8 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     marginHorizontal: 8,
-    backgroundColor: '#0E5CF4',
+    backgroundColor: Color.secondary,
+    elevation: 1,
   },
   dot: {
     width: 8,

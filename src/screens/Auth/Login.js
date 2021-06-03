@@ -58,10 +58,8 @@ const Login = (props) => {
   });
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.txtTitle}>Đăng Nhập</Text>
-      </View>
       <ScrollView style={styles.contentLogin}>
+        <View style={styles.title} />
         <View style={styles.header}>
           <Image source={logo} style={styles.logo} />
         </View>
@@ -93,7 +91,7 @@ const Login = (props) => {
         <View style={styles.bottom}>
           <Button titleBtn="Đăng nhập" checkBtn={true} function={handleTextInput} />
           <Button
-            titleBtn="Đăng Ký ngay"
+            titleBtn="Đăng Ký"
             checkBtn={false}
             title="Bạn chưa có tài khoản ?"
             function={register}

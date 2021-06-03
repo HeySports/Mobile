@@ -84,10 +84,8 @@ const Register = (props) => {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.txtTitle}> Đăng Ký</Text>
-      </View>
       <ScrollView style={styles.body}>
+        <View style={styles.title} />
         <View style={styles.header}>
           <Image source={logo} style={styles.logo} />
         </View>
@@ -141,7 +139,6 @@ const Register = (props) => {
             <Input
               style={styles.inputAddress}
               title="Địa chỉ"
-              required={true}
               icon="map-marker-alt"
               checkPass={false}
               txtChange={(text) => setAddress(text)}
@@ -172,7 +169,7 @@ const Register = (props) => {
           )}
           <Button titleBtn="Đăng Ký" checkBtn={true} function={() => register()} />
           <Button
-            titleBtn="Đăng Nhập ngay"
+            titleBtn="Đăng Nhập"
             checkBtn={false}
             title="Bạn đã có tài khoản ?"
             function={loginScreen}

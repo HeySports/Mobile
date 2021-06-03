@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     width: width,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FFFFFF',
+    borderColor: 'white',
+    borderBottomColor: Color.backgroud,
     backgroundColor: '#FFFFFF',
   },
   iconLeft: {
