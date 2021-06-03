@@ -24,7 +24,7 @@ export const getAllUser = (state) =>
 export const checkPhone = (state) =>
   state.merge({
     loadingCheckPhone: true,
-    responseCheckPhone: true,
+    responseCheckPhone: false,
     errorCheckPhone: null,
     type: 'CHECK PHONE NUMBER EXISTED',
   });
@@ -57,7 +57,7 @@ export const resetPasswordSuccess = (state, { response }) =>
   });
 export const resetPasswordFail = (state, { error }) =>
   state.merge({
-    loadingResetPassword: true,
+    loadingResetPassword: false,
     responseResetPassword: null,
     errorResetPassword: error,
     type: 'RESET PASSWORD FAIL',

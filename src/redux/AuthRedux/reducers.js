@@ -10,7 +10,7 @@ export const INITIAL_STATE = Immutable({
   errorRegister: null,
   token: null,
   type: '',
-  checkPhone: false,
+  checkPhone: true,
   loadingCheckPhone: false,
   loadingRegister: false,
   responseRegister: null,

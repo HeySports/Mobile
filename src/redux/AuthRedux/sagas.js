@@ -5,9 +5,16 @@ import { userLoginApi, userRegisterApi, userCheckPhoneApi } from '../../api/auth
 import { userStartApp } from '../AppRedux/actions';
 import { pushScreen, goBack } from '../../navigation/pushScreen';
 import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
 export function* userLogin({ data }) {
   try {
-    const response = yield call(userLoginApi, data);
+    const device_token = yield messaging().getToken();
+    const dataApi = {
+      device_token: device_token,
+      password: data.password,
+      phone_numbers: data.phone_numbers,
+    };
+    const response = yield call(userLoginApi, dataApi);
     yield AsyncStorage.setItem('token', response.data.access_token);
     yield put(AuthAction.userLoginSuccess(response?.data));
     yield put(userStartApp());
@@ -29,7 +36,7 @@ export function* userRegister({ data }) {
   try {
     console.log('register saga: ');
     const response = yield call(userRegisterApi, data);
-    yield put(userStartApp());
+    yield put(AuthAction.userLogin(data));
   } catch (error) {
     yield put(AuthAction.userRegisterFailure(error));
     goBack();

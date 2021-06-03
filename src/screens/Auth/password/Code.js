@@ -22,14 +22,9 @@ const Code = (props) => {
   const [code, setCode] = useState('');
   const [loading, setloading] = useState(true);
   const [confirm, setConfirm] = useState(null);
-  const responseCheckPhone = useSelector((state) => state.users.responseCheckPhone);
   useEffect(() => {
-    if (responseCheckPhone !== null && responseCheckPhone.length > 0) {
-      signInWithPhoneNumber();
-    } else {
-      goBackScreen();
-    }
-  }, [responseCheckPhone]);
+    signInWithPhoneNumber();
+  }, []);
   const signInWithPhoneNumber = async () => {
     try {
       const formatPhoneNumberFirebase = '+84' + props.data.substring(1, props.data.length);

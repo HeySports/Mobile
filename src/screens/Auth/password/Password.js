@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../themes/colors';
 import Font from '../../../themes/font';
@@ -16,6 +16,7 @@ const Password = (props) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorLogin, setErrorLogin] = useState(false);
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.users);
   const savePassword = () => {
     if (password !== confirmPassword) {
       setErrorLogin('Không khớp mật khẩu?');
@@ -65,7 +66,11 @@ const Password = (props) => {
           />
         </View>
         <View style={styles.buttonBottom}>
+          {loading.loadingResetPassword && (
+            <ActivityIndicator size="small" color={Color.secondary} />
+          )}
           {errorLogin && <Error messageError={errorLogin} />}
+
           <Button titleBtn="Xác Nhận" checkBtn={true} checkColor={true} function={savePassword} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <View elevation={5} style={[styles.number, { backgroundColor: 'white' }]}>

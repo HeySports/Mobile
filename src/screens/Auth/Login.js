@@ -20,6 +20,7 @@ import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import { LocalNotification } from '../../utils/localPushController';
+
 import Error from '../../components/Error';
 const Login = (props) => {
   const [phone, setPhone] = useState('');
