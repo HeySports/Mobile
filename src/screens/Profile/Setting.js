@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     height: height,
-    backgroundColor: Color.backgroud,
+    backgroundColor: 'white',
   },
   header: {
     height: 50,

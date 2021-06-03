@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1d9dd8',
   },
   imageSlide: {
-    height: 170,
+    height: 200,
     width: '100%',
   },
 });

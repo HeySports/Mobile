@@ -58,7 +58,7 @@ const Profile = (props) => {
     <View style={styles.container}>
       {profileStore.loadingProfile ? (
         <View style={styles.containerLoading}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={Color.primary} />
         </View>
       ) : (
         <View style={styles.container}>

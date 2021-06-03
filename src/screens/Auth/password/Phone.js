@@ -12,13 +12,14 @@ import Back from '../../../components/Back';
 import { pushScreen, goBack } from '../../../navigation/pushScreen';
 import UserActions from '../../../redux/UserRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { validatePhone } from '../../../utils/checker';
 const Phone = (props) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const responseCheckPhone = useSelector((state) => state.users);
   const pushNextScreen = async () => {
-    if (phoneNumber === '' || phoneNumber.length > 13 || phoneNumber.length < 10) {
+    if (!validatePhone(phoneNumber)) {
       setError('Số điện thoại của bạn không đúng !');
     } else {
       try {
@@ -66,7 +67,7 @@ const Phone = (props) => {
             <ActivityIndicator size="small" color={Color.secondary} />
           )}
           <Button titleBtn="Gửi mã" checkBtn={true} checkColor={true} function={pushNextScreen} />
-          {responseCheckPhone.responseCheckPhone ? (
+          {!responseCheckPhone.responseCheckPhone ? (
             <View style={styles.viewError}>
               <Text style={styles.txtError}>Số điện thoại chưa được đăng kí!</Text>
             </View>

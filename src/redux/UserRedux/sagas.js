@@ -1,6 +1,7 @@
 import { call, takeLatest, put, take, select } from 'redux-saga/effects';
 import { userTypes } from './actions';
 import UserAction from './actions';
+import AuthAction from '../AuthRedux/actions';
 import { userStartApp } from '../AppRedux/actions';
 import { pushScreen, goBack } from '../../navigation/pushScreen';
 import { getAllUsersApi, resetPasswordApi } from '../../api/users';
@@ -28,7 +29,7 @@ export function* resetPassword({ data }) {
   try {
     const response = yield call(resetPasswordApi, data);
     yield put(UserAction.resetPasswordSuccess(response.data));
-    yield put(userStartApp());
+    yield put(AuthAction.userLogin(data));
   } catch (error) {
     console.log(error);
     yield put(UserAction.resetPasswordFail(error));

@@ -25,6 +25,9 @@ export const pushScreen = (
           options: {
             topBar: {
               visible: visible,
+              background: {
+                color: Colors.primary,
+              },
               title: {
                 text: title,
               },

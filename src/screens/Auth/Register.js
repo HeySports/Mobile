@@ -18,7 +18,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import AsyncStorage from '@react-native-community/async-storage';
 import LoginActions from '../../redux/AuthRedux/actions';
-
+import { validateEmail, validatePhone } from '../../utils/checker';
 import { useDispatch, useSelector } from 'react-redux';
 const Register = (props) => {
   // const { auth } = setupFirebase();
@@ -63,18 +63,20 @@ const Register = (props) => {
       dataRegister.password === ''
     ) {
       setError('Bạn phải nhập đầy đủ thông tin bắt buộc !');
-    } else if (dataRegister.password !== dataRegister.confirm_password) {
-      setError('Mật khẩu không khớp !');
-    } else if (dataRegister.phone_numbers.length > 13 || dataRegister.phone_numbers.length < 10) {
+    } else if (!validatePhone(dataRegister.phone_numbers)) {
       setError('Số điện thoại của bạn không đúng !');
+    } else if (!validateEmail(dataRegister.email)) {
+      setError('Email của bạn nhập không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
+    } else if (dataRegister.password !== dataRegister.confirm_password) {
+      setError('Mật khẩu không trùng khớp !');
     } else if (
       dataRegister.age < 10 ||
       dataRegister.age > 60 ||
       !Number.isInteger(dataRegister.age)
     ) {
-      setError('Số tuổi ' + dataRegister.age + ' không hợp lệ');
+      setError('Số tuổi ' + dataRegister.age + ' không hợp lệ (10-60 tuổi)');
     } else {
       setError(false);
       dispatch(LoginActions.userCheckPhone(dataRegister));
@@ -82,10 +84,8 @@ const Register = (props) => {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.txtTitle}> Đăng Ký</Text>
-      </View>
       <ScrollView style={styles.body}>
+        <View style={styles.title} />
         <View style={styles.header}>
           <Image source={logo} style={styles.logo} />
         </View>
@@ -139,7 +139,6 @@ const Register = (props) => {
             <Input
               style={styles.inputAddress}
               title="Địa chỉ"
-              required={true}
               icon="map-marker-alt"
               checkPass={false}
               txtChange={(text) => setAddress(text)}
@@ -170,7 +169,7 @@ const Register = (props) => {
           )}
           <Button titleBtn="Đăng Ký" checkBtn={true} function={() => register()} />
           <Button
-            titleBtn="Đăng Nhập ngay"
+            titleBtn="Đăng Nhập"
             checkBtn={false}
             title="Bạn đã có tài khoản ?"
             function={loginScreen}
