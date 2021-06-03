@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  TextInput,
+  FlatList,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import TeamActions from '../../../redux/TeamRedux/actions';
@@ -16,6 +18,8 @@ import { Colors, Fonts, ScreenSize } from '../../../themes';
 import { Navigation } from 'react-native-navigation';
 import Images from '../../../image';
 import Star from '../../../components/Star';
+import { formatDate } from '../../../utils/Tools';
+import Player from '../../../components/team/PlayerTeam';
 const Detail = ({ data }) => {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
@@ -23,7 +27,7 @@ const Detail = ({ data }) => {
   const [comment, setComment] = useState(false);
   const [information, setInformation] = useState(true);
   const [members, setMembers] = useState(false);
-
+  const [joinTeam, setJoinTeam] = useState(false);
   const onMembers = () => {
     setComment(false);
     setInformation(false);
@@ -39,6 +43,9 @@ const Detail = ({ data }) => {
     setInformation(true);
     setMembers(false);
   };
+  console.log('====================================');
+  console.log(team);
+  console.log('====================================');
   const ItemMenu = ({ label, icon, onPress, colorText, colorBtn, colorIcon, fontWeight }) => {
     return (
       <TouchableOpacity
@@ -48,6 +55,51 @@ const Detail = ({ data }) => {
         <Icons name={icon} style={[styles.iconMenu, { color: colorIcon }]} />
         <Text style={[styles.txtBtn, { color: colorText, fontWeight: fontWeight }]}>{label}</Text>
       </TouchableOpacity>
+    );
+  };
+  const ItemInformation = () => {
+    return (
+      <View style={styles.containerInformation}>
+        <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
+        <View style={styles.itemInformation}>
+          <Icons name="map-marked-alt" style={styles.iconItemInfo} />
+          <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.address}</Text>
+        </View>
+        <View style={styles.itemInformation}>
+          <Icons name="calendar-alt" style={[styles.iconItemInfo, { fontSize: 18 }]} />
+          <Text style={styles.txtItemInfo}>
+            {'Ngày Thành Lâp: ' +
+              formatDate(
+                team?.teamDetail?.team?.created_at
+                  ? team?.teamDetail?.team?.created_at
+                  : new Date(),
+              )}
+          </Text>
+        </View>
+        <View style={styles.description}>
+          <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
+        </View>
+        {joinTeam && (
+          <View style={styles.descriptionJoin}>
+            <TextInput
+              style={styles.txtInputJoinTeam}
+              numberOfLines={64}
+              placeholder="Mô tả về bạn"
+            />
+          </View>
+        )}
+        <View style={styles.bottomItemInformation}>
+          {joinTeam ? (
+            <TouchableOpacity style={styles.btnJoinTeam}>
+              <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.btnJoinTeam} onPress={() => setJoinTeam(true)}>
+              <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
     );
   };
 
@@ -63,7 +115,6 @@ const Detail = ({ data }) => {
           <Text style={styles.txtTitle}>CHI TIẾT ĐỘI BÓNG</Text>
         </View>
       </View>
-
       {team?.loading ? (
         <Loading />
       ) : (
@@ -72,9 +123,9 @@ const Detail = ({ data }) => {
             <Image source={Images.vn} style={styles.imgTeam} />
             <View style={styles.teamDetail}>
               <Text style={styles.txtNameTeam} numberOfLines={2}>
-                {team?.teamDetail?.name?.toUpperCase()}
+                {team?.teamDetail?.team?.name?.toUpperCase()}
               </Text>
-              <Star star={team?.teamDetail?.rating} size={18} />
+              <Star star={team?.teamDetail?.team.rating} size={18} />
             </View>
           </View>
           <View style={styles.menuTeam}>
@@ -89,7 +140,7 @@ const Detail = ({ data }) => {
             />
             <ItemMenu
               icon="users"
-              label="Cầu (10)"
+              label={'Cầu (' + team?.teamDetail?.userOfTeam?.length + ')'}
               onPress={onMembers}
               colorBtn={members ? Colors.secondary : null}
               colorIcon={members ? Colors.primary : Colors.secondary}
@@ -98,7 +149,7 @@ const Detail = ({ data }) => {
             />
             <ItemMenu
               icon="comment-dots"
-              label="Đánh Giá (10)"
+              label={'Đánh Giá(' + team?.teamDetail?.commentOfTeam?.length + ')'}
               onPress={onComment}
               colorBtn={comment ? Colors.secondary : null}
               colorIcon={comment ? Colors.primary : Colors.secondary}
@@ -106,7 +157,24 @@ const Detail = ({ data }) => {
               fontWeight={comment ? '700' : '400'}
             />
           </View>
-          <Text>DetailTeam</Text>
+          <View style={styles.containerBody}>
+            {information && <ItemInformation />}
+            {members && (
+              <View style={styles.containerMemberTeam}>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={team?.teamDetail?.userOfTeam}
+                  renderItem={({ item, index }) => <Player key={index} player={item} />}
+                />
+              </View>
+            )}
+            {comment && (
+              <View>
+                <Text>Comment</Text>
+              </View>
+            )}
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -191,5 +259,81 @@ const styles = StyleSheet.create({
   },
   iconMenu: {
     fontSize: Fonts.font_description,
+  },
+  containerBody: {
+    flex: 1,
+  },
+  txtTitleInfo: {
+    fontSize: Fonts.title_child2,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  itemInformation: {
+    flexDirection: 'row',
+    paddingLeft: 5,
+    height: 30,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  iconItemInfo: {
+    fontSize: Fonts.font_description,
+    color: Colors.primary,
+  },
+  txtItemInfo: {
+    fontSize: Fonts.font_description,
+    marginLeft: 15,
+    color: Colors.greyishBrown,
+  },
+  description: {
+    padding: 5,
+    paddingTop: 10,
+  },
+  bottomItemInformation: {
+    height: 50,
+    paddingLeft: 50,
+    paddingRight: 50,
+    position: 'absolute',
+    bottom: 0,
+    width: ScreenSize.Screen_Width,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnJoinTeam: {
+    backgroundColor: Colors.primary,
+    width: '100%',
+    height: 45,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerInformation: {
+    height: ScreenSize.Screen_Height / 2.6,
+    paddingLeft: 20,
+    paddingRight: 20,
+    width: ScreenSize.Screen_Width,
+  },
+  txtBtnJoinTeam: {
+    fontSize: Fonts.title_child4,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  descriptionJoin: {
+    height: 100,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginTop: 10,
+  },
+  txtInputJoinTeam: {
+    height: 80,
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: Colors.txtLevel2,
+    paddingLeft: 5,
+    textAlignVertical: 'top',
+  },
+  containerMemberTeam: {
+    paddingTop: 10,
+    width: ScreenSize.Screen_Width,
   },
 });
