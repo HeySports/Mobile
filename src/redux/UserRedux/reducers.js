@@ -24,7 +24,7 @@ export const getAllUser = (state) =>
 export const checkPhone = (state) =>
   state.merge({
     loadingCheckPhone: true,
-    responseCheckPhone: false,
+    responseCheckPhone: true,
     errorCheckPhone: null,
     type: 'CHECK PHONE NUMBER EXISTED',
   });

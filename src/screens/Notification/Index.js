@@ -62,10 +62,13 @@ const Notification = () => {
         <Icon name="bell" style={checkNotification ? styles.icons : styles.icon} />
       </View>
       <ScrollView style={styles.listView}>
-        {list &&
+        {list ? (
           list.map((item, index) => {
             return <ItemNotification item={item} checkItem={item.status === 1} />;
-          })}
+          })
+        ) : (
+          <Text>Không có thông báo</Text>
+        )}
       </ScrollView>
     </View>
   );

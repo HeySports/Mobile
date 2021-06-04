@@ -10,7 +10,7 @@ export const INITIAL_STATE = Immutable({
   errorRegister: null,
   token: null,
   type: '',
-  checkPhone: false,
+  checkPhone: true,
   loadingCheckPhone: false,
   loadingRegister: false,
   responseRegister: null,
@@ -33,13 +33,13 @@ export const userCheckPhone = (state) =>
 export const userCheckPhoneSuccess = (state) =>
   state.merge({
     type: 'User CheckPhone Exist',
-    checkPhone: true,
+    checkPhone: false,
     loadingCheckPhone: false,
   });
 export const userCheckPhoneFailure = (state) =>
   state.merge({
     type: 'User CheckPhone not Exist',
-    checkPhone: false,
+    checkPhone: true,
     loadingCheckPhone: false,
   });
 export const userRegister = (state) =>

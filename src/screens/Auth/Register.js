@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable radix */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
@@ -35,7 +36,10 @@ const Register = (props) => {
   const checkPhone = useSelector((state) => state.auth);
   useEffect(() => {
     getStore();
-  }, []);
+    if (phoneNumber !== '') {
+      !checkPhone.checkPhone ? setError('Số điện thoại này đã đăng kí!') : setError(false);
+    }
+  }, [checkPhone.checkPhone]);
   const getStore = async () => {
     try {
       const location = await AsyncStorage.getItem('location');
@@ -65,7 +69,7 @@ const Register = (props) => {
       setError('Bạn phải nhập đầy đủ thông tin bắt buộc !');
     } else if (!validatePhone(dataRegister.phone_numbers)) {
       setError('Số điện thoại của bạn không đúng !');
-    } else if (!validateEmail(dataRegister.email)) {
+    } else if (validateEmail(dataRegister.email)) {
       setError('Email của bạn nhập không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
@@ -155,11 +159,8 @@ const Register = (props) => {
           />
         </View>
         <View style={styles.bottom}>
-          {checkPhone.loadingCheckPhone && <ActivityIndicator size="small" color={Color.primary} />}
-          {checkPhone.checkPhone ? (
-            <View style={styles.viewError}>
-              <Text style={styles.txtError}>Số điện thoại đã đăng kí!</Text>
-            </View>
+          {checkPhone.loadingCheckPhone ? (
+            <ActivityIndicator size="small" color={Color.primary} />
           ) : (
             error && (
               <View style={styles.viewError}>
