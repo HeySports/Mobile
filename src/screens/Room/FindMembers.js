@@ -71,7 +71,7 @@ const FindMembers = (props) => {
   const fields = useSelector((state) => state.fields);
   const user = useSelector((state) => state.profile?.responseProfile);
   const matches = useSelector((state) => state.matches);
-  const orders = useSelector((state) => state.orders.orders);
+  const orders = useSelector((state) => state?.orders?.orders);
   const team = useSelector((state) => state.team?.team);
   const [mode, setMode] = useState('time');
   const [show, setShow] = useState(false);
@@ -334,7 +334,7 @@ const FindMembers = (props) => {
                 name_room: nameRoom,
                 user_id: user?.id,
                 time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
-                price: orders?.orderInfo?.price,
+                price: priceField ? priceField?.[0]?.price : 0,
                 type: optionMatch ? 0 : 1,
                 lose_pay: losePayment,
                 method_pay: 0,
@@ -356,7 +356,7 @@ const FindMembers = (props) => {
               name_room: nameRoom,
               user_id: user?.id,
               time_start_play: moment(time).format('YYYY-MM-DD hh:mm:ss'),
-              price: orders?.orderInfo?.price,
+              price: priceField ? priceField?.[0]?.price : 0,
               type: optionMatch ? 0 : 1,
               lose_pay: losePayment,
               method_pay: 0,
@@ -562,7 +562,7 @@ const FindMembers = (props) => {
               ) : (
                 <ItemMatches
                   icon="money-bill-wave"
-                  title={orders?.orderInfo ? orders?.orderInfo?.price + ' đ' : 0 + ' đ'}
+                  title={priceField ? priceField?.[0]?.price + ' đ' : 0 + ' đ'}
                 />
               )}
               <ItemMatches
@@ -653,7 +653,7 @@ const FindMembers = (props) => {
               ) : (
                 <ItemMatches
                   icon="money-bill-wave"
-                  title={orders?.orderInfo ? orders?.orderInfo?.price + ' đ' : 0 + ' đ'}
+                  title={priceField ? priceField?.[0]?.price + ' đ' : 0 + ' đ'}
                 />
               )}
               <ItemMatches

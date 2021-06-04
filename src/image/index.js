@@ -4,6 +4,7 @@ import card from './card.png';
 import filed from './duytan.jpg';
 import team from './team.jpg';
 import vn from './vn.jpg';
+import avatar from './avatarDefalt.jpg';
 export default {
   momo,
   payment,
@@ -11,4 +12,5 @@ export default {
   filed,
   team,
   vn,
+  avatar,
 };

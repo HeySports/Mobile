@@ -8,3 +8,6 @@ export async function getListTeamApi() {
 export async function getTeamDetail(id) {
   return http.get('/team/getTeam/' + id);
 }
+export async function offerTeamApi(data) {
+  return http.post('/offers/offerTeam', data);
+}

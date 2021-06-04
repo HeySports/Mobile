@@ -6,7 +6,13 @@ export function* userOrderField({ data }) {
   try {
     const response = yield call(userOrderFieldApi, data);
     yield put(OrderAction.userOrderFieldSuccess(response?.data));
+    console.log('=================response===================');
+    console.log(response);
+    console.log('====================================');
   } catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
     yield put(OrderAction.userOrderFieldFailure(error));
   }
 }

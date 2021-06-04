@@ -16,5 +16,6 @@ const Colors = {
   error: '#ff0000',
   black: '#000000',
   item: '#FFFFFF',
+  shadow: '#f4f4f4',
 };
 export default Colors;

@@ -1,7 +1,7 @@
 import { call, takeLatest, put } from 'redux-saga/effects';
 import { teamTypes } from './actions';
 import TeamActions from './actions';
-import { getTeamUserApi, getListTeamApi, getTeamDetail } from '../../api/team';
+import { getTeamUserApi, getListTeamApi, getTeamDetail, offerTeamApi } from '../../api/team';
 export function* userGetTeam({ id }) {
   try {
     const response = yield call(getTeamUserApi, id);
@@ -21,17 +21,33 @@ export function* getListTeam() {
 export function* getTeamDetailApi({ id }) {
   try {
     const response = yield call(getTeamDetail, id);
-    console.log('====================================');
-    console.log(response);
-    console.log('====================================');
     yield put(TeamActions.getTeamDetailSuccess(response?.data));
   } catch (error) {
     yield put(TeamActions.getTeamDetailFailure(error));
+  }
+}
+export function* userOfferTeamApi({ data }) {
+  try {
+    console.log('==============data======================');
+    console.log(data);
+    console.log('====================================');
+    const response = yield call(offerTeamApi, data);
+    console.log('============response========================');
+    console.log(response);
+    console.log('====================================');
+    yield put(TeamActions.userOfferTeamSuccess(response?.data));
+    return response;
+  } catch (error) {
+    console.log('=============er=======================');
+    console.log(error);
+    console.log('====================================');
+    yield put(TeamActions.userOfferTeamFailure(error));
   }
 }
 const teamSagas = () => [
   takeLatest(teamTypes.USER_GET_TEAM, userGetTeam),
   takeLatest(teamTypes.GET_TEAM_DETAIL, getTeamDetailApi),
   takeLatest(teamTypes.GET_LIST_TEAM, getListTeam),
+  takeLatest(teamTypes.USER_OFFER_TEAM, userOfferTeamApi),
 ];
 export default teamSagas();

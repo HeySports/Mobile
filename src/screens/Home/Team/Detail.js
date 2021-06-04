@@ -20,6 +20,11 @@ import Images from '../../../image';
 import Star from '../../../components/Star';
 import { formatDate } from '../../../utils/Tools';
 import Player from '../../../components/team/PlayerTeam';
+import Comment from '../../../components/team/comment';
+import { Rating } from 'react-native-ratings';
+import { pushScreen } from '../../../navigation/pushScreen';
+import ModelOffer from '../../../components/JoinTeam/ModelJoinTeam';
+import Load from '../../../components/Load';
 const Detail = ({ data }) => {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
@@ -28,6 +33,11 @@ const Detail = ({ data }) => {
   const [information, setInformation] = useState(true);
   const [members, setMembers] = useState(false);
   const [joinTeam, setJoinTeam] = useState(false);
+  const [comments, setComments] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [textComment, setTextComment] = useState('');
+  const [description, setDescription] = useState('');
+  const [modelOffer, setModelOffer] = useState(false);
   const onMembers = () => {
     setComment(false);
     setInformation(false);
@@ -43,9 +53,41 @@ const Detail = ({ data }) => {
     setInformation(true);
     setMembers(false);
   };
-  console.log('====================================');
-  console.log(team);
-  console.log('====================================');
+  const commentScreen = () => {
+    pushScreen(
+      'TeamDetail',
+      'CommentTeam',
+      team?.teamDetail?.commentOfTeam,
+      '',
+      false,
+      false,
+      false,
+      false,
+    );
+  };
+  const onCommentTeam = () => {
+    const dataComment = {
+      rating: rating,
+      comment: textComment,
+    };
+    console.log('====================================');
+    console.log(dataComment);
+    console.log('====================================');
+  };
+  const onOfferTeam = async () => {
+    if (!description) {
+      alert('Bạn chưa mô tả về bạn');
+    } else {
+      let dataOffer = {
+        id_team: team?.teamDetail?.team?.id,
+        description: description,
+      };
+      await dispatch(TeamActions.userOfferTeam(dataOffer));
+      setTimeout(function () {
+        setModelOffer(true);
+      }, 2000);
+    }
+  };
   const ItemMenu = ({ label, icon, onPress, colorText, colorBtn, colorIcon, fontWeight }) => {
     return (
       <TouchableOpacity
@@ -57,54 +99,26 @@ const Detail = ({ data }) => {
       </TouchableOpacity>
     );
   };
-  const ItemInformation = () => {
-    return (
-      <View style={styles.containerInformation}>
-        <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
-        <View style={styles.itemInformation}>
-          <Icons name="map-marked-alt" style={styles.iconItemInfo} />
-          <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.address}</Text>
-        </View>
-        <View style={styles.itemInformation}>
-          <Icons name="calendar-alt" style={[styles.iconItemInfo, { fontSize: 18 }]} />
-          <Text style={styles.txtItemInfo}>
-            {'Ngày Thành Lâp: ' +
-              formatDate(
-                team?.teamDetail?.team?.created_at
-                  ? team?.teamDetail?.team?.created_at
-                  : new Date(),
-              )}
-          </Text>
-        </View>
-        <View style={styles.description}>
-          <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
-        </View>
-        {joinTeam && (
-          <View style={styles.descriptionJoin}>
-            <TextInput
-              style={styles.txtInputJoinTeam}
-              numberOfLines={64}
-              placeholder="Mô tả về bạn"
-            />
-          </View>
-        )}
-        <View style={styles.bottomItemInformation}>
-          {joinTeam ? (
-            <TouchableOpacity style={styles.btnJoinTeam}>
-              <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.btnJoinTeam} onPress={() => setJoinTeam(true)}>
-              <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-    );
+  const handleModel = () => {
+    setModelOffer(false);
   };
-
   return (
     <SafeAreaView style={styles.container}>
+      {modelOffer && (
+        <ModelOffer
+          labelBtn1={team?.error ? 'Xác Nhận' : 'Xác Nhận'}
+          labelBtn2="Kèo Của Tôi"
+          title={team?.error ? 'THAM GIA THẤT BẠI' : 'THAM GIA THÀNH CÔNG'}
+          checkModel={true}
+          checkBtn={false}
+          description={
+            team?.error ? team?.error?.data?.message : 'Bạn đã gửi yêu cầu tham gia đội thành công '
+          }
+          handleModel={team?.error ? handleModel : handleModel}
+          styleBodyModel={styles.styleModelNotification}
+          styleDescriptionView={styles.descriptionNotification}
+        />
+      )}
       <View style={styles.headerDetailTeam}>
         <View style={styles.iconHeader}>
           <TouchableOpacity style={styles.btnBackHeader} onPress={() => Navigation.popTo('Home')}>
@@ -158,7 +172,51 @@ const Detail = ({ data }) => {
             />
           </View>
           <View style={styles.containerBody}>
-            {information && <ItemInformation />}
+            {team?.loadingOffer && <Load />}
+            {information && (
+              <View style={styles.containerInformation}>
+                <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
+                <View style={styles.itemInformation}>
+                  <Icons name="map-marked-alt" style={styles.iconItemInfo} />
+                  <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.address}</Text>
+                </View>
+                <View style={styles.itemInformation}>
+                  <Icons name="calendar-alt" style={[styles.iconItemInfo, { fontSize: 18 }]} />
+                  <Text style={styles.txtItemInfo}>
+                    {'Ngày Thành Lâp: ' +
+                      formatDate(
+                        team?.teamDetail?.team?.created_at
+                          ? team?.teamDetail?.team?.created_at
+                          : new Date(),
+                      )}
+                  </Text>
+                </View>
+                <View style={styles.description}>
+                  <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
+                </View>
+                {joinTeam && (
+                  <View style={styles.descriptionJoin}>
+                    <TextInput
+                      style={styles.txtInputJoinTeam}
+                      numberOfLines={64}
+                      placeholder="Mô tả về bạn"
+                      onChangeText={(text) => setDescription(text)}
+                    />
+                  </View>
+                )}
+                <View style={styles.bottomItemInformation}>
+                  {joinTeam ? (
+                    <TouchableOpacity style={styles.btnJoinTeam} onPress={onOfferTeam}>
+                      <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity style={styles.btnJoinTeam} onPress={() => setJoinTeam(true)}>
+                      <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            )}
             {members && (
               <View style={styles.containerMemberTeam}>
                 <FlatList
@@ -170,8 +228,47 @@ const Detail = ({ data }) => {
               </View>
             )}
             {comment && (
-              <View>
-                <Text>Comment</Text>
+              <View style={styles.containerComment}>
+                {team?.teamDetail?.commentOfTeam?.slice(0, 2).map((item, index) => {
+                  return <Comment key={index} comment={item} />;
+                })}
+                <View style={styles.comment}>
+                  {comments
+                    ? null
+                    : team?.teamDetail?.commentOfTeam?.length >= 3 && (
+                        <Text style={styles.viewMoreRating} onPress={commentScreen}>
+                          Xem Thêm Đánh Giá
+                        </Text>
+                      )}
+                  {comments && (
+                    <Rating
+                      type="custom"
+                      ratingColor={Colors.icon}
+                      ratingBackgroundColor="#c8c7c8"
+                      ratingCount={5}
+                      imageSize={20}
+                      style={styles.itemRating}
+                      onFinishRating={setRating}
+                    />
+                  )}
+                  {comments && (
+                    <TextInput
+                      style={styles.txtInputJoinTeam}
+                      numberOfLines={6}
+                      placeholder="Nhận xét của bạn !"
+                      onChangeText={(text) => setTextComment(text)}
+                    />
+                  )}
+                  {comments ? (
+                    <TouchableOpacity style={styles.btnComment} onPress={onCommentTeam}>
+                      <Text style={styles.txtBottom}>XÁC NHẬN</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity style={styles.btnComment} onPress={() => setComments(true)}>
+                      <Text style={styles.txtBottom}>ĐÁNH GIÁ</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             )}
           </View>
@@ -335,5 +432,44 @@ const styles = StyleSheet.create({
   containerMemberTeam: {
     paddingTop: 10,
     width: ScreenSize.Screen_Width,
+  },
+  containerComment: {
+    padding: 20,
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  comment: {
+    marginTop: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  btnComment: {
+    marginTop: 15,
+    height: 40,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.primary,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  viewMoreRating: {
+    fontSize: Fonts.font_description,
+    color: Colors.waterBlueTwo,
+    textDecorationLine: 'underline',
+  },
+  txtBottom: {
+    fontSize: Fonts.font_description,
+    fontWeight: 'bold',
+    color: Colors.shadow,
+  },
+  itemRating: {
+    marginBottom: 5,
+  },
+  styleModelNotification: {
+    height: 180,
+  },
+  descriptionNotification: {
+    height: 80,
   },
 });
