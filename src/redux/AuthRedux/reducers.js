@@ -1,7 +1,6 @@
 import Immutable from 'seamless-immutable';
 import { makeReducerCreator } from '../../utils/utils';
 import { LoginTypes } from './actions';
-
 export const INITIAL_STATE = Immutable({
   loadingLogin: false,
   responseLogin: null,

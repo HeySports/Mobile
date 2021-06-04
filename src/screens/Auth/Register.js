@@ -45,7 +45,7 @@ const Register = (props) => {
       const location = await AsyncStorage.getItem('location');
       setAddress(location);
     } catch (e) {
-      alert('Failed to fetch the data from storage');
+      alert('Không thể lấy được vị trí hiện tại');
     }
   };
   const register = async () => {
