@@ -33,6 +33,13 @@ const Phone = (props) => {
   const goBackScreen = () => {
     goBack(props.componentId);
   };
+  useEffect(() => {
+    if (phoneNumber !== '') {
+      !responseCheckPhone.responseCheckPhone
+        ? setError('Số điện thoại này chưa đăng kí!')
+        : setError(false);
+    }
+  }, [responseCheckPhone.responseCheckPhone]);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -63,14 +70,9 @@ const Phone = (props) => {
           />
         </View>
         <View style={styles.buttonBottom}>
-          {responseCheckPhone.loadingCheckPhone && (
-            <ActivityIndicator size="small" color={Color.secondary} />
-          )}
           <Button titleBtn="Gửi mã" checkBtn={true} checkColor={true} function={pushNextScreen} />
-          {!responseCheckPhone.responseCheckPhone ? (
-            <View style={styles.viewError}>
-              <Text style={styles.txtError}>Số điện thoại chưa được đăng kí!</Text>
-            </View>
+          {responseCheckPhone.loadingCheckPhone ? (
+            <ActivityIndicator size="small" color={Color.secondary} />
           ) : (
             error && (
               <View style={styles.viewError}>
