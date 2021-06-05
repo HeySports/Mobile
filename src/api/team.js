@@ -13,8 +13,8 @@ export async function offerTeamApi(data) {
 }
 
 export async function getOfferOfTeamApi(id) {
-  console.log('================id====================');
-  console.log(id);
-  console.log('====================================');
   return http.get('/offers/get/' + id + '/offerTeam');
+}
+export async function createTeamApi(data) {
+  return http.post('/team/postTeam', data);
 }

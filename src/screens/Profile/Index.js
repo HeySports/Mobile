@@ -52,7 +52,7 @@ const Profile = (props) => {
     alert('find matches');
   };
   const handleCreateNewTeam = () => {
-    alert('create Team');
+    pushScreen('Profile', 'Team', '', false, false, false, false, false);
   };
   return (
     <View style={styles.container}>
@@ -84,7 +84,7 @@ const Profile = (props) => {
               <View style={styles.informations}>
                 {btnprofile('info-circle', 'Thông Tin', handleInfomationBtn)}
                 {btnprofile('search', 'Tìm Trận', handleInfomationBtn)}
-                {btnprofile('plus-circle', 'Tạo Trận', handleCreateNewTeam)}
+                {btnprofile('plus-circle', 'Tạo Đội', handleCreateNewTeam)}
               </View>
               <Title title="Trận đấu sắp tới" checkTitle={true} />
               <ScrollView style={styles.listScroll} horizontal={true}>
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   },
   txtContent: {
     fontSize: Font.font_description,
+    marginTop: 5,
   },
   listScroll: {
     marginTop: 10,
