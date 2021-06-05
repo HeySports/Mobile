@@ -10,7 +10,8 @@ import TeamActions from '../../redux/TeamRedux/actions';
 const ItemTeam = ({ item }) => {
   const dispatch = useDispatch();
   const onDetailTeam = async () => {
-    dispatch(TeamActions.getTeamDetail(item?.id));
+    await dispatch(TeamActions.getTeamDetail(item?.id));
+    await dispatch(TeamActions.userGetOfferTeam(item?.id));
     pushScreen('Home', 'TeamDetail', item?.id, false, false, false, false, false);
   };
   return (

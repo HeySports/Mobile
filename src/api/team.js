@@ -11,3 +11,10 @@ export async function getTeamDetail(id) {
 export async function offerTeamApi(data) {
   return http.post('/offers/offerTeam', data);
 }
+
+export async function getOfferOfTeamApi(id) {
+  console.log('================id====================');
+  console.log(id);
+  console.log('====================================');
+  return http.get('/offers/get/' + id + '/offerTeam');
+}

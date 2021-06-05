@@ -38,6 +38,16 @@ const Detail = ({ data }) => {
   const [textComment, setTextComment] = useState('');
   const [description, setDescription] = useState('');
   const [modelOffer, setModelOffer] = useState(false);
+  const listOfferOfTeam = team?.listOfferTeam?.data;
+  function userExists(id_user) {
+    return listOfferOfTeam?.some(function (el) {
+      if (id_user === el?.id_user && el?.id_status === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
   const onMembers = () => {
     setComment(false);
     setInformation(false);
@@ -70,9 +80,6 @@ const Detail = ({ data }) => {
       rating: rating,
       comment: textComment,
     };
-    console.log('====================================');
-    console.log(dataComment);
-    console.log('====================================');
   };
   const onOfferTeam = async () => {
     if (!description) {
@@ -112,7 +119,9 @@ const Detail = ({ data }) => {
           checkModel={true}
           checkBtn={false}
           description={
-            team?.error ? team?.error?.data?.message : 'Bạn đã gửi yêu cầu tham gia đội thành công '
+            team?.error
+              ? team?.error?.data?.message
+              : 'Bạn đã gửi yêu cầu tham gia đội thành công, Bạn hãy đợi được chấp nhận từ đội này '
           }
           handleModel={team?.error ? handleModel : handleModel}
           styleBodyModel={styles.styleModelNotification}
@@ -134,7 +143,12 @@ const Detail = ({ data }) => {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.bodyTeamDetail}>
           <View style={styles.bodyHeaderTeam}>
-            <Image source={Images.vn} style={styles.imgTeam} />
+            <Image
+              source={
+                team?.teamDetail?.team?.image ? { uri: team?.teamDetail?.team?.image } : Images.vn
+              }
+              style={styles.imgTeam}
+            />
             <View style={styles.teamDetail}>
               <Text style={styles.txtNameTeam} numberOfLines={2}>
                 {team?.teamDetail?.team?.name?.toUpperCase()}
@@ -204,17 +218,28 @@ const Detail = ({ data }) => {
                     />
                   </View>
                 )}
-                <View style={styles.bottomItemInformation}>
-                  {joinTeam ? (
-                    <TouchableOpacity style={styles.btnJoinTeam} onPress={onOfferTeam}>
-                      <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
+                {userExists(user?.id) ? (
+                  <View style={styles.bottomItemInformation}>
+                    <TouchableOpacity style={styles.btnJoinTeam}>
+                      <Text style={styles.txtBtnJoinTeam}>ĐỢI PHẢN HỒI</Text>
                     </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity style={styles.btnJoinTeam} onPress={() => setJoinTeam(true)}>
-                      <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+                  </View>
+                ) : (
+                  <View style={styles.bottomItemInformation}>
+                    {joinTeam ? (
+                      <TouchableOpacity style={styles.btnJoinTeam} onPress={onOfferTeam}>
+                        <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.btnJoinTeam}
+                        onPress={() => setJoinTeam(true)}
+                      >
+                        <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
               </View>
             )}
             {members && (

@@ -10,6 +10,8 @@ const INITIAL_STATE = Immutable({
   listTeam: null,
   teamDetail: null,
   offerTeam: null,
+  listOfferTeam: null,
+  loadingListOffer: false,
 });
 export const useGetTeam = (state) =>
   state.merge({
@@ -94,6 +96,27 @@ export const userOfferTeamFailure = (state, { error }) =>
     error: error,
     type: 'userOfferTeam failure',
   });
+export const userGetOfferTeam = (state) =>
+  state.merge({
+    loadingListOffer: true,
+    listOfferTeam: null,
+    error: null,
+    type: 'user get Offer Team',
+  });
+export const userGetOfferTeamSuccess = (state, { response }) =>
+  state.merge({
+    loadingListOffer: false,
+    listOfferTeam: response,
+    error: null,
+    type: 'user get Offer Team success',
+  });
+export const userGetOfferTeamFailure = (state, { error }) =>
+  state.merge({
+    loadingListOffer: false,
+    listOfferTeam: null,
+    error: error,
+    type: 'user get Offer Team failure',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.USER_GET_TEAM]: useGetTeam,
   [teamTypes.USER_GET_TEAM_SUCCESS]: useGetTeamSuccess,
@@ -107,5 +130,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.USER_OFFER_TEAM]: userOfferTeam,
   [teamTypes.USER_OFFER_TEAM_SUCCESS]: userOfferTeamSuccess,
   [teamTypes.USER_OFFER_TEAM_FAILURE]: userOfferTeamFailure,
+  [teamTypes.USER_GET_OFFER_TEAM]: userGetOfferTeam,
+  [teamTypes.USER_GET_OFFER_TEAM_SUCCESS]: userGetOfferTeamSuccess,
+  [teamTypes.USER_GET_OFFER_TEAM_FAILURE]: userGetOfferTeamFailure,
 });
 export default reducer;
