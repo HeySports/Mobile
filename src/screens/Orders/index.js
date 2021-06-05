@@ -24,6 +24,10 @@ import OrderAction from '../../redux/OrdersRedux/actions';
 import Loading from '../../components/Loading';
 import { pushScreen } from '../../navigation/pushScreen';
 import { Navigation } from 'react-native-navigation';
+import { Platform, DeviceEventEmitter, NativeModules, NativeEventEmitter } from 'react-native';
+import RNMomosdk from 'react-native-momosdk';
+const EventEmitter = new NativeEventEmitter(NativeModules.RNMomosdk);
+
 const Orders = (props) => {
   var nameField = '';
   var listChildField = useSelector((state) => state.fields.responseGetChildField);
@@ -35,12 +39,17 @@ const Orders = (props) => {
   const [momo, setMomo] = useState(false);
   const [payment, setPayment] = useState(false);
   const [card, setCard] = useState(false);
-  const [typePayment, setTypePayment] = useState(0);
+  const [typePayment, setTypePayment] = useState(false);
   const [model, setModel] = useState(false);
   var pricePayment = (price?.[0]?.price * 30) / 100;
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders);
   const [modelOrders, setModelOrders] = useState(false);
+  const merchantname = 'Hey Sport momo';
+  const merchantcode = 'CGV01';
+  const merchantNameLabel = 'Nhà cung cấp';
+  const billdescription = 'Thanh toán 30% tiền cọc sân';
+  const enviroment = '0';
   listChildField?.forEach((element) => {
     if (element.id === childField) {
       nameField = element.name_field;
@@ -51,11 +60,43 @@ const Orders = (props) => {
       field = element;
     }
   });
+  const momoHandleResponse = async (response) => {
+    try {
+      if (response && response.status === 0) {
+        await setTypePayment(4);
+        await setMomo(true);
+        await handleOrder();
+      } else {
+        //let message = response.message;
+        //Has Error: show message here
+      }
+    } catch (ex) {}
+  };
+  const onPaymentByMomo = async () => {
+    let jsonData = {};
+    jsonData.enviroment = enviroment;
+    jsonData.action = 'gettoken';
+    jsonData.merchantname = merchantname;
+    jsonData.merchantcode = merchantcode;
+    jsonData.merchantnamelabel = merchantNameLabel;
+    jsonData.description = billdescription;
+    jsonData.amount = pricePayment;
+    jsonData.orderId = 'ID20181123192300';
+    jsonData.orderLabel = 'Ma don hang';
+    jsonData.appScheme = 'momocgv20170101';
+    if (Platform.OS === 'android') {
+      let dataPayment = await RNMomosdk.requestPayment(jsonData);
+      await momoHandleResponse(dataPayment);
+    } else {
+      RNMomosdk.requestPayment(JSON.stringify(jsonData));
+    }
+  };
   const handleMomo = () => {
     setMomo(!momo);
     setCard(false);
     setPayment(false);
     setTypePayment(0);
+    onPaymentByMomo();
   };
   const handleCard = () => {
     setMomo(false);
@@ -83,7 +124,7 @@ const Orders = (props) => {
     );
   };
   const handleOrder = async () => {
-    if (!payment && !card) {
+    if (!typePayment) {
       setModel('Bạn chưa chọn hình thức thanh toán !');
     } else {
       const idLastMatch = await http.get('/match/lastMatch');
@@ -94,7 +135,7 @@ const Orders = (props) => {
         id_child_field: childField,
         time_start: moment(time_start).format('YYYY-MM-DD hh:mm:ss'),
         time_end: moment(time_end).format('YYYY-MM-DD hh:mm:ss'),
-        method_pay: typePayment,
+        method_pay: typePayment ? typePayment : 0,
         price: price?.[0]?.price,
         deposit: pricePayment,
       };

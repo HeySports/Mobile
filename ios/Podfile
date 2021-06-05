@@ -18,6 +18,8 @@ target 'HeySports' do
 
   pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
 
+  pod 'RNMomosdk', :path => '../node_modules/react-native-momosdk'
+
   target 'HeySportsTests' do
     inherit! :complete
     # Pods for testing
