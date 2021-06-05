@@ -63,9 +63,8 @@ const Orders = (props) => {
   const momoHandleResponse = async (response) => {
     try {
       if (response && response.status === 0) {
-        await setTypePayment(4);
         await setMomo(true);
-        await handleOrder();
+        await onPaymentByMomoText();
       } else {
         //let message = response.message;
         //Has Error: show message here
@@ -123,8 +122,26 @@ const Orders = (props) => {
       </TouchableOpacity>
     );
   };
+  const onPaymentByMomoText = async () => {
+    const idLastMatch = await http.get('/match/lastMatch');
+    var time_start = props?.data?.time;
+    var time_end = moment(time_start).add(1, 'hours');
+    const dataOrder = await {
+      id_match: idLastMatch?.data?.id_match,
+      id_child_field: childField,
+      time_start: moment(time_start).format('YYYY-MM-DD hh:mm:ss'),
+      time_end: moment(time_end).format('YYYY-MM-DD hh:mm:ss'),
+      method_pay: typePayment ? typePayment : 0,
+      price: price?.[0]?.price,
+      deposit: pricePayment,
+    };
+    await dispatch(OrderAction.userOrderField(dataOrder));
+    setTimeout(function () {
+      setModelOrders(true);
+    }, 1000);
+  };
   const handleOrder = async () => {
-    if (!typePayment) {
+    if (!payment && !card) {
       setModel('Bạn chưa chọn hình thức thanh toán !');
     } else {
       const idLastMatch = await http.get('/match/lastMatch');
