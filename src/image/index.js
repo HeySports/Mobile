@@ -5,6 +5,7 @@ import filed from './duytan.jpg';
 import team from './team.jpg';
 import vn from './vn.jpg';
 import avatar from './avatarDefalt.jpg';
+import icon from './icon.png';
 export default {
   momo,
   payment,
@@ -13,4 +14,5 @@ export default {
   team,
   vn,
   avatar,
+  icon,
 };

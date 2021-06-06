@@ -4,6 +4,8 @@ import Images from '../../image/index';
 import { Colors, Fonts } from '../../themes';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Star from '../../components/Star';
+import { formatDate } from '../../utils/Tools';
+import { useSelector } from 'react-redux';
 const Comment = ({
   comment,
   styleContainer,
@@ -15,6 +17,7 @@ const Comment = ({
   onPressEdit,
   onPressDelete,
 }) => {
+  const user = useSelector((state) => state.profile.responseProfile);
   const ItemBottom = ({ icon, onPress, colors }) => {
     return (
       <TouchableOpacity style={styles.btnBottom} onPress={onPress}>
@@ -23,23 +26,28 @@ const Comment = ({
     );
   };
   return (
-    <View style={[styles.container, styleContainer && styleContainer]}>
+    <View style={[styles.container, styleContainer && styleContainer]} key={comment?.id}>
       <View style={[styles.leftComment, styleLeft && styleLeft]}>
         <Image source={Images.avatar} style={[styles.image, styleImage]} />
       </View>
       <View style={[styles.rightComment, styleRight && styleRight]}>
         <View style={styles.user}>
           <Text style={styles.txtNameUser}>{comment?.full_name}</Text>
+          <Text style={styles.txtDate}>{formatDate(comment?.created_at)}</Text>
         </View>
         <View style={[styles.description, styleDescription && styleDescription]}>
           <Text style={styles.textComment}>{comment.description}</Text>
         </View>
         <View style={[styles.bottomComment, styleBottom]}>
           <View style={styles.rating}>
-            <Star star={Math.floor(Math.random() * 5) + 1} />
+            <Star star={comment?.rating ? comment?.rating : 1} />
           </View>
-          <ItemBottom icon="edit" onPress={onPressEdit} colors={Colors.primary} />
-          <ItemBottom icon="trash-alt" onPress={onPressDelete} colors={Colors.error} />
+          {comment?.id_user === user?.id ? (
+            <View style={styles.actionComment}>
+              <ItemBottom icon="edit" onPress={onPressEdit} colors={Colors.primary} />
+              <ItemBottom icon="trash-alt" onPress={onPressDelete} colors={Colors.error} />
+            </View>
+          ) : null}
         </View>
       </View>
     </View>
@@ -80,17 +88,25 @@ const styles = StyleSheet.create({
   },
   user: {
     height: 30,
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   txtNameUser: {
     fontSize: Fonts.title_child4,
     fontWeight: '700',
+    flex: 1,
   },
   bottomComment: {
     height: 30,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  actionComment: {
+    flex: 2,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    height: '100%',
   },
   btnBottom: {
     flex: 1,
@@ -104,5 +120,10 @@ const styles = StyleSheet.create({
   },
   iconComment: {
     fontSize: 16,
+  },
+  txtDate: {
+    marginRight: 5,
+    fontSize: 12,
+    color: Colors.txtLevel2,
   },
 });

@@ -18,3 +18,6 @@ export async function getOfferOfTeamApi(id) {
 export async function createTeamApi(data) {
   return http.post('/team/postTeam', data);
 }
+export async function commentTeamApi(data) {
+  return http.post('/team/ratingTeam', data);
+}

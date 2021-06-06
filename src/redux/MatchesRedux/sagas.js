@@ -38,7 +38,9 @@ export function* userGetDetailMatch({ id }) {
 export function* userPostMatch({ data }) {
   try {
     const response = yield call(userPostMatchApi, data);
-    console.log(response?.data);
+    console.log('====================================');
+    console.log(response);
+    console.log('====================================');
     yield put(MatchesAction.userPostMatchSuccess(response.data));
     if (data?.type === 0) {
       yield put(MatchesAction.getListMatchFindMember());

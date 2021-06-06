@@ -6,12 +6,12 @@ import Color from '../themes/colors';
 import Font from '../themes/font';
 import { pushScreen } from '../navigation/pushScreen';
 import Star from './Star';
-const Pitch = ({ item }) => {
+const Pitch = ({ item, checkField, styleContainer }) => {
   const detailPitch = () => {
-    pushScreen('Home', 'Detail', item?.id, 'Detail', false, '', '');
+    pushScreen(checkField ? 'Field' : 'Home', 'Detail', item?.id, 'Detail', false, '', '');
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styleContainer]}>
       <TouchableOpacity onPress={detailPitch}>
         <View style={styles.image}>
           <Image source={pitch} style={styles.imagePitch} />
@@ -21,7 +21,7 @@ const Pitch = ({ item }) => {
         </View>
         <View>
           <View style={styles.detailPitch}>
-            <View style={styles.title}>
+            <View style={[styles.title, { height: checkField ? 20 : 30 }]}>
               <Text style={styles.txtTitle}>{item?.name?.toUpperCase()}</Text>
             </View>
             <View style={styles.content}>
@@ -42,14 +42,16 @@ const Pitch = ({ item }) => {
                 </Text>
               </View>
             </View>
-            <View style={styles.content}>
-              <View style={styles.iconDetailPitch}>
-                <Icon name="clock" style={styles.iconDetail} />
+            {checkField ? null : (
+              <View style={styles.content}>
+                <View style={styles.iconDetailPitch}>
+                  <Icon name="clock" style={styles.iconDetail} />
+                </View>
+                <View style={styles.txtDetailPitch}>
+                  <Text style={styles.txtDetail}>5:00 am - 23:00 pm</Text>
+                </View>
               </View>
-              <View style={styles.txtDetailPitch}>
-                <Text style={styles.txtDetail}>5:00 am - 23:00 pm</Text>
-              </View>
-            </View>
+            )}
           </View>
         </View>
       </TouchableOpacity>

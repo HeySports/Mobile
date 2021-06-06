@@ -67,11 +67,11 @@ const Detail = (props) => {
   const setModelTrue = () => {
     setCheckShowModel(true);
   };
-  const elementDetailField = (icon, functionOnpress) => {
+  const elementDetailField = (icon, functionOnPress) => {
     return (
       <TouchableOpacity
         style={checkShowModel ? styles.choseBtn : styles.itemMenuTab}
-        onPress={() => functionOnpress()}
+        onPress={() => functionOnPress()}
       >
         <Icon name={icon} style={checkShowModel ? styles.iconItemMenus : styles.iconItemMenu} />
       </TouchableOpacity>
@@ -79,15 +79,13 @@ const Detail = (props) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {checkShowModel ? (
+      {checkShowModel && (
         <ModelComment
           showModel={setModel}
           title={field && field.name}
           id={field && field.id}
           description="Nhận xét về sân bóng !"
         />
-      ) : (
-        <View />
       )}
       {detail.loadingDetailField ? (
         <Loading loadingStyle={styles.loading} />
@@ -133,7 +131,9 @@ const Detail = (props) => {
               </View>
               <View style={styles.comment}>
                 <View style={styles.rating}>
-                  <Text style={styles.titleDescriptions}>Đánh Giá</Text>
+                  <Text style={styles.titleDescriptions}>
+                    {'Đánh Giá( ' + comments?.responseGetComment?.length + ' )'}
+                  </Text>
                   <Star star={field?.rating} />
                 </View>
                 <View style={styles.listComment}>
@@ -274,20 +274,20 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   rating: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 20,
   },
   titleDescriptions: {
-    marginLeft: 15,
     fontSize: Font.title_child2,
     color: Color.primary,
     fontWeight: 'bold',
-    width: 90,
+    width: 150,
   },
   listComment: {
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   loading: {
     backgroundColor: 'rgba(0,0,0,0.2)',

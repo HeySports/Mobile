@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Color from '../../themes/colors';
-import imageUser from '../../image/thanh.jpg';
 import logo from '../../image/logo.png';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -33,6 +32,7 @@ import ItemFindMembers from '../../components/ItemFindMembers';
 import LoadingView from '../../components/Loading';
 import TeamActions from '../../redux/TeamRedux/actions';
 import ItemTeam from '../../components/team/ItemTeam';
+import messaging from '@react-native-firebase/messaging';
 const data = {
   dataSlide: [
     {
@@ -63,6 +63,12 @@ const Home = (props) => {
     dispatch(TeamActions.getListTeam());
   }, [dispatch]);
 
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+  }, []);
   // selector
   var fields = [];
   const listMatches = useSelector((state) => state.matches);
@@ -108,7 +114,6 @@ const Home = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-
       {listMatches?.loadingMatches || listMatches?.loadingMatchFindMember ? (
         <LoadingView />
       ) : (

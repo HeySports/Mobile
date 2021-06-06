@@ -19,7 +19,7 @@ import { pushScreen } from '../../navigation/pushScreen';
 import LoginActions from '../../redux/AuthRedux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { LocalNotification } from '../../utils/localPushController';
+import messaging from '@react-native-firebase/messaging';
 
 import Error from '../../components/Error';
 const Login = (props) => {
@@ -35,7 +35,6 @@ const Login = (props) => {
     pushScreen(props.componentId, 'Phone', '', 'Phone', false, '', '');
   };
   const handleTextInput = () => {
-    // LocalNotification();
     let validatePhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     if (!phone || !password) {
       setErrorLogin('Bạn phải nhập đủ thông tin để tiến hành Login !');
@@ -48,10 +47,17 @@ const Login = (props) => {
       setErrorLogin(false);
     }
   };
-  const handleLogin = (phone_numbers, password_login) => {
+  const handleLogin = async (phone_numbers, password_login) => {
     Keyboard.dismiss();
     setErrorLogin('');
-    dispatch(LoginActions.userLogin({ phone_numbers: phone_numbers, password: password_login }));
+    const device = await messaging().getToken();
+    dispatch(
+      LoginActions.userLogin({
+        phone_numbers: phone_numbers,
+        password: password_login,
+        device_token: device,
+      }),
+    );
   };
   useEffect(() => {
     SplashScreen.hide();

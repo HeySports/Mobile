@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import TeamActions from '../../../redux/TeamRedux/actions';
-import Loading from '../../../components/Load';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { Colors, Fonts, ScreenSize } from '../../../themes';
 import { Navigation } from 'react-native-navigation';
@@ -25,6 +24,8 @@ import { Rating } from 'react-native-ratings';
 import { pushScreen } from '../../../navigation/pushScreen';
 import ModelOffer from '../../../components/JoinTeam/ModelJoinTeam';
 import Load from '../../../components/Load';
+import ModelNotification from '../../../components/JoinTeam/ModelJoinTeam';
+
 const Detail = ({ data }) => {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
@@ -38,6 +39,8 @@ const Detail = ({ data }) => {
   const [textComment, setTextComment] = useState('');
   const [description, setDescription] = useState('');
   const [modelOffer, setModelOffer] = useState(false);
+  const [error, setError] = useState(false);
+  const [model, setModel] = useState(false);
   const listOfferOfTeam = team?.listOfferTeam?.data;
   function userExists(id_user) {
     return listOfferOfTeam?.some(function (el) {
@@ -76,20 +79,45 @@ const Detail = ({ data }) => {
     );
   };
   const onCommentTeam = () => {
-    const dataComment = {
-      rating: rating,
-      comment: textComment,
-    };
+    if (userExists(user?.id)) {
+      setError('Bạn đã đánh giá trước đây, bạn chỉ có thể sửa đánh giá');
+      setModel(true);
+    } else if (!textComment) {
+      setError('Bạn chưa nhập nhận xét của bạn về đội này');
+      setModel(true);
+    } else if (!rating) {
+      setError('Bạn chưa đánh giá cho đội này');
+      setModel(true);
+    } else {
+      setError(false);
+      setModel(false);
+      const dataComment = {
+        description: textComment,
+        rating: rating,
+        id_team: team?.teamDetail?.team?.id,
+      };
+      setTextComment('');
+      setRating(0);
+      dispatch(TeamActions.commentTeam(dataComment));
+    }
   };
+  function userExists(id) {
+    return team?.teamDetail?.commentOfTeam?.some(function (el) {
+      return el.id_user === id;
+    });
+  }
   const onOfferTeam = async () => {
     if (!description) {
-      alert('Bạn chưa mô tả về bạn');
+      setError('Bạn chưa mô tả về bạn');
+      setModel(true);
     } else {
       let dataOffer = {
         id_team: team?.teamDetail?.team?.id,
         description: description,
       };
       await dispatch(TeamActions.userOfferTeam(dataOffer));
+      setModel(false);
+      setDescription('');
       setTimeout(function () {
         setModelOffer(true);
       }, 2000);
@@ -108,6 +136,9 @@ const Detail = ({ data }) => {
   };
   const handleModel = () => {
     setModelOffer(false);
+  };
+  const handleModelNotification = () => {
+    setModel(false);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -128,6 +159,18 @@ const Detail = ({ data }) => {
           styleDescriptionView={styles.descriptionNotification}
         />
       )}
+      {model && (
+        <ModelNotification
+          labelBtn1={'Xác Nhận'}
+          title={'THÔNG BÁO'}
+          checkModel={true}
+          checkBtn={false}
+          description={error}
+          handleModel={handleModelNotification}
+          styleBodyModel={styles.styleModelNotification}
+          styleDescriptionView={styles.descriptionNotification}
+        />
+      )}
       <View style={styles.headerDetailTeam}>
         <View style={styles.iconHeader}>
           <TouchableOpacity style={styles.btnBackHeader} onPress={() => Navigation.popTo('Home')}>
@@ -138,167 +181,176 @@ const Detail = ({ data }) => {
           <Text style={styles.txtTitle}>CHI TIẾT ĐỘI BÓNG</Text>
         </View>
       </View>
-      {team?.loading ? (
-        <Loading />
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.bodyTeamDetail}>
-          <View style={styles.bodyHeaderTeam}>
-            <Image
-              source={
-                team?.teamDetail?.team?.image ? { uri: team?.teamDetail?.team?.image } : Images.vn
-              }
-              style={styles.imgTeam}
-            />
-            <View style={styles.teamDetail}>
-              <Text style={styles.txtNameTeam} numberOfLines={2}>
-                {team?.teamDetail?.team?.name?.toUpperCase()}
-              </Text>
-              <Star star={team?.teamDetail?.team.rating} size={18} />
-            </View>
-          </View>
-          <View style={styles.menuTeam}>
-            <ItemMenu
-              icon="info-circle"
-              label="Thông Tin"
-              onPress={onInformation}
-              colorBtn={information ? Colors.secondary : null}
-              colorIcon={information ? Colors.primary : Colors.secondary}
-              colorText={information ? Colors.primary : Colors.secondary}
-              fontWeight={information ? '700' : '400'}
-            />
-            <ItemMenu
-              icon="users"
-              label={'Cầu (' + team?.teamDetail?.userOfTeam?.length + ')'}
-              onPress={onMembers}
-              colorBtn={members ? Colors.secondary : null}
-              colorIcon={members ? Colors.primary : Colors.secondary}
-              colorText={members ? Colors.primary : Colors.secondary}
-              fontWeight={members ? '700' : '400'}
-            />
-            <ItemMenu
-              icon="comment-dots"
-              label={'Đánh Giá(' + team?.teamDetail?.commentOfTeam?.length + ')'}
-              onPress={onComment}
-              colorBtn={comment ? Colors.secondary : null}
-              colorIcon={comment ? Colors.primary : Colors.secondary}
-              colorText={comment ? Colors.primary : Colors.secondary}
-              fontWeight={comment ? '700' : '400'}
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.bodyTeamDetail}>
+        <View style={styles.bodyHeaderTeam}>
+          <Image
+            source={
+              team?.teamDetail?.team?.image ? { uri: team?.teamDetail?.team?.image } : Images.vn
+            }
+            style={styles.imgTeam}
+          />
+          <View style={styles.teamDetail}>
+            <Text style={styles.txtNameTeam} numberOfLines={2}>
+              {team?.teamDetail?.team?.name
+                ? team?.teamDetail?.team?.name?.toUpperCase()
+                : 'Name Team'?.toUpperCase()}
+            </Text>
+            <Star
+              star={team?.teamDetail?.team.rating ? team?.teamDetail?.team.rating : 1}
+              size={18}
             />
           </View>
-          <View style={styles.containerBody}>
-            {team?.loadingOffer && <Load />}
-            {information && (
-              <View style={styles.containerInformation}>
-                <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
-                <View style={styles.itemInformation}>
-                  <Icons name="map-marked-alt" style={styles.iconItemInfo} />
-                  <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.address}</Text>
-                </View>
-                <View style={styles.itemInformation}>
-                  <Icons name="calendar-alt" style={[styles.iconItemInfo, { fontSize: 18 }]} />
-                  <Text style={styles.txtItemInfo}>
-                    {'Ngày Thành Lâp: ' +
-                      formatDate(
-                        team?.teamDetail?.team?.created_at
-                          ? team?.teamDetail?.team?.created_at
-                          : new Date(),
-                      )}
-                  </Text>
-                </View>
-                <View style={styles.description}>
-                  <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
-                </View>
-                {joinTeam && (
-                  <View style={styles.descriptionJoin}>
-                    <TextInput
-                      style={styles.txtInputJoinTeam}
-                      numberOfLines={64}
-                      placeholder="Mô tả về bạn"
-                      onChangeText={(text) => setDescription(text)}
-                    />
-                  </View>
-                )}
-                {userExists(user?.id) ? (
-                  <View style={styles.bottomItemInformation}>
-                    <TouchableOpacity style={styles.btnJoinTeam}>
-                      <Text style={styles.txtBtnJoinTeam}>ĐỢI PHẢN HỒI</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View style={styles.bottomItemInformation}>
-                    {joinTeam ? (
-                      <TouchableOpacity style={styles.btnJoinTeam} onPress={onOfferTeam}>
-                        <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.btnJoinTeam}
-                        onPress={() => setJoinTeam(true)}
-                      >
-                        <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
-                      </TouchableOpacity>
+        </View>
+        <View style={styles.menuTeam}>
+          <ItemMenu
+            icon="info-circle"
+            label="Thông Tin"
+            onPress={onInformation}
+            colorBtn={information ? Colors.secondary : null}
+            colorIcon={information ? Colors.primary : Colors.secondary}
+            colorText={information ? Colors.primary : Colors.secondary}
+            fontWeight={information ? '700' : '400'}
+          />
+          <ItemMenu
+            icon="users"
+            label={
+              team?.teamDetail
+                ? 'Cầu (' + team?.teamDetail?.userOfTeam?.length + ')'
+                : 'Cầu (' + 0 + ')'
+            }
+            onPress={onMembers}
+            colorBtn={members ? Colors.secondary : null}
+            colorIcon={members ? Colors.primary : Colors.secondary}
+            colorText={members ? Colors.primary : Colors.secondary}
+            fontWeight={members ? '700' : '400'}
+          />
+          <ItemMenu
+            icon="comment-dots"
+            label={
+              team?.teamDetail
+                ? 'Đánh Giá(' + team?.teamDetail?.commentOfTeam?.length + ')'
+                : 'Đánh Giá(' + 0 + ')'
+            }
+            onPress={onComment}
+            colorBtn={comment ? Colors.secondary : null}
+            colorIcon={comment ? Colors.primary : Colors.secondary}
+            colorText={comment ? Colors.primary : Colors.secondary}
+            fontWeight={comment ? '700' : '400'}
+          />
+        </View>
+        <View style={styles.containerBody}>
+          {team?.loadingOffer && <Load />}
+          {information && (
+            <View style={styles.containerInformation}>
+              <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
+              <View style={styles.itemInformation}>
+                <Icons name="map-marked-alt" style={styles.iconItemInfo} />
+                <Text style={styles.txtItemInfo}>
+                  {team?.teamDetail?.team?.address ? team?.teamDetail?.team?.address : 'address'}
+                </Text>
+              </View>
+              <View style={styles.itemInformation}>
+                <Icons name="calendar-alt" style={[styles.iconItemInfo, { fontSize: 18 }]} />
+                <Text style={styles.txtItemInfo}>
+                  {'Ngày Thành Lâp: ' +
+                    formatDate(
+                      team?.teamDetail?.team?.created_at
+                        ? team?.teamDetail?.team?.created_at
+                        : new Date(),
                     )}
-                  </View>
-                )}
+                </Text>
               </View>
-            )}
-            {members && (
-              <View style={styles.containerMemberTeam}>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={team?.teamDetail?.userOfTeam}
-                  renderItem={({ item, index }) => <Player key={index} player={item} />}
-                />
+              <View style={styles.description}>
+                <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
               </View>
-            )}
-            {comment && (
-              <View style={styles.containerComment}>
-                {team?.teamDetail?.commentOfTeam?.slice(0, 2).map((item, index) => {
-                  return <Comment key={index} comment={item} />;
-                })}
-                <View style={styles.comment}>
-                  {comments
-                    ? null
-                    : team?.teamDetail?.commentOfTeam?.length >= 3 && (
-                        <Text style={styles.viewMoreRating} onPress={commentScreen}>
-                          Xem Thêm Đánh Giá
-                        </Text>
-                      )}
-                  {comments && (
-                    <Rating
-                      type="custom"
-                      ratingColor={Colors.icon}
-                      ratingBackgroundColor="#c8c7c8"
-                      ratingCount={5}
-                      imageSize={20}
-                      style={styles.itemRating}
-                      onFinishRating={setRating}
-                    />
-                  )}
-                  {comments && (
-                    <TextInput
-                      style={styles.txtInputJoinTeam}
-                      numberOfLines={6}
-                      placeholder="Nhận xét của bạn !"
-                      onChangeText={(text) => setTextComment(text)}
-                    />
-                  )}
-                  {comments ? (
-                    <TouchableOpacity style={styles.btnComment} onPress={onCommentTeam}>
-                      <Text style={styles.txtBottom}>XÁC NHẬN</Text>
+              {joinTeam && (
+                <View style={styles.descriptionJoin}>
+                  <TextInput
+                    style={styles.txtInputJoinTeam}
+                    numberOfLines={64}
+                    placeholder="Mô tả về bạn"
+                    onChangeText={(text) => setDescription(text)}
+                  />
+                </View>
+              )}
+              {userExists(user?.id) ? (
+                <View style={styles.bottomItemInformation}>
+                  <TouchableOpacity style={styles.btnJoinTeam}>
+                    <Text style={styles.txtBtnJoinTeam}>ĐỢI PHẢN HỒI</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.bottomItemInformation}>
+                  {joinTeam ? (
+                    <TouchableOpacity style={styles.btnJoinTeam} onPress={onOfferTeam}>
+                      <Text style={styles.txtBtnJoinTeam}>XÁC NHẬN</Text>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity style={styles.btnComment} onPress={() => setComments(true)}>
-                      <Text style={styles.txtBottom}>ĐÁNH GIÁ</Text>
+                    <TouchableOpacity style={styles.btnJoinTeam} onPress={() => setJoinTeam(true)}>
+                      <Text style={styles.txtBtnJoinTeam}>THAM GIA NGAY</Text>
                     </TouchableOpacity>
                   )}
                 </View>
+              )}
+            </View>
+          )}
+          {members && (
+            <View style={styles.containerMemberTeam}>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={team?.teamDetail?.userOfTeam}
+                renderItem={({ item, index }) => <Player key={index} player={item} />}
+              />
+            </View>
+          )}
+          {comment && (
+            <View style={styles.containerComment}>
+              {team?.teamDetail?.commentOfTeam?.slice(0, 2).map((item, index) => {
+                return <Comment comment={item} key={index} />;
+              })}
+              <View style={styles.comment}>
+                {comments
+                  ? null
+                  : team?.teamDetail?.commentOfTeam?.length >= 3 && (
+                      <Text style={styles.viewMoreRating} onPress={commentScreen}>
+                        Xem Thêm Đánh Giá
+                      </Text>
+                    )}
+                {comments && (
+                  <Rating
+                    type="custom"
+                    ratingColor={Colors.icon}
+                    ratingBackgroundColor="#c8c7c8"
+                    ratingCount={5}
+                    imageSize={20}
+                    style={styles.itemRating}
+                    onFinishRating={setRating}
+                  />
+                )}
+                {comments && (
+                  <TextInput
+                    style={styles.txtInputJoinTeam}
+                    numberOfLines={6}
+                    placeholder="Nhận xét của bạn !"
+                    onChangeText={(text) => setTextComment(text)}
+                  />
+                )}
+                {comments ? (
+                  <TouchableOpacity style={styles.btnComment} onPress={onCommentTeam}>
+                    <Text style={styles.txtBottom}>XÁC NHẬN</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity style={styles.btnComment} onPress={() => setComments(true)}>
+                    <Text style={styles.txtBottom}>ĐÁNH GIÁ</Text>
+                  </TouchableOpacity>
+                )}
               </View>
-            )}
-          </View>
-        </ScrollView>
-      )}
+            </View>
+          )}
+        </View>
+      </ScrollView>
+      {team?.loading && <Load />}
     </SafeAreaView>
   );
 };

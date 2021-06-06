@@ -18,6 +18,9 @@ export const teamTypes = makeConstantCreator(
   'CREATE_TEAM',
   'CREATE_TEAM_SUCCESS',
   'CREATE_TEAM_FAILURE',
+  'COMMENT_TEAM',
+  'COMMENT_TEAM_SUCCESS',
+  'COMMENT_TEAM_FAILURE',
 );
 const userGetTeam = (id) => makeActionCreator(teamTypes.USER_GET_TEAM, { id });
 const userGetTeamSuccess = (response) =>
@@ -47,6 +50,10 @@ const createTeam = (data) => makeActionCreator(teamTypes.CREATE_TEAM, { data });
 const createTeamSuccess = (response) =>
   makeActionCreator(teamTypes.CREATE_TEAM_SUCCESS, { response });
 const createTeamFailure = (error) => makeActionCreator(teamTypes.CREATE_TEAM_FAILURE, { error });
+const commentTeam = (data) => makeActionCreator(teamTypes.COMMENT_TEAM, { data });
+const commentTeamSuccess = (response) =>
+  makeActionCreator(teamTypes.COMMENT_TEAM_SUCCESS, { response });
+const commentTeamFailure = (error) => makeActionCreator(teamTypes.COMMENT_TEAM_FAILURE, { error });
 export default {
   userGetTeam,
   userGetTeamSuccess,
@@ -66,4 +73,7 @@ export default {
   createTeam,
   createTeamSuccess,
   createTeamFailure,
+  commentTeam,
+  commentTeamFailure,
+  commentTeamSuccess,
 };

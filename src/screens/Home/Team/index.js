@@ -19,6 +19,8 @@ import ModelNotification from '../../../components/JoinTeam/ModelJoinTeam';
 import Loading from '../../../components/Load';
 const Team = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.responseProfile);
+
   const [image, setImage] = useState(Images.vn);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -26,11 +28,21 @@ const Team = () => {
   const [rating, setRating] = useState('');
   const [model, setModel] = useState(false);
   const team = useSelector((state) => state.team);
+  const [error, setError] = useState('');
+  const [modelError, setModelError] = useState(false);
+  const userExists = (id) => {
+    return team?.listTeam?.some(function (el) {
+      return el.id_user === id;
+    });
+  };
   const onCreateTeam = async () => {
-    await dispatch(TeamActions.createTeam({ name, address, description }));
-    setTimeout(function () {
-      setModel(true);
-    }, 2000);
+    if (userExists(user.id)) {
+    } else {
+      await dispatch(TeamActions.createTeam({ name, address, description }));
+      setTimeout(function () {
+        setModel(true);
+      }, 2000);
+    }
   };
   const handleModel = () => {
     setModel(false);
@@ -39,6 +51,7 @@ const Team = () => {
     setModel(false);
     Navigation.popTo('Profile');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       {model && (
