@@ -46,13 +46,13 @@ const Profile = (props) => {
     );
   };
   const handleInfomationBtn = () => {
-    alert('Info');
-  };
-  const handlefindMatchesBtn = () => {
-    alert('find matches');
+    console.log('info');
   };
   const handleCreateNewTeam = () => {
     pushScreen('Profile', 'Team', '', false, false, false, false, false);
+  };
+  const handleMyTeam = () => {
+    pushScreen('Profile', 'TeamOffer', '', false, false, false, false, false);
   };
   return (
     <View style={styles.container}>
@@ -83,7 +83,7 @@ const Profile = (props) => {
             <ScrollView style={styles.content}>
               <View style={styles.informations}>
                 {btnprofile('info-circle', 'Thông Tin', handleInfomationBtn)}
-                {btnprofile('search', 'Tìm Trận', handleInfomationBtn)}
+                {btnprofile('users', 'Đội của bạn', handleMyTeam)}
                 {btnprofile('plus-circle', 'Tạo Đội', handleCreateNewTeam)}
               </View>
               <Title title="Trận đấu sắp tới" checkTitle={true} />

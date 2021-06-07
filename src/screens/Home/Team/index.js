@@ -17,6 +17,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import TeamActions from '../../../redux/TeamRedux/actions';
 import ModelNotification from '../../../components/JoinTeam/ModelJoinTeam';
 import Loading from '../../../components/Load';
+import Model from '../../../components/JoinTeam/ModelJoinTeam';
+
 const Team = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.responseProfile);
@@ -32,13 +34,31 @@ const Team = () => {
   const [modelError, setModelError] = useState(false);
   const userExists = (id) => {
     return team?.listTeam?.some(function (el) {
-      return el.id_user === id;
+      return el.create_by === id;
+    });
+  };
+  const nameExists = (nameTeam) => {
+    return team?.listTeam?.some(function (el) {
+      return el.name === nameTeam;
     });
   };
   const onCreateTeam = async () => {
     if (userExists(user.id)) {
+      setModelError(true);
+      setError('Bạn đã tạo một team trước đó, Bạn không thể tạo thêm đội nào nữa');
+    } else if (nameExists(name)) {
+      setModelError(true);
+      setError('Tên đội này đã tồn tại, bạn phải chọn tên khác');
+    } else if (!name) {
+      setModelError(true);
+      setError('Bạn Chưa nhập tên đội');
+    } else if (!address) {
+      setModelError(true);
+      setError('Bạn chưa nhập Địa chỉ');
     } else {
       await dispatch(TeamActions.createTeam({ name, address, description }));
+      setError('');
+      setModelError(false);
       setTimeout(function () {
         setModel(true);
       }, 2000);
@@ -46,6 +66,7 @@ const Team = () => {
   };
   const handleModel = () => {
     setModel(false);
+    setModelError(false);
   };
   const handleModelSuccess = () => {
     setModel(false);
@@ -62,6 +83,18 @@ const Team = () => {
           checkBtn={false}
           description={team?.error ? team?.error?.data?.message : 'Bạn đã đội thành công'}
           handleModel={team?.error ? handleModel : handleModelSuccess}
+          styleBodyModel={styles.styleModelNotification}
+          styleDescriptionView={styles.descriptionNotification}
+        />
+      )}
+      {modelError && (
+        <ModelNotification
+          labelBtn1={'Xác Nhận'}
+          title={'THẤT BẠI'}
+          checkModel={true}
+          checkBtn={false}
+          description={error}
+          handleModel={handleModel}
           styleBodyModel={styles.styleModelNotification}
           styleDescriptionView={styles.descriptionNotification}
         />
@@ -86,12 +119,12 @@ const Team = () => {
         <View style={styles.bodyTeam}>
           <TextInput
             style={styles.textInput}
-            placeholder="Tên đội"
+            placeholder="Tên đội *"
             onChangeText={(text) => setName(text)}
           />
           <TextInput
             style={styles.textInput}
-            placeholder="Địa Chỉ"
+            placeholder="Địa Chỉ *"
             onChangeText={(text) => setAddress(text)}
           />
           <TextInput
