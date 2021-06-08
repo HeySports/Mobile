@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -33,6 +33,7 @@ import LoadingView from '../../components/Loading';
 import TeamActions from '../../redux/TeamRedux/actions';
 import ItemTeam from '../../components/team/ItemTeam';
 import messaging from '@react-native-firebase/messaging';
+import myMatchActions from '../../redux/myMatches/actions';
 const data = {
   dataSlide: [
     {
@@ -55,29 +56,35 @@ const Home = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(MatchesAction.getListMatches());
-    dispatch(MatchesAction.getListMatchFindMember());
+    getMatchesList();
     dispatch(FieldAction.getListField());
     dispatch(UserAction.getAllUsers());
     dispatch(ProfileAction.userGetProfile());
     dispatch(TeamActions.getListTeam());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-    return unsubscribe;
-  }, []);
-  // selector
-  var fields = [];
+  }, [dispatch, getMatchesList]);
   const listMatches = useSelector((state) => state.matches);
   const listField = useSelector((state) => state.fields);
   const listTeam = useSelector((state) => state.team?.listTeam);
-  // data of all list
-  if (listField.responseField) {
-    fields = listField.responseField;
-  }
+  const [loading, setLoading] = useState(true);
+  const getMatchesList = useCallback(async () => {
+    await dispatch(MatchesAction.getListMatches());
+    await dispatch(MatchesAction.getListMatchFindMember());
+    await setTimeout(function () {
+      setLoading(false);
+    }, 5000);
+  }, [dispatch]);
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage?.notification?.title === 'Trận đấu mới') {
+        dispatch(MatchesAction.getListMatches());
+        dispatch(MatchesAction.getListMatchFindMember());
+      } else if (remoteMessage?.notification?.title === 'Thành viên tham gia đội') {
+        dispatch(MatchesAction.getListMatchFindMember());
+        dispatch(myMatchActions.userGetMyMatches());
+      }
+    });
+    return unsubscribe;
+  }, [dispatch]);
   const search = () => {
     pushScreen(props.componentId, 'Search', '', 'Search', false, '', '');
   };
@@ -114,7 +121,7 @@ const Home = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      {listMatches?.loadingMatches || listMatches?.loadingMatchFindMember ? (
+      {loading ? (
         <LoadingView />
       ) : (
         <ScrollView style={styles.containerHome} showsVerticalScrollIndicator={false}>
@@ -173,7 +180,7 @@ const Home = (props) => {
             <Title title="Sân Bóng" functionViewMore={viewMorePitch} />
             <View style={styles.team}>
               <FlatList
-                data={fields}
+                data={listField?.responseField}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) => <Pitch item={item} key={index} />}

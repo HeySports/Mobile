@@ -21,3 +21,6 @@ export async function createTeamApi(data) {
 export async function commentTeamApi(data) {
   return http.post('/team/ratingTeam', data);
 }
+export async function getMyDetailTeamApi() {
+  return http.get('/team/getDetailTeam/byUser');
+}

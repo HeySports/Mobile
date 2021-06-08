@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../../components/Loading';
 import myMatchActions from '../../redux/myMatches/actions';
 import moment from 'moment';
+
 const Room = (props) => {
   const [option, setOption] = useState(true);
   const room = useSelector((state) => state.myMatches);
@@ -39,6 +40,15 @@ const Room = (props) => {
       </TouchableOpacity>
     );
   };
+  // Thành viên tham gia đội
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  //     if (remoteMessage?.notification?.title === 'Thành viên tham gia đội') {
+  //       onGetMyMatches();
+  //     }
+  //   });
+  //   return unsubscribe;
+  // }, [onGetMyMatches]);
   const handleOption = () => {
     setOption(!option);
   };

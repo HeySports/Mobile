@@ -23,7 +23,6 @@ const INITIAL_STATE = Immutable({
 export const getListMatches = (state) =>
   state.merge({
     loadingMatches: true,
-    responseMatches: null,
     errorMatches: null,
     typeMatches: 'GET LIST MATCHES',
   });
@@ -38,7 +37,6 @@ export const getListMatchesSuccess = (state, { response }) =>
 export const getListMatchFindMember = (state) =>
   state.merge({
     loadingMatchFindMember: true,
-    responseMatchFindMember: null,
     errorMatches: null,
     typeMatches: 'GET_LIST_MATCH_FIND_MEMBER',
   });

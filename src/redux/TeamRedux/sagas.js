@@ -9,6 +9,7 @@ import {
   getOfferOfTeamApi,
   createTeamApi,
   commentTeamApi,
+  getMyDetailTeamApi,
 } from '../../api/team';
 export function* userGetTeam({ id }) {
   try {
@@ -69,6 +70,20 @@ export function* userCommentTeam({ data }) {
     yield put(TeamActions.commentTeamFailure(error));
   }
 }
+export function* myDetailTeam() {
+  try {
+    const response = yield call(getMyDetailTeamApi);
+    yield put(TeamActions.myDetailTeamSuccess(response.data));
+    console.log('====================================');
+    console.log(response);
+    console.log('====================================');
+  } catch (error) {
+    console.log('==========e==========================');
+    console.log(error);
+    console.log('====================================');
+    yield put(TeamActions.myDetailTeamFailure(error));
+  }
+}
 const teamSagas = () => [
   takeLatest(teamTypes.USER_GET_TEAM, userGetTeam),
   takeLatest(teamTypes.GET_TEAM_DETAIL, getTeamDetailApi),
@@ -77,5 +92,6 @@ const teamSagas = () => [
   takeLatest(teamTypes.USER_GET_OFFER_TEAM, userGetListOfferTeam),
   takeLatest(teamTypes.COMMENT_TEAM, userCommentTeam),
   takeLatest(teamTypes.CREATE_TEAM, userCreateTeam),
+  takeLatest(teamTypes.MY_DETAIL_TEAM, myDetailTeam),
 ];
 export default teamSagas();

@@ -14,6 +14,7 @@ const INITIAL_STATE = Immutable({
   loadingListOffer: false,
   createTeam: null,
   commentTeam: null,
+  myTeam: null,
 });
 export const useGetTeam = (state) =>
   state.merge({
@@ -161,6 +162,26 @@ export const commentTeamFailure = (state, { error }) =>
     error: error,
     type: 'commentTeam failure',
   });
+export const myTeamDetail = (state) =>
+  state.merge({
+    loading: true,
+    error: null,
+    type: 'myTeamDetail ',
+  });
+export const myTeamDetailSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    myTeam: response,
+    error: null,
+    type: 'myTeamDetailSuccess',
+  });
+export const myTeamDetailFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    myTeam: null,
+    error: error,
+    type: 'myTeamDetailFailure',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.USER_GET_TEAM]: useGetTeam,
   [teamTypes.USER_GET_TEAM_SUCCESS]: useGetTeamSuccess,
@@ -183,5 +204,8 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.COMMENT_TEAM]: commentTeam,
   [teamTypes.COMMENT_TEAM_SUCCESS]: commentTeamSuccess,
   [teamTypes.COMMENT_TEAM_FAILURE]: commentTeamFailure,
+  [teamTypes.MY_DETAIL_TEAM]: myTeamDetail,
+  [teamTypes.MY_DETAIL_TEAM_SUCCESS]: myTeamDetailSuccess,
+  [teamTypes.MY_DETAIL_TEAM_FAILURE]: myTeamDetailFailure,
 });
 export default reducer;

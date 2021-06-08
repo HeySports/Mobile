@@ -21,6 +21,9 @@ export const teamTypes = makeConstantCreator(
   'COMMENT_TEAM',
   'COMMENT_TEAM_SUCCESS',
   'COMMENT_TEAM_FAILURE',
+  'MY_DETAIL_TEAM',
+  'MY_DETAIL_TEAM_SUCCESS',
+  'MY_DETAIL_TEAM_FAILURE',
 );
 const userGetTeam = (id) => makeActionCreator(teamTypes.USER_GET_TEAM, { id });
 const userGetTeamSuccess = (response) =>
@@ -54,6 +57,12 @@ const commentTeam = (data) => makeActionCreator(teamTypes.COMMENT_TEAM, { data }
 const commentTeamSuccess = (response) =>
   makeActionCreator(teamTypes.COMMENT_TEAM_SUCCESS, { response });
 const commentTeamFailure = (error) => makeActionCreator(teamTypes.COMMENT_TEAM_FAILURE, { error });
+const myDetailTeam = () => makeActionCreator(teamTypes.MY_DETAIL_TEAM);
+const myDetailTeamSuccess = (response) =>
+  makeActionCreator(teamTypes.MY_DETAIL_TEAM_SUCCESS, { response });
+const myDetailTeamFailure = (error) =>
+  makeActionCreator(teamTypes.MY_DETAIL_TEAM_FAILURE, { error });
+
 export default {
   userGetTeam,
   userGetTeamSuccess,
@@ -76,4 +85,7 @@ export default {
   commentTeam,
   commentTeamFailure,
   commentTeamSuccess,
+  myDetailTeam,
+  myDetailTeamSuccess,
+  myDetailTeamFailure,
 };

@@ -12,13 +12,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { Colors, Fonts } from '../../../themes';
+import TeamActions from '../../../redux/TeamRedux/actions';
 import Images from '../../../image';
 const Team = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.responseProfile);
   useEffect(() => {
     onGetTeam();
   }, [onGetTeam]);
-  const onGetTeam = useCallback(async () => {}, []);
+  const onGetTeam = useCallback(async () => {
+    dispatch(TeamActions.myDetailTeam(user?.id));
+  }, [dispatch, user]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerDetailTeam}>
@@ -37,7 +41,11 @@ const Team = () => {
       <ScrollView style={styles.bodyContainer}>
         <View style={styles.bodyHeaderTeam}>
           <Image source={Images.vn} style={styles.imgTeam} />
-          <View style={styles.teamDetail}></View>
+          <View style={styles.teamDetail}>
+            <View>
+              <Text>Thanh</Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
