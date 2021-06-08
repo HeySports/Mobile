@@ -29,7 +29,7 @@ const ItemFindMembers = (props) => {
           />
           <ItemContent
             icon="user"
-            title={room?.team_a?.matches_number + ' /' + room?.match?.type_field * 2 + ' Người'}
+            title={room?.missing_members + ' /' + room?.match?.type_field * 2 + ' Người'}
           />
           <ItemContent
             icon="map-marker-alt"

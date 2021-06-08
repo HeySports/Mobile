@@ -168,9 +168,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   room: {
-    width: width / 2,
+    width: width / 2 - 20,
     height: 130,
-    marginLeft: 20,
+    marginLeft: 10,
     marginRight: 0,
     marginTop: 15,
     backgroundColor: Color.field,

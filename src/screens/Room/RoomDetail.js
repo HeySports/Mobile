@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
@@ -31,6 +33,7 @@ import MatchActions from '../../redux/MatchesRedux/actions';
 import Load from '../../components/Load';
 import { Navigation } from 'react-native-navigation';
 import { pushScreen } from '../../navigation/pushScreen';
+import myMatchActions from '../../redux/myMatches/actions';
 const RoomDetail = (props) => {
   const [id_room] = useState(props.data);
   const matches = useSelector((state) => state.matches);
@@ -50,16 +53,19 @@ const RoomDetail = (props) => {
       }, 250);
     }
   }, [handleRoom, room]);
-  var data = useSelector((state) => state.matches?.responseMatches);
+  var data = useSelector((state) => state.myMatches.response);
+  var dataHome = useSelector((state) => state.matches.responseMatches);
   const handleRoom = useCallback(async () => {
-    const dataList = await data;
-    if (dataList) {
-      dataList.forEach((element) => {
-        if (element?.match?.id === id_room) {
-          setRoom(element);
-        }
-      });
+    var dataList = await data;
+    var roomItem = dataList.filter((item) => item?.match.id === id_room);
+    if (roomItem.length < 1) {
+      var dataList = await dataHome;
+      roomItem = dataList.filter((item) => item?.match.id === id_room);
+      roomItem = roomItem[0];
+    } else {
+      roomItem = roomItem[0];
     }
+    setRoom(roomItem);
   }, [data, id_room]);
   const dataRoom = {
     dataMatch: matches?.responseDetailMatches?.match,

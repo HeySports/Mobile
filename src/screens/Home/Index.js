@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   listRoomFirst: {
     marginBottom: 20,
-    // paddingBottom: 5,
+    paddingBottom: 5,
   },
   listScroll: {
     height: 140,
