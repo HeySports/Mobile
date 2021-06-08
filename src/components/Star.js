@@ -9,16 +9,16 @@ const Star = ({ star, size }) => {
   let starSize = star;
   for (let i = 0; i < 5; i++) {
     if (starSize >= 1) {
-      starView.push(<Icons key={i} name="star" size={size ? size : 11} color={colors.primary} />);
+      starView.push(<Icons key={i} name="star" size={size ? size : 11} color='#ffd000' />);
       starSize = starSize - 1;
     } else if (starSize < 1 && starSize > 0) {
       starView.push(
-        <Icon key={i} name="star-half-alt" size={size ? size - 1 : 10} color={colors.primary} />,
+        <Icon key={i} name="star-half-alt" size={size ? size - 1 : 10} color='#ffd000' />,
       );
       starSize = 0;
     } else {
       starView.push(
-        <Icon key={i} name="star" size={size ? size - 1 : 10} color={colors.primary} />,
+        <Icon key={i} name="star" size={size ? size - 1 : 10} color='#ffd000' />,
       );
     }
   }

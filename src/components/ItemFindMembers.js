@@ -33,11 +33,7 @@ const ItemFindMembers = (props) => {
           />
           <ItemContent
             icon="map-marker-alt"
-            title={
-              room?.field_play
-                ? 'Sân Bóng : ' + room?.field_play?.[0]?.name
-                : 'Địa chỉ' + room?.match?.address
-            }
+            title={room?.field_play ? room?.field_play?.[0]?.name : room?.match?.address}
           />
           <ItemContent
             icon="clock"
@@ -75,7 +71,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     width: width - 40,
-    height: 300,
+    height: 310,
     borderRadius: 4,
     backgroundColor: '#fffaf0',
     borderWidth: 0.5,
@@ -116,8 +112,9 @@ const styles = StyleSheet.create({
   btnJoinTeam: {
     height: 35,
     width: '80%',
+    marginTop: 5,
     borderWidth: 1,
-    borderColor: Colors.secondary,
+    borderColor: Colors.primary,
     marginLeft: '10%',
     justifyContent: 'center',
     alignItems: 'center',

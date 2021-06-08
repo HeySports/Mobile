@@ -814,6 +814,7 @@ const styles = StyleSheet.create({
     padding: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 10,
   },
   txtNameTeam: {
     textAlign: 'center',

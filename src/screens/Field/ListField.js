@@ -27,10 +27,12 @@ const ListField = (props) => {
   };
 
   const searchField = (text) => {
-    const dataSearch = text;
+    const dataSearch = text.toUpperCase();
     const resultSearch = [];
     fields?.forEach((element) => {
-      if (element.name.indexOf(dataSearch) > -1) {
+      const name = element.name.toUpperCase();
+      const address = element.address.toUpperCase();
+      if (name.indexOf(dataSearch) > -1 || address.indexOf(dataSearch) > -1) {
         resultSearch.push(element);
       }
     });

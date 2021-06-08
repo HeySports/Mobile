@@ -9,6 +9,9 @@ import messaging from '@react-native-firebase/messaging';
 export function* userLogin({ data }) {
   try {
     const device_token = yield messaging().getToken();
+    console.log(
+      'device token............................................................'.device_token,
+    );
     const dataApi = {
       device_token: device_token,
       password: data.password,

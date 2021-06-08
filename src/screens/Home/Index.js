@@ -18,7 +18,7 @@ import Slide from './ItemSlide';
 import slide1 from '../../image/slide1.png';
 import slide2 from '../../image/slide2.jpg';
 import slide3 from '../../image/slide3.jpg';
-import ItemRoom from '../../components/ItemRoom';
+import ItemRoom from '../../components/ItemRoom2';
 import Title from '../../components/TitleView';
 import { pushScreen } from '../../navigation/pushScreen';
 import Pitch from '../../components/Pitch';
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   listRoomFirst: {
     marginBottom: 20,
-    paddingBottom: 5,
+    // paddingBottom: 5,
   },
   listScroll: {
     height: 140,

@@ -30,7 +30,7 @@ const setupFirebase = () => {
       console.log('Authorization status:', authStatus);
     }
   };
-  useEffect(async () => {
+  useEffect(() => {
     setupCloudMessaging();
   }, []);
 };

@@ -64,7 +64,7 @@ const { width } = Dimensions.get('window');
 const startWidth = 360;
 const styles = StyleSheet.create({
   container: {
-    width: width - 40,
+    width: width - 120,
     height: 250,
     marginLeft: (20 / startWidth) * width,
     marginRight: (20 / startWidth) * width,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   txtDetail: {
     fontSize: 12,
-    color: Color.primary,
+    color: Color.black,
   },
   rating: {
     position: 'absolute',

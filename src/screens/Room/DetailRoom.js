@@ -15,7 +15,7 @@ import Color from '../../themes/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Back from '../../components/Back';
 import { goBack, pushScreen } from '../../navigation/pushScreen';
-import sanbong from '../../image/sanbong.jpg';
+import sanbong from '../../image/sanbong2.jpg';
 import Field11 from '../../components/Field11';
 import Field5 from '../../components/Field5';
 import Field7 from '../../components/Field7';
@@ -67,37 +67,37 @@ const DetailRoom = (props) => {
   const dataMatches = [
     {
       icon: 'user',
-      title: 'Người Tạo: ',
+      title: ' ',
       description: room?.team_a?.members?.[0]?.full_name,
     },
     {
-      icon: 'volleyball-ball',
-      title: 'Sân Bóng',
+      icon: 'futbol',
+      title: ' ',
       description: room?.field_play ? room?.field_play?.[0]?.name : room?.match?.field_name,
     },
     {
       icon: 'i-cursor',
-      title: 'Loại Sân',
+      title: ' ',
       description: 'Sân ' + room?.match?.type_field + ' Người',
     },
     {
       icon: 'map-marker-alt',
-      title: 'Địa Chỉ',
+      title: ' ',
       description: room?.field_play ? room?.field_play?.[0]?.address : room?.match?.address,
     },
     {
       icon: 'clock',
-      title: 'Thời Gian',
-      description: moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY'),
+      title: ' ',
+      description: 'Lúc ' + moment(room?.match?.time_start_play).format('hh:mm - DD/MM/YYYY'),
     },
     {
-      icon: 'map-marker-alt',
-      title: 'Giá sân',
-      description: room?.match?.price ? room?.match?.price + ' VND' : 'FREE',
+      icon: 'dollar-sign',
+      title: ' ',
+      description: 'Tiền sân: '. room?.match?.price ? room?.match?.price + ' VND' : 'FREE',
     },
     {
       icon: 'balance-scale-right',
-      title: 'Tỷ Lệ',
+      title: ' ',
       description: room?.match?.price
         ? 'Phí chơi: ' + room?.match?.lose_pay + '  | ' + room?.match?.price + ' VND'
         : 'FREE',
@@ -215,7 +215,6 @@ const DetailRoom = (props) => {
                 return (
                   <View style={styles.itemDetail} key={index}>
                     <Icon name={item.icon} style={styles.iconDetail} />
-                    <Text style={styles.txtDetail}>{item.title}</Text>
                     <Text style={styles.txtValueDetail}>{item.description}</Text>
                   </View>
                 );

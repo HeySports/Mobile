@@ -12,7 +12,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import sanbong from '../../image/sanbong.jpg';
+import sanbong from '../../image/sanbong2.jpg';
 import logoTeam from '../../image/team.jpg';
 import Font from '../../themes/font';
 import Color from '../../themes/colors';
@@ -21,7 +21,7 @@ import image from '../../image/thanh.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Star from '../../components/Star';
 import TitleView from '../../components/Header';
-import ItemRoom from '../../components/ItemRoom';
+import ItemRoom from '../../components/ItemRoom2';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import moment from 'moment';
@@ -159,18 +159,21 @@ const RoomDetail = (props) => {
               </View>
             </View>
             <View style={styles.informationTeam}>
-              <ItemTeam
-                icon="phone"
-                description={
-                  room?.team_a?.members?.[0]?.phone_numbers
-                    ? 'Liên lạc: ' + room?.team_a?.members?.[0]?.phone_numbers
-                    : 'Liên lạc: ' + '0946613608'
-                }
-              />
-              <ItemTeam
-                icon="anchor"
-                description={'Đã đá:  ' + room?.team_a?.matches_number + ' trận'}
-              />
+              <View>
+                <ItemTeam
+                  icon="phone"
+                  description={
+                    room?.team_a?.members?.[0]?.phone_numbers
+                      ? 'Liên lạc: ' + room?.team_a?.members?.[0]?.phone_numbers
+                      : 'Liên lạc: ' + '0946613608'
+                  }
+                />
+                <ItemTeam
+                  icon="anchor"
+                  description={'Đã đá:  ' + room?.team_a?.matches_number + ' trận'}
+                />
+              </View>
+
               <ItemTeam
                 icon="users"
                 description={'Đội có ' + room?.team_a?.members?.length + ' cầu'}
@@ -184,6 +187,7 @@ const RoomDetail = (props) => {
                 showsHorizontalScrollIndicator={false}
               />
               <View style={styles.status}>
+                <Icon name="clipboard" style={styles.iconStyle} />
                 <Text style={styles.txtStatus} numberOfLines={3}>
                   {room?.match?.description}
                 </Text>
@@ -332,7 +336,6 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     flexDirection: 'row',
-    width: '100%',
     height: 25,
     alignItems: 'center',
   },
@@ -350,7 +353,7 @@ const styles = StyleSheet.create({
   },
   txtDescription: {
     fontSize: Font.font_description,
-    color: Color.primary,
+    color: Color.white,
     fontWeight: '700',
   },
   txtDescriptions: {
@@ -362,12 +365,15 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 5,
     height: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   txtStatus: {
     fontSize: Font.font_description,
-    color: Color.txtLevel2,
+    color: Color.white,
     lineHeight: 20,
     marginTop: 5,
+    marginLeft: 10,
   },
   joinTeam: {
     flex: 1,
@@ -381,6 +387,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 5,
   },
   btnJoinTeam: {
     width: 80,

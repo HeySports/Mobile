@@ -6,7 +6,7 @@ const Field5 = () => {
     <View style={styles.container}>
       <View style={styles.itemDetailMatches}>
         <View style={styles.nameTeam}>
-          <Text style={styles.txtNameTeam}>Team</Text>
+          <Text style={styles.txtNameTeam}></Text>
         </View>
         <View style={styles.goalkeeper}>
           <Position position="GK" colors="#ff8c00" />
@@ -32,7 +32,7 @@ const Field5 = () => {
       </View>
       <View style={styles.itemDetailMatches}>
         <View style={styles.nameTeam}>
-          <Text style={styles.txtNameTeam}>Team</Text>
+          <Text style={styles.txtNameTeam}></Text>
         </View>
         <View style={styles.middlePlayer}>
           <View style={styles.CMP}>

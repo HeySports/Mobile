@@ -45,7 +45,7 @@ export default ItemTeam;
 const styles = StyleSheet.create({
   container: {
     height: 150,
-    width: ScreenSize.Screen_Width - 40,
+    width: ScreenSize.Screen_Width - 120,
     marginRight: 20,
     marginLeft: 20,
     flexDirection: 'row',

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import {
   StyleSheet,
@@ -19,10 +21,12 @@ import { pushScreen } from '../../navigation/pushScreen';
 import { useSelector, useDispatch } from 'react-redux';
 import Star from '../../components/Star';
 import ProfileAction from '../../redux/ProfileRedux/actions';
+import myMatchActions from '../../redux/myMatches/actions';
 const Profile = (props) => {
   var user = [];
   var histories = [false];
   const profileStore = useSelector((state) => state.profile);
+  const room = useSelector((state) => state.myMatches);
   if (profileStore.responseProfile) {
     user = profileStore.responseProfile;
   }
@@ -87,11 +91,19 @@ const Profile = (props) => {
                 {btnprofile('plus-circle', 'Tạo Đội', handleCreateNewTeam)}
               </View>
               <Title title="Trận đấu sắp tới" checkTitle={true} />
+
               <ScrollView style={styles.listScroll} horizontal={true}>
-                <ItemRoom />
-                <ItemRoom />
-                <ItemRoom />
+                {room?.loading ? (
+                  <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <ActivityIndicator color={Color.primary} size="small" />
+                  </View>
+                ) : (
+                  room?.response?.map(({ item, index }) => {
+                    return <ItemRoom key={index} item={item} />;
+                  })
+                )}
               </ScrollView>
+
               <Title title="Lịch sử thi đấu" checkTitle={true} />
             </ScrollView>
           </View>
