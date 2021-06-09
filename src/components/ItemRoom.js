@@ -78,7 +78,11 @@ const ItemRoom = (props) => {
               </View>
             </View>
             <View style={styles.informationOfMatches}>
-              <Text style={styles.txtNameTeam}>{team_a[0]?.name_team?.toUpperCase()}</Text>
+              <Text style={styles.txtNameTeam}>
+                {props.room.team_a.members[0].team_name
+                  ? props.room.team_a.members[0].team_name?.toUpperCase()
+                  : props.room.team_a.members[0].full_name}
+              </Text>
               <View style={styles.listIconStar}>
                 <Star star={team_a[0]?.rating_team} />
               </View>
@@ -93,7 +97,11 @@ const ItemRoom = (props) => {
               </View>
             </View>
             <View style={styles.informationOfMatches}>
-              <Text style={styles.txtNameTeam}>{team_b[0]?.name_team?.toUpperCase()}</Text>
+              <Text style={styles.txtNameTeam}>
+                {props.room.team_b.members[0].team_name
+                  ? props.room.team_b.members[0].team_name?.toUpperCase()
+                  : props.room.team_b.members[0].full_name}
+              </Text>
               <View style={styles.listIconStar}>
                 <Star star={team_b[0]?.rating_team} />
               </View>

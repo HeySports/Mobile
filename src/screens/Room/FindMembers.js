@@ -268,6 +268,7 @@ const FindMembers = (props) => {
       } else if (!address) {
         setError('Bạn phải nhập địa chỉ sân bóng bạn chơi!');
       } else {
+        var teamName = team?.[0]?.name;
         if (optionMatch) {
           if (!members) {
             setError('Bạn Cần phải nhấp số cầu thủ hiện tại bạn có!');
@@ -289,6 +290,7 @@ const FindMembers = (props) => {
               lock: 0,
               address: address,
               field_name: nameField,
+              team_name: teamName,
             };
             await dispatch(ActionMatch.userPostMatch(dataMatch));
             setTimeout(function () {
@@ -310,6 +312,7 @@ const FindMembers = (props) => {
             description: description,
             lock: 0,
             address: address,
+            team_name: teamName,
             field_name: nameField,
           };
           await dispatch(ActionMatch.userPostMatch(dataMatch));
@@ -343,6 +346,7 @@ const FindMembers = (props) => {
                 description: description,
                 lock: 0,
                 address: fieldHaveChoose?.[0]?.address,
+                team_name: teamName,
                 field_name: fieldHaveChoose?.[0]?.name,
               };
               await dispatch(ActionMatch.userPostMatch(dataMatch));
@@ -363,6 +367,7 @@ const FindMembers = (props) => {
               type_field: typeField,
               numbers_user_added: members,
               description: description,
+              team_name: teamName,
               lock: 0,
               address: fieldHaveChoose?.[0]?.address,
               field_name: fieldHaveChoose?.[0]?.name,

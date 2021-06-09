@@ -110,9 +110,9 @@ const ItemRoom = (props) => {
             </View>
             <View style={styles.informationOfMatches}>
               <Text style={styles.txtNameTeam}>
-                {props.room.team_a.members[0].team_name
-                  ? props.room.team_a.members[0].team_name?.toUpperCase()
-                  : props.room.team_a.members[0].full_name}
+                {props.room.team_b.members[0].team_name
+                  ? props.room.team_b.members[0].team_name?.toUpperCase()
+                  : props.room.team_b.members[0].full_name}
               </Text>
               <View style={styles.listIconStar}>
                 <Star star={team_b[0]?.rating_team} />
@@ -143,11 +143,11 @@ const ItemRoom = (props) => {
           <Text style={styles.nameRoom}>{room?.match?.name_room?.toUpperCase()}</Text>
         </View>
         <View style={styles.teamInfo}>
-          {room?.team_a?.matches_number ? itemTeam(true) : team()}
+          {room?.team_a?.members?.length > 0 ? itemTeam(true) : team()}
           <View style={styles.iconMatch}>
             <Image source={imgvs} style={styles.imgVs} />
           </View>
-          {room?.team_b?.matches_number ? itemTeam(false) : team()}
+          {room?.team_b?.members?.length > 0 ? itemTeam(false) : team()}
         </View>
 
         <View style={styles.bottomRoom}>
