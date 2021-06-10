@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import TeamActions from '../../../redux/TeamRedux/actions';
@@ -99,6 +100,7 @@ const Detail = ({ data, componentId }) => {
       setTextComment('');
       setRating(0);
       dispatch(TeamActions.commentTeam(dataComment));
+      Keyboard.dismiss();
     }
   };
   function userExists(id) {
@@ -116,6 +118,7 @@ const Detail = ({ data, componentId }) => {
         description: description,
       };
       await dispatch(TeamActions.userOfferTeam(dataOffer));
+      Keyboard.dismiss();
       setModel(false);
       setDescription('');
       setTimeout(function () {
@@ -280,7 +283,8 @@ const Detail = ({ data, componentId }) => {
                 <View style={styles.descriptionJoin}>
                   <TextInput
                     style={styles.txtInputJoinTeam}
-                    numberOfLines={64}
+                    numberOfLines={6}
+                    multiline={true}
                     placeholder="Mô tả về bạn"
                     onChangeText={(text) => setDescription(text)}
                   />
@@ -347,6 +351,7 @@ const Detail = ({ data, componentId }) => {
                   <TextInput
                     style={styles.txtInputJoinTeam}
                     numberOfLines={6}
+                    multiline={true}
                     placeholder="Nhận xét của bạn !"
                     onChangeText={(text) => setTextComment(text)}
                   />

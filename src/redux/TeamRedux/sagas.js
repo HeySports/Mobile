@@ -85,6 +85,7 @@ export function* acceptJoinTeam({ id }) {
   try {
     const response = yield call(acceptJoinTeamApi, id);
     yield put(TeamActions.acceptJoinTeamSuccess(response?.data));
+    yield put(TeamActions.myDetailTeam());
   } catch (error) {
     yield put(TeamActions.acceptJoinTeamFailure(error));
   }

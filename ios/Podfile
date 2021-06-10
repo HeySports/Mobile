@@ -20,6 +20,8 @@ target 'HeySports' do
 
   pod 'RNMomosdk', :path => '../node_modules/react-native-momosdk'
 
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
   target 'HeySportsTests' do
     inherit! :complete
     # Pods for testing

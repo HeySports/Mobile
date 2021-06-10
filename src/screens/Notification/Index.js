@@ -1,12 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import Color from '../../themes/colors';
 import Font from '../../themes/font';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemNotification from '../../components/Notification';
 import { getNotification } from '../../redux/NotificationRedux/actions';
 import setupFirebase from '../../../setupFirebase';
+import Logo from '../../image/logo.png';
 import messaging from '@react-native-firebase/messaging';
 // import Setup from './Setup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,12 +42,15 @@ const Notification = () => {
         <Icon name="bell" style={checkNotification ? styles.icons : styles.icon} />
       </View>
       <ScrollView style={styles.listView}>
-        {list ? (
+        {list?.length ? (
           list.map((item, index) => {
             return <ItemNotification item={item} checkItem={item.status === 1} />;
           })
         ) : (
-          <Text>Không có thông báo</Text>
+          <View style={styles.containerDefault}>
+            <Image source={Logo} style={styles.imageLogo} />
+            <Text style={styles.txtBtnCreate}>Bạn chưa có thông báo nào cả !!</Text>
+          </View>
         )}
       </ScrollView>
     </View>
@@ -47,12 +59,24 @@ const Notification = () => {
 
 export default Notification;
 const { width, height } = Dimensions.get('window');
-const startWidth = 360;
-const startHeight = 640;
 const styles = StyleSheet.create({
   container: {
     width: width,
     height: height,
+  },
+  txtBtnCreate: {
+    marginTop: 20,
+  },
+  containerDefault: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  imageLogo: {
+    height: 220,
+    width: 220,
+    marginTop: 100,
+    borderRadius: 125,
   },
   header: {
     height: 50,

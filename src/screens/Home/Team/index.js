@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
+import axios from 'axios';
 import { Navigation } from 'react-native-navigation';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { Colors } from '../../../themes';
@@ -18,12 +19,15 @@ import TeamActions from '../../../redux/TeamRedux/actions';
 import ModelNotification from '../../../components/JoinTeam/ModelJoinTeam';
 import Loading from '../../../components/Load';
 import Model from '../../../components/JoinTeam/ModelJoinTeam';
+import LoadingImage from '../../../components/Load';
+
+import DocumentPicker from 'react-native-document-picker';
 
 const Team = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.responseProfile);
 
-  const [image, setImage] = useState(Images.vn);
+  const [image, setImage] = useState('');
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
@@ -32,6 +36,48 @@ const Team = () => {
   const team = useSelector((state) => state.team);
   const [error, setError] = useState('');
   const [modelError, setModelError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const uploadImage = async () => {
+    const TOKEN =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiM2E5YzE5NmI2YjJjNGIyNmRiZGZkODE1MTNkOGVjZDIxN2E3MTUzMWE0N2QxM2M1OTQ3OWFiNWFiMzE5NzQ1OGE0NzhjOTc1NTVlNThiOWUiLCJpYXQiOjE2MTU5ODAwMTIsIm5iZiI6MTYxNTk4MDAxMiwiZXhwIjoxNjQ3NTE2MDExLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.hej0cb0MhGQwFKl66Bq0iK0M-o2yOeCWNOrp9lXj8jb2I4pdUwXsTgOJSL99Bq7XQJvYBqhVkbdfqQYSgj-Q3h3l5nvuOujdZIoR6-5Ma_VXjT9OncXo_XHDxasFTFjEmTlxUSnquMO6hcWJmqiatd8M15bcaY257KjDBdcHfTXnWCzxMyNceC4jTr_uVhGjlHwRB-Z7V7S0P4fVGF-oV5c6kbcdoAq8ktqT0FgpJNf4k4_PBP46lpteVDKhHzT5XDcXMbxSt1upEw9J_ThV0L5Ooy0w5Xu7vnfkkLFSZ0AdeT5yYuFb6XFevmmRpgIEjzt-oK8OjpsYgNWAp0D1qAnXjnnXF1gKJxkQqE0vxPrQlK18B4oJiX04XxMvmxypZakMnJMV1fEeX7XsNlth2JUvjRkMUi0Wc-e6fbuuMguKYjfNmTJqMvMDwF1yzJ1I2-Fcrg23Ixt1Cf-y19wSOfrGKSj_lV3YR5kfWQRwJIY4UwdhQyxlWPo8b0K1B_lwP8zg3qR5e7G8eNEr1IXxxk8DMXQ6CRRfESjCknvIDoDpGV-Dh2F2njEt7KAsXAeonBznbesbwkyyckCxhv1te2gC8wzqZn4fPtg8cgHgHSbS_iSsF7RvOAdeKTzm9kjOyGt_nS44RkQQ7zcRw-7fLKgt_TIr45Cstq6P2i3WkRY';
+    try {
+      const response = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      if (response) {
+        setImage(response.uri);
+      }
+      setLoading(true);
+      const dataForm = new FormData();
+      dataForm.append('folder', 'avatars');
+      dataForm.append('image', {
+        uri: response.uri,
+        type: response.type,
+        name: response.name,
+      });
+      axios({
+        method: 'POST',
+        url: 'http://dtravel.crayi.com/api/v1/image-upload',
+        data: dataForm,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: 'Bearer ' + TOKEN,
+        },
+      })
+        .then(function (responses) {
+          console.log(responses);
+          if (responses.status === 200) {
+            setLoading(false);
+            setImage(responses?.data?.data);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log(error.response.data);
+          setLoading(false);
+        });
+    } catch (err) {}
+  };
   const userExists = (id) => {
     return team?.listTeam?.some(function (el) {
       return el.create_by === id;
@@ -56,7 +102,7 @@ const Team = () => {
       setModelError(true);
       setError('Bạn chưa nhập Địa chỉ');
     } else {
-      await dispatch(TeamActions.createTeam({ name, address, description }));
+      await dispatch(TeamActions.createTeam({ name, address, description, image }));
       setError('');
       setModelError(false);
       setTimeout(function () {
@@ -114,8 +160,13 @@ const Team = () => {
       </View>
       <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
         <View style={styles.imageTeam}>
-          <Image source={image} style={styles.image} />
+          <Image source={image ? { uri: image } : Images.vn} style={styles.image} />
+          <TouchableOpacity style={styles.btnUpload} onPress={uploadImage}>
+            <Icons name="camera" style={styles.iconUpload} />
+          </TouchableOpacity>
+          {loading && <LoadingImage />}
         </View>
+
         <View style={styles.bodyTeam}>
           <TextInput
             style={styles.textInput}
@@ -136,6 +187,7 @@ const Team = () => {
             style={[styles.textInput, styles.txtDescription]}
             placeholder="Mô Tả Đội"
             numberOfLines={6}
+            multiline={true}
             onChangeText={(text) => setDescription(text)}
           />
           <TouchableOpacity style={styles.btnCreateTeam} onPress={onCreateTeam}>
@@ -234,5 +286,18 @@ const styles = StyleSheet.create({
   },
   descriptionNotification: {
     height: 80,
+  },
+  btnUpload: {
+    position: 'absolute',
+    bottom: 10,
+    left: 15,
+    height: 40,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconUpload: {
+    fontSize: 20,
+    color: Colors.primary,
   },
 });
