@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../../components/Loading';
 import myMatchActions from '../../redux/myMatches/actions';
 import moment from 'moment';
-
+import Logo from '../../image/logo.png';
 const Room = (props) => {
   const [option, setOption] = useState(true);
   const room = useSelector((state) => state.myMatches);
@@ -40,15 +40,6 @@ const Room = (props) => {
       </TouchableOpacity>
     );
   };
-  // Thành viên tham gia đội
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-  //     if (remoteMessage?.notification?.title === 'Thành viên tham gia đội') {
-  //       onGetMyMatches();
-  //     }
-  //   });
-  //   return unsubscribe;
-  // }, [onGetMyMatches]);
   const handleOption = () => {
     setOption(!option);
   };
@@ -125,6 +116,7 @@ const Room = (props) => {
           txtColor={option ? Colors.txtLevel3 : Colors.white}
         />
       </View>
+
       {room?.loading ? (
         <Loading />
       ) : (
@@ -151,11 +143,44 @@ const Room = (props) => {
           )}
         </View>
       )}
+      {room?.response?.length === 0 && option && (
+        <View style={styles.containerDefault}>
+          <Image source={Logo} style={styles.imageLogo} />
+          <TouchableOpacity style={styles.btnCreate} onPress={handleOption}>
+            <Text style={styles.txtBtnCreate}>Tạo Trận</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 export default Room;
 const styles = StyleSheet.create({
+  containerDefault: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  imageLogo: {
+    height: 220,
+    width: 220,
+    marginTop: 100,
+    borderRadius: 125,
+  },
+  btnCreate: {
+    margin: 50,
+    height: 50,
+    borderRadius: 5,
+    backgroundColor: Colors.secondary,
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtBtnCreate: {
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: '700',
+  },
   container: {
     flex: 1,
   },

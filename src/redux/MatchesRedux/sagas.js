@@ -39,8 +39,8 @@ export function* userPostMatch({ data }) {
   try {
     const response = yield call(userPostMatchApi, data);
     yield put(MatchesAction.userPostMatchSuccess(response.data));
-    yield put(OrdersActions.userOrderFieldFailure(null));
     yield put(myMatchActions.userGetMyMatches());
+    yield put(OrdersActions.userOrderFieldFailure(null));
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
   }

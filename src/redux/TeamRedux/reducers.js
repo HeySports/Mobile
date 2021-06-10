@@ -15,6 +15,8 @@ const INITIAL_STATE = Immutable({
   createTeam: null,
   commentTeam: null,
   myTeam: null,
+  acceptJoinTeam: null,
+  removeJoinTeam: null,
 });
 export const useGetTeam = (state) =>
   state.merge({
@@ -182,6 +184,46 @@ export const myTeamDetailFailure = (state, { error }) =>
     error: error,
     type: 'myTeamDetailFailure',
   });
+export const acceptJoinTeam = (state) =>
+  state.merge({
+    loading: true,
+    error: null,
+    type: 'acceptJoinTeam ',
+  });
+export const acceptJoinTeamSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    acceptJoinTeam: response,
+    error: null,
+    type: 'acceptJoinTeamSuccess',
+  });
+export const acceptJoinTeamFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    acceptJoinTeam: null,
+    error: error,
+    type: 'acceptJoinTeamFailure',
+  });
+export const removeJoinTeam = (state) =>
+  state.merge({
+    loading: true,
+    error: null,
+    type: 'removeJoinTeam ',
+  });
+export const removeJoinTeamSuccess = (state, { response }) =>
+  state.merge({
+    loading: false,
+    removeJoinTeam: response,
+    error: null,
+    type: 'removeJoinTeamSuccess',
+  });
+export const removeJoinTeamFailure = (state, { error }) =>
+  state.merge({
+    loading: false,
+    removeJoinTeam: null,
+    error: error,
+    type: 'removeJoinTeamFailure',
+  });
 const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.USER_GET_TEAM]: useGetTeam,
   [teamTypes.USER_GET_TEAM_SUCCESS]: useGetTeamSuccess,
@@ -207,5 +249,11 @@ const reducer = makeReducerCreator(INITIAL_STATE, {
   [teamTypes.MY_DETAIL_TEAM]: myTeamDetail,
   [teamTypes.MY_DETAIL_TEAM_SUCCESS]: myTeamDetailSuccess,
   [teamTypes.MY_DETAIL_TEAM_FAILURE]: myTeamDetailFailure,
+  [teamTypes.ACCEPT_JOIN_TEAM]: acceptJoinTeam,
+  [teamTypes.ACCEPT_JOIN_TEAM_SUCCESS]: acceptJoinTeamSuccess,
+  [teamTypes.ACCEPT_JOIN_TEAM_FAILURE]: acceptJoinTeamFailure,
+  [teamTypes.REMOVE_JOIN_TEAM]: removeJoinTeam,
+  [teamTypes.REMOVE_JOIN_TEAM_SUCCESS]: removeJoinTeamSuccess,
+  [teamTypes.REMOVE_JOIN_TEAM_FAILURE]: removeJoinTeamFailure,
 });
 export default reducer;

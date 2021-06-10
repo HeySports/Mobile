@@ -26,7 +26,7 @@ import ModelOffer from '../../../components/JoinTeam/ModelJoinTeam';
 import Load from '../../../components/Load';
 import ModelNotification from '../../../components/JoinTeam/ModelJoinTeam';
 
-const Detail = ({ data }) => {
+const Detail = ({ data, componentId }) => {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
   const user = useSelector((state) => state.profile.responseProfile);
@@ -139,6 +139,15 @@ const Detail = ({ data }) => {
   };
   const handleModelNotification = () => {
     setModel(false);
+  };
+  const onRating = () => {
+    if (team?.teamDetail?.team?.rating > 4) {
+      return 'Đội Mạnh';
+    } else if (team?.teamDetail?.team?.rating > 4) {
+      return 'Đá Được';
+    } else {
+      return 'Đội Yếu';
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -260,6 +269,10 @@ const Detail = ({ data }) => {
                     )}
                 </Text>
               </View>
+              <View style={styles.itemInformation}>
+                <Icons name="gem" style={[styles.iconItemInfo, [{ fontSize: 18 }]]} />
+                <Text style={styles.txtItemInfo}>{onRating()}</Text>
+              </View>
               <View style={styles.description}>
                 <Text style={styles.txtItemInfo}>{team?.teamDetail?.team?.description}</Text>
               </View>
@@ -300,7 +313,9 @@ const Detail = ({ data }) => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 data={team?.teamDetail?.userOfTeam}
-                renderItem={({ item, index }) => <Player key={index} player={item} />}
+                renderItem={({ item, index }) => (
+                  <Player key={index} player={item} componentId={componentId} />
+                )}
               />
             </View>
           )}
@@ -475,10 +490,11 @@ const styles = StyleSheet.create({
   btnJoinTeam: {
     backgroundColor: Colors.primary,
     width: '100%',
-    height: 45,
+    height: 40,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 5,
   },
   containerInformation: {
     height: ScreenSize.Screen_Height / 2.6,

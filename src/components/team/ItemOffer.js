@@ -1,13 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { Colors, Fonts, ScreenSize } from '../../themes';
+import { Colors, Fonts } from '../../themes';
+import TeamActions from '../../redux/TeamRedux/actions';
 import Star from '../Star';
 import { formatDate } from '../../utils/Tools';
 import Images from '../../image';
+import { useDispatch } from 'react-redux';
 const ItemOffer = ({ offer }) => {
-  console.log('====================================');
-  console.log(offer);
-  console.log('====================================');
+  const dispatch = useDispatch();
+  const onAccept = () => {
+    dispatch(TeamActions.acceptJoinTeam(offer?.id));
+  };
+  const onRemove = () => {
+    dispatch(TeamActions.removeJoinTeam(offer?.id));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,10 +34,13 @@ const ItemOffer = ({ offer }) => {
         <Text style={styles.description}>{offer?.description}</Text>
       </View>
       <View style={styles.bottom}>
-        <TouchableOpacity style={[styles.btnBottom, { backgroundColor: Colors.secondary }]}>
+        <TouchableOpacity
+          style={[styles.btnBottom, { backgroundColor: Colors.secondary }]}
+          onPress={onAccept}
+        >
           <Text style={styles.txtBtnBottom}>Chấp Nhận</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btnBottom, styles.btnRemove]}>
+        <TouchableOpacity style={[styles.btnBottom, styles.btnRemove]} onPress={onRemove}>
           <Text style={styles.txtBtnBottom}>Từ Chối</Text>
         </TouchableOpacity>
       </View>
@@ -43,6 +52,8 @@ export default ItemOffer;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 10,
+    marginBottom: 10,
     height: 170,
     width: '100%',
     borderRadius: 4,

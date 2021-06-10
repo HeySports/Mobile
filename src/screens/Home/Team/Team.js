@@ -21,9 +21,10 @@ import Player from '../../../components/team/PlayerTeam';
 import Comment from '../../../components/team/comment';
 import { pushScreen } from '../../../navigation/pushScreen';
 import ItemOffer from '../../../components/team/ItemOffer';
-const Team = () => {
+import messaging from '@react-native-firebase/messaging';
+import Loading from '../../../components/Load';
+const Team = ({ componentId }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.profile.responseProfile);
   const team = useSelector((state) => state.team);
   const [information, setInformation] = useState(true);
   const [comment, setComment] = useState(false);
@@ -57,7 +58,7 @@ const Team = () => {
     onGetTeam();
   }, [onGetTeam]);
   const onGetTeam = useCallback(async () => {
-    await dispatch(TeamActions.myDetailTeam());
+    dispatch(TeamActions.myDetailTeam());
   }, [dispatch]);
 
   const ItemMenu = ({ icon, colorIcon, colorButton, text, onPress }) => {
@@ -92,9 +93,14 @@ const Team = () => {
       false,
     );
   };
-  console.log('====================================');
-  console.log(team?.listOfferTeam);
-  console.log('====================================');
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage?.notification?.title === 'Chấp nhận vào đội') {
+        onGetTeam();
+      }
+    });
+    return unsubscribe;
+  }, [dispatch, onGetTeam]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerDetailTeam}>
@@ -183,7 +189,7 @@ const Team = () => {
                 <Text style={styles.txtItemInfo}>{onRating()}</Text>
               </View>
               <View style={styles.description}>
-                <Text style={styles.txtItemInfo}>asidhjkads</Text>
+                <Text style={styles.txtItemInfo}>{team?.myTeam?.team?.description}</Text>
               </View>
             </View>
           )}
@@ -193,7 +199,9 @@ const Team = () => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 data={team?.myTeam?.userOfTeam}
-                renderItem={({ item, index }) => <Player key={index} player={item} />}
+                renderItem={({ item, index }) => (
+                  <Player key={index} player={item} componentId={componentId} />
+                )}
               />
             </View>
           )}
@@ -222,6 +230,7 @@ const Team = () => {
           )}
         </View>
       </ScrollView>
+      {team?.loading && <Loading />}
     </SafeAreaView>
   );
 };

@@ -24,6 +24,12 @@ export const teamTypes = makeConstantCreator(
   'MY_DETAIL_TEAM',
   'MY_DETAIL_TEAM_SUCCESS',
   'MY_DETAIL_TEAM_FAILURE',
+  'ACCEPT_JOIN_TEAM',
+  'ACCEPT_JOIN_TEAM_SUCCESS',
+  'ACCEPT_JOIN_TEAM_FAILURE',
+  'REMOVE_JOIN_TEAM',
+  'REMOVE_JOIN_TEAM_SUCCESS',
+  'REMOVE_JOIN_TEAM_FAILURE',
 );
 const userGetTeam = (id) => makeActionCreator(teamTypes.USER_GET_TEAM, { id });
 const userGetTeamSuccess = (response) =>
@@ -62,7 +68,16 @@ const myDetailTeamSuccess = (response) =>
   makeActionCreator(teamTypes.MY_DETAIL_TEAM_SUCCESS, { response });
 const myDetailTeamFailure = (error) =>
   makeActionCreator(teamTypes.MY_DETAIL_TEAM_FAILURE, { error });
-
+const acceptJoinTeam = (id) => makeActionCreator(teamTypes.ACCEPT_JOIN_TEAM, { id });
+const acceptJoinTeamSuccess = (response) =>
+  makeActionCreator(teamTypes.ACCEPT_JOIN_TEAM_SUCCESS, { response });
+const acceptJoinTeamFailure = (error) =>
+  makeActionCreator(teamTypes.ACCEPT_JOIN_TEAM_FAILURE, { error });
+const removeJoinTeam = (id) => makeActionCreator(teamTypes.REMOVE_JOIN_TEAM, { id });
+const removeJoinTeamSuccess = (response) =>
+  makeActionCreator(teamTypes.REMOVE_JOIN_TEAM_SUCCESS, { response });
+const removeJoinTeamFailure = (error) =>
+  makeActionCreator(teamTypes.REMOVE_JOIN_TEAM_FAILURE, { error });
 export default {
   userGetTeam,
   userGetTeamSuccess,
@@ -88,4 +103,10 @@ export default {
   myDetailTeam,
   myDetailTeamSuccess,
   myDetailTeamFailure,
+  acceptJoinTeam,
+  acceptJoinTeamSuccess,
+  acceptJoinTeamFailure,
+  removeJoinTeam,
+  removeJoinTeamFailure,
+  removeJoinTeamSuccess,
 };

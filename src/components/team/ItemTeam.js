@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Colors, Fonts, ScreenSize } from '../../themes';
 import Images from '../../image/index';
@@ -7,6 +7,8 @@ import Star from '../../components/Star';
 import { pushScreen } from '../../navigation/pushScreen';
 import { useDispatch } from 'react-redux';
 import TeamActions from '../../redux/TeamRedux/actions';
+import messaging from '@react-native-firebase/messaging';
+
 const ItemTeam = ({ item }) => {
   const dispatch = useDispatch();
   const onDetailTeam = async () => {
@@ -14,6 +16,15 @@ const ItemTeam = ({ item }) => {
     await pushScreen('Home', 'TeamDetail', item?.id, false, false, false, false, false);
     await dispatch(TeamActions.userGetOfferTeam(item?.id));
   };
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage?.notification?.title === 'Chấp nhận vào đội') {
+        dispatch(TeamActions.userGetOfferTeam(item?.id));
+        dispatch(TeamActions.getTeamDetail(item?.id));
+      }
+    });
+    return unsubscribe;
+  }, [dispatch, item]);
   return (
     <TouchableOpacity style={styles.container} onPress={onDetailTeam}>
       <View style={styles.teamImage}>

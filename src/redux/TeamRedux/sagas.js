@@ -10,6 +10,8 @@ import {
   createTeamApi,
   commentTeamApi,
   getMyDetailTeamApi,
+  acceptJoinTeamApi,
+  removeJoinTeamApi,
 } from '../../api/team';
 export function* userGetTeam({ id }) {
   try {
@@ -79,6 +81,23 @@ export function* myDetailTeam() {
     yield put(TeamActions.myDetailTeamFailure(error));
   }
 }
+export function* acceptJoinTeam({ id }) {
+  try {
+    const response = yield call(acceptJoinTeamApi, id);
+    yield put(TeamActions.acceptJoinTeamSuccess(response?.data));
+  } catch (error) {
+    yield put(TeamActions.acceptJoinTeamFailure(error));
+  }
+}
+export function* removeJoinTeam({ id }) {
+  try {
+    const response = yield call(removeJoinTeamApi, id);
+    yield put(TeamActions.removeJoinTeamSuccess(response?.data));
+    yield put(TeamActions.myDetailTeam());
+  } catch (error) {
+    yield put(TeamActions.removeJoinTeamFailure(error));
+  }
+}
 const teamSagas = () => [
   takeLatest(teamTypes.USER_GET_TEAM, userGetTeam),
   takeLatest(teamTypes.GET_TEAM_DETAIL, getTeamDetailApi),
@@ -88,5 +107,7 @@ const teamSagas = () => [
   takeLatest(teamTypes.COMMENT_TEAM, userCommentTeam),
   takeLatest(teamTypes.CREATE_TEAM, userCreateTeam),
   takeLatest(teamTypes.MY_DETAIL_TEAM, myDetailTeam),
+  takeLatest(teamTypes.ACCEPT_JOIN_TEAM, acceptJoinTeam),
+  takeLatest(teamTypes.REMOVE_JOIN_TEAM, removeJoinTeam),
 ];
 export default teamSagas();

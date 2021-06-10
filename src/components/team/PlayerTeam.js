@@ -4,9 +4,9 @@ import { Colors, Fonts, ScreenSize } from '../../themes';
 import Star from '../Star';
 import { pushScreen } from '../../navigation/pushScreen';
 import Images from '../../image/index';
-const PlayerTeam = ({ player }) => {
+const PlayerTeam = ({ player, componentId }) => {
   const user = () => {
-    pushScreen('TeamDetail', 'User', player?.id, 'User', false, '', '');
+    pushScreen(componentId, 'User', player?.id, 'User', false, '', '');
   };
   return (
     <TouchableOpacity style={styles.container} onPress={user}>

@@ -24,3 +24,12 @@ export async function commentTeamApi(data) {
 export async function getMyDetailTeamApi() {
   return http.get('/team/getDetailTeam/byUser');
 }
+export async function acceptJoinTeamApi(id) {
+  console.log('===============http://127.0.0.1:8000/=====================');
+  console.log(id);
+  console.log('====================================');
+  return http.put('/offers/accept/' + id + '/offerTeam');
+}
+export async function removeJoinTeamApi(id) {
+  return http.put('/offers/remove/' + id + '/offerTeam');
+}
