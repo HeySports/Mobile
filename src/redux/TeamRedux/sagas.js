@@ -73,14 +73,9 @@ export function* userCommentTeam({ data }) {
 export function* myDetailTeam() {
   try {
     const response = yield call(getMyDetailTeamApi);
+    yield put(TeamActions.userGetOfferTeam(response?.data?.team?.id));
     yield put(TeamActions.myDetailTeamSuccess(response.data));
-    console.log('====================================');
-    console.log(response);
-    console.log('====================================');
   } catch (error) {
-    console.log('==========e==========================');
-    console.log(error);
-    console.log('====================================');
     yield put(TeamActions.myDetailTeamFailure(error));
   }
 }

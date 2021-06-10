@@ -78,8 +78,13 @@ const Home = (props) => {
       if (remoteMessage?.notification?.title === 'Trận đấu mới') {
         dispatch(MatchesAction.getListMatches());
         dispatch(MatchesAction.getListMatchFindMember());
-      } else if (remoteMessage?.notification?.title === 'Thành viên tham gia đội') {
+      } else if (remoteMessage?.notification?.title === 'Thành viên tham gia trận') {
         dispatch(MatchesAction.getListMatchFindMember());
+        dispatch(myMatchActions.userGetMyMatches());
+      } else if (remoteMessage?.notification?.title === 'Đội tạo mới') {
+        dispatch(TeamActions.getListTeam());
+      } else if (remoteMessage?.notification?.title === 'Tham gia trận đấu') {
+        dispatch(MatchesAction.getListMatches());
         dispatch(myMatchActions.userGetMyMatches());
       }
     });

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,22 +7,94 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  FlatList,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import Icons from 'react-native-vector-icons/FontAwesome5';
-import { Colors, Fonts } from '../../../themes';
+import { Colors, Fonts, ScreenSize } from '../../../themes';
 import TeamActions from '../../../redux/TeamRedux/actions';
 import Images from '../../../image';
+import { formatDate } from '../../../utils/Tools';
+import Star from '../../../components/Star';
+import Player from '../../../components/team/PlayerTeam';
+import Comment from '../../../components/team/comment';
+import { pushScreen } from '../../../navigation/pushScreen';
+import ItemOffer from '../../../components/team/ItemOffer';
 const Team = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.responseProfile);
+  const team = useSelector((state) => state.team);
+  const [information, setInformation] = useState(true);
+  const [comment, setComment] = useState(false);
+  const [members, setMembers] = useState(false);
+  const [offer, setOffer] = useState(false);
+  const onInfo = () => {
+    setInformation(true);
+    setComment(false);
+    setMembers(false);
+    setOffer(false);
+  };
+  const onMembers = () => {
+    setInformation(false);
+    setComment(false);
+    setMembers(true);
+    setOffer(false);
+  };
+  const onComment = () => {
+    setInformation(false);
+    setComment(true);
+    setMembers(false);
+    setOffer(false);
+  };
+  const onOffer = () => {
+    setInformation(false);
+    setComment(false);
+    setMembers(false);
+    setOffer(true);
+  };
   useEffect(() => {
     onGetTeam();
   }, [onGetTeam]);
   const onGetTeam = useCallback(async () => {
-    dispatch(TeamActions.myDetailTeam(user?.id));
-  }, [dispatch, user]);
+    await dispatch(TeamActions.myDetailTeam());
+  }, [dispatch]);
+
+  const ItemMenu = ({ icon, colorIcon, colorButton, text, onPress }) => {
+    return (
+      <TouchableOpacity
+        style={[styles.btnMenu, { backgroundColor: colorButton }]}
+        onPress={onPress}
+      >
+        <Icons name={icon} style={[styles.iconMenu, { color: colorIcon }]} />
+        {text && <Text style={[styles.txtMenu, { color: colorIcon }]}>{text}</Text>}
+      </TouchableOpacity>
+    );
+  };
+  const onRating = () => {
+    if (team?.myTeam?.team?.rating > 4) {
+      return 'Đội Mạnh';
+    } else if (team?.myTeam?.team?.rating > 4) {
+      return 'Đá Được';
+    } else {
+      return 'Đội Yếu';
+    }
+  };
+  const commentScreen = () => {
+    pushScreen(
+      'TeamOffer',
+      'CommentTeam',
+      team?.teamDetail?.commentOfTeam,
+      '',
+      false,
+      false,
+      false,
+      false,
+    );
+  };
+  console.log('====================================');
+  console.log(team?.listOfferTeam);
+  console.log('====================================');
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerDetailTeam}>
@@ -40,12 +112,114 @@ const Team = () => {
       </View>
       <ScrollView style={styles.bodyContainer}>
         <View style={styles.bodyHeaderTeam}>
-          <Image source={Images.vn} style={styles.imgTeam} />
+          <Image
+            source={team?.myTeam?.team?.image ? { uri: team?.myTeam?.team?.image } : Images.vn}
+            style={styles.imgTeam}
+          />
           <View style={styles.teamDetail}>
-            <View>
-              <Text>Thanh</Text>
-            </View>
+            <Text style={styles.txtNameTeam} numberOfLines={2}>
+              {team?.myTeam?.team?.name
+                ? team?.myTeam?.team?.name?.toUpperCase()
+                : 'Name Team'?.toUpperCase()}
+            </Text>
+            <Star star={team?.myTeam?.team.rating ? team?.myTeam?.team.rating : 1} size={18} />
           </View>
+        </View>
+        <View style={styles.containerMenu}>
+          <ItemMenu
+            onPress={onInfo}
+            icon="info-circle"
+            colorButton={information ? Colors.secondary : null}
+            colorIcon={information ? Colors.primary : Colors.txtLevel3}
+          />
+          <ItemMenu
+            icon="users"
+            text={
+              team?.myTeam?.userOfTeam?.length
+                ? '( ' + team?.myTeam?.userOfTeam?.length + ')'
+                : '(0)'
+            }
+            onPress={onMembers}
+            colorButton={members ? Colors.secondary : null}
+            colorIcon={members ? Colors.primary : Colors.txtLevel3}
+          />
+          <ItemMenu
+            icon="comments"
+            text={
+              team?.myTeam?.commentOfTeam?.length
+                ? '( ' + team?.myTeam?.commentOfTeam?.length + ')'
+                : '(0)'
+            }
+            onPress={onComment}
+            colorButton={comment ? Colors.secondary : null}
+            colorIcon={comment ? Colors.primary : Colors.txtLevel3}
+          />
+          <ItemMenu
+            icon="gem"
+            text={
+              team?.listOfferTeam?.data?.length
+                ? '( ' + team?.listOfferTeam?.data?.length + ' )'
+                : '(0)'
+            }
+            onPress={onOffer}
+            colorButton={offer ? Colors.secondary : null}
+            colorIcon={offer ? Colors.primary : Colors.txtLevel3}
+          />
+        </View>
+        <View style={styles.bodyTeam}>
+          {information && (
+            <View style={styles.containerInformation}>
+              <Text style={styles.txtTitleInfo}>Thông Tin Đội Bóng</Text>
+              <View style={styles.itemInformation}>
+                <Icons name="map-marked-alt" style={styles.iconItemInfo} />
+                <Text style={styles.txtItemInfo}>{team?.myTeam?.team?.address}</Text>
+              </View>
+              <View style={styles.itemInformation}>
+                <Icons name="calendar-alt" style={[styles.iconItemInfo, [{ fontSize: 18 }]]} />
+                <Text style={styles.txtItemInfo}>{formatDate(team?.myTeam?.team?.created_at)}</Text>
+              </View>
+              <View style={styles.itemInformation}>
+                <Icons name="gem" style={[styles.iconItemInfo, [{ fontSize: 18 }]]} />
+                <Text style={styles.txtItemInfo}>{onRating()}</Text>
+              </View>
+              <View style={styles.description}>
+                <Text style={styles.txtItemInfo}>asidhjkads</Text>
+              </View>
+            </View>
+          )}
+          {members && (
+            <View style={styles.containerMemberTeam}>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={team?.myTeam?.userOfTeam}
+                renderItem={({ item, index }) => <Player key={index} player={item} />}
+              />
+            </View>
+          )}
+          {comment && (
+            <View style={styles.containerComment}>
+              {team?.myTeam?.commentOfTeam?.slice(0, 2).map((item, index) => {
+                return <Comment comment={item} key={index} />;
+              })}
+              <View style={styles.comment}>
+                {team?.myTeam?.commentOfTeam?.length >= 3 && (
+                  <Text style={styles.viewMoreRating} onPress={commentScreen}>
+                    Xem Thêm Đánh Giá
+                  </Text>
+                )}
+              </View>
+            </View>
+          )}
+          {offer && (
+            <View style={styles.offerList}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={team?.listOfferTeam?.data}
+                renderItem={({ item, index }) => <ItemOffer key={index} offer={item} />}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -57,6 +231,21 @@ export default Team;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  viewMoreRating: {
+    fontSize: Fonts.font_description,
+    color: Colors.waterBlueTwo,
+    textDecorationLine: 'underline',
+  },
+  containerComment: {
+    padding: 20,
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  comment: {
+    marginTop: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   headerDetailTeam: {
     height: 45,
@@ -99,5 +288,79 @@ const styles = StyleSheet.create({
   imgTeam: {
     height: '100%',
     width: '100%',
+  },
+  containerMenu: {
+    height: 40,
+    margin: 10,
+    backgroundColor: Colors.shadow,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  btnMenu: {
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    flexDirection: 'row',
+  },
+  iconMenu: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  txtMenu: {
+    fontSize: 15,
+    fontWeight: '400',
+    marginLeft: 3,
+  },
+  containerInformation: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    flex: 1,
+  },
+  txtTitleInfo: {
+    fontSize: Fonts.title_child2,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  itemInformation: {
+    flexDirection: 'row',
+    paddingLeft: 5,
+    height: 30,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  iconItemInfo: {
+    fontSize: Fonts.font_description,
+    color: Colors.primary,
+  },
+  txtItemInfo: {
+    fontSize: Fonts.font_description,
+    marginLeft: 15,
+    color: Colors.greyishBrown,
+  },
+  description: {
+    padding: 5,
+    paddingTop: 10,
+  },
+  teamDetail: {
+    position: 'absolute',
+    left: 10,
+    bottom: 20,
+  },
+  txtNameTeam: {
+    fontSize: Fonts.title_child,
+    fontWeight: 'bold',
+  },
+  containerMemberTeam: {
+    paddingTop: 10,
+    width: ScreenSize.Screen_Width,
+  },
+  offerList: {
+    padding: 20,
   },
 });
