@@ -28,7 +28,7 @@ const ItemTeam = ({ item }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onDetailTeam}>
       <View style={styles.teamImage}>
-        <Image source={item?.image ? { uri: item?.image } : Images.vn} style={styles.imgTeam} />
+        <Image source={item?.avatar ? { uri: item?.avatar } : Images.vn} style={styles.imgTeam} />
         <View style={styles.rating}>
           <Star star={item?.rating} size={14} />
         </View>

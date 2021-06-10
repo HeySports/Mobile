@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Keyboard,
 } from 'react-native';
 import { Colors, Fonts, ScreenSize } from '../../themes';
 import Icons from 'react-native-vector-icons/FontAwesome5';
@@ -384,6 +385,7 @@ const FindMembers = (props) => {
         );
       }
     }
+    Keyboard.dismiss();
   };
   const setModel = () => {
     setCheckModel(false);

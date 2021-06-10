@@ -32,11 +32,12 @@ const Index = (props) => {
     const resultSearch = [];
     responseMatches?.forEach((element) => {
       if (
-        element.match.name_room.toLowerCase().indexOf(dataSearch) > -1 ||
-        element.match.address.toLowerCase().indexOf(dataSearch) > -1 ||
-        (element.field_play && element.field_play[0].name.toLowerCase().indexOf(dataSearch) > -1) ||
-        element.team_a.members[0].full_name.toLowerCase().indexOf(dataSearch) > -1 ||
-        element.team_a.members[0].team_name.toLowerCase().indexOf(dataSearch) > -1
+        element?.match.name_room?.toLowerCase()?.indexOf(dataSearch) > -1 ||
+        element?.match?.address?.toLowerCase()?.indexOf(dataSearch) > -1 ||
+        (element?.field_play &&
+          element?.field_play?.[0]?.name?.toLowerCase()?.indexOf(dataSearch) > -1) ||
+        element?.team_a?.members?.[0]?.full_name?.toLowerCase()?.indexOf(dataSearch) > -1 ||
+        element?.team_a?.members[0]?.team_name?.toLowerCase()?.indexOf(dataSearch) > -1
       ) {
         resultSearch.push(element);
       }
