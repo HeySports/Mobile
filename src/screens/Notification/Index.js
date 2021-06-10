@@ -19,42 +19,13 @@ const Notification = () => {
   const list = useSelector((state) => state.notification.notificationData);
 
   useEffect(() => {
-    dispatch(getNotification());
     messaging().onMessage(async (remoteMessage) => {
+      console.log('A new FCM message arrived! ...........................................');
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      setNotification({
-        title: remoteMessage.notification.title,
-        body: remoteMessage.notification.body,
-        image: remoteMessage.notification.android.imageUrl,
-      });
+      dispatch(getNotification());
     });
-
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log('onNotificationOpenedApp: ', JSON.stringify(remoteMessage));
-      setNotification({
-        title: remoteMessage.notification.title,
-        body: remoteMessage.notification.body,
-        image: remoteMessage.notification.android.imageUrl,
-      });
-    });
-    //hung add
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            JSON.stringify(remoteMessage),
-          );
-          setNotification({
-            title: remoteMessage.notification.title,
-            body: remoteMessage.notification.body,
-            image: remoteMessage.notification.android.imageUrl,
-          });
-        }
-      });
   }, [notification, checkNotification]);
-  console.log('list...........................................', JSON.stringify(list));
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
