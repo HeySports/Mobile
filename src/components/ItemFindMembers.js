@@ -25,7 +25,7 @@ const ItemFindMembers = (props) => {
         <View style={styles.bodyContent}>
           <ItemContent
             icon="futbol"
-            title={room?.match?.type_field + ' người Vs ' + room?.match?.type_field + ' người'}
+            title={room?.match?.type_field + ' người VS ' + room?.match?.type_field + ' người'}
           />
           <ItemContent
             icon="user"

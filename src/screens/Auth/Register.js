@@ -69,8 +69,8 @@ const Register = (props) => {
       setError('Bạn phải nhập đầy đủ thông tin bắt buộc !');
     } else if (!validatePhone(dataRegister.phone_numbers)) {
       setError('Số điện thoại của bạn không đúng !');
-    } else if (!validateEmail(dataRegister.email)) {
-      setError('Email của bạn nhập không đúng !' + dataRegister.email);
+    } else if (!validateEmail(email)) {
+      setError('Email của bạn nhập không đúng !');
     } else if (dataRegister.password.length < 6) {
       setError('Mật khẩu ít nhất có 6 ký tự !');
     } else if (dataRegister.password !== dataRegister.confirm_password) {

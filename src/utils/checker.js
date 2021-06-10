@@ -1,5 +1,5 @@
 export function validateEmail(email) {
-  var pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  var pattern = /\S+@\S+\.\S+/;
   return pattern.test(String(email).toLowerCase());
 }
 export function validatePhone(phone) {
