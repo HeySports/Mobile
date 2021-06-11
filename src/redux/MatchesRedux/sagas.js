@@ -40,6 +40,11 @@ export function* userPostMatch({ data }) {
     const response = yield call(userPostMatchApi, data);
     yield put(MatchesAction.userPostMatchSuccess(response.data));
     yield put(myMatchActions.userGetMyMatches());
+    if (data?.type === 0) {
+      yield put(MatchesAction.getListMatchFindMember());
+    } else {
+      yield put(MatchesAction.getListMatches());
+    }
     yield put(OrdersActions.userOrderFieldFailure(null));
   } catch (error) {
     yield put(MatchesAction.userPostMatchFailure(error));
