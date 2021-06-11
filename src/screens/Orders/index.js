@@ -171,6 +171,7 @@ const Orders = (props) => {
   const handleAccept = () => {
     Navigation.popTo('FindMember');
   };
+  console.log('................................................................', props);
   return (
     <SafeAreaView style={styles.container}>
       {model && <ModelNotification description={model} showModel={handleModel} />}
@@ -195,6 +196,13 @@ const Orders = (props) => {
           <View style={styles.chooseChildField}>
             <Picker selectedValue={childField} onValueChange={(item) => setChildField(item)}>
               {listChildField?.map((item, index) => {
+                console.log(
+                  'item....................' +
+                    props.data.type_field +
+                    '............................................',
+                  item.type,
+                );
+
                 return <Picker.Item key={index} label={item.name_field} value={item.id} />;
               })}
             </Picker>

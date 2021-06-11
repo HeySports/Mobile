@@ -26,7 +26,7 @@ const ItemField = (props) => {
       time: data?.time,
       option: data?.option,
     };
-    await dispatch(FieldActions.userGetChildField(field.id));
+    await dispatch(FieldActions.userGetChildField(dataPrice));
     await dispatch(FieldActions.userGetPriceField(dataPrice));
     await pushScreen(props.idComponent, 'Orders', dataPush, 'Orders', false, '', '');
   };

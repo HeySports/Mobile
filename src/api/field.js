@@ -5,8 +5,8 @@ export async function getListFieldApi() {
 export async function getDetailFieldApi(id) {
   return http.get('/field/getDetailField/' + id);
 }
-export async function userGetChildFieldApi(id) {
-  return http.get('/field/getChildField/' + id);
+export async function userGetChildFieldApi(data) {
+  return http.get('/field/' + data.id_field + '/getChildFieldWithType/' + data.type_field);
 }
 
 export async function userGetPriceFieldApi(data) {
