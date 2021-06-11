@@ -119,7 +119,7 @@ const Team = ({ componentId }) => {
       <ScrollView style={styles.bodyContainer}>
         <View style={styles.bodyHeaderTeam}>
           <Image
-            source={team?.myTeam?.team?.image ? { uri: team?.myTeam?.team?.image } : Images.vn}
+            source={team?.myTeam?.team?.avatar ? { uri: team?.myTeam?.team?.avatar } : Images.vn}
             style={styles.imgTeam}
           />
           <View style={styles.teamDetail}>

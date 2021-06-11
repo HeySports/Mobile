@@ -197,7 +197,7 @@ const Detail = ({ data, componentId }) => {
         <View style={styles.bodyHeaderTeam}>
           <Image
             source={
-              team?.teamDetail?.team?.image ? { uri: team?.teamDetail?.team?.image } : Images.vn
+              team?.teamDetail?.team?.avatar ? { uri: team?.teamDetail?.team?.avatar } : Images.vn
             }
             style={styles.imgTeam}
           />
